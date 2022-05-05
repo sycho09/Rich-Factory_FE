@@ -10,7 +10,11 @@ const Write = () => {
       <Stack mx={5} alignItems="flex-end">
         <ReactToPrint
           trigger={() => (
-            <Button size="small" variant="contained" sx={{ px: 2 }}>
+            <Button
+              size="small"
+              variant="contained"
+              sx={{ px: 2, borderRaius: "50px" }}
+            >
               프린트하기
             </Button>
           )}
