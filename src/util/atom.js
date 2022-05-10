@@ -26,10 +26,11 @@ export const AllInfo = atom({
     store: "",
     manager: "",
     tel: "",
-    address: "",
+    storeAddress: "",
     registerId: "",
 
     type: "", // select
+    dealType: "",
     propertyId: 0,
     address: "",
     status: "",
@@ -62,7 +63,7 @@ export const AllInfo = atom({
     // 담당자,
     // 전화,
     // 주소,
-    // 등록번호
+    // 등록번호,
 
     // - 매물 정보
     // 매물종류

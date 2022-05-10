@@ -4,50 +4,47 @@ import {
   Typography,
   Divider,
   Button,
-  Switch,
   styled,
   MenuItem,
 } from "@mui/material";
 import React, { useState } from "react";
-import { SelectBox } from "../components/Common";
 import axios from "axios";
+import { SelectBox } from "../components/Common";
 import ListCard from "../components/Home/ListCard";
 import QuickSearch from "../components/Home/QuickSearch";
 
 const Home = () => {
-  const itemList01 = [
-    { value: "공장임대", menu: "공장임대" },
-    { value: "공장매매", menu: "공장매매" },
-    { value: "창고임대", menu: "창고임대" },
-    { value: "창고매매", menu: "창고매매" },
-    { value: "임야전답", menu: "임야,전,답" },
-    { value: "토지분양", menu: "토지분양" },
+  const typeList = [
+    { value: "공장", menu: "공장" },
+    { value: "창고", menu: "창고" },
+    { value: "토지", menu: "토지" },
     { value: "공장부지", menu: "공장부지" },
+    { value: "주택부지", menu: "주택부지" },
+    { value: "주택/상가/원룸", menu: "주택/상가/원룸" },
   ];
-  const itemList02 = [
-    { value: "1", menu: "300이하" },
-    { value: "2", menu: "300초과 ~ 500이하" },
-    { value: "3", menu: "500초과 ~ 1000이하" },
-    { value: "4", menu: "1000초과 ~ 2000이하" },
-    { value: "5", menu: "2000초과" },
+  const dealTypeList = [
+    { value: "임대", menu: "임대" },
+    { value: "매매", menu: "매매" },
+    { value: "분양", menu: "분양" },
   ];
-  const items01 = itemList01.map((item, i) => (
-    <StyledMenuItem key={`li_${i}`} value={item.value}>
-      {item.menu}
-    </StyledMenuItem>
-  ));
-  const items02 = itemList02.map((item, i) => (
-    <StyledMenuItem key={`li_${i}`} value={item.value}>
-      {item.menu}
-    </StyledMenuItem>
-  ));
+  const buildingFilter = [
+    { value: 330.579, menu: "100평 이하" }, // 330.579제곱미터, 0.3025
+    { value: 661.157, menu: "200평 이하" },
+    { value: 0, menu: "200평 이상" },
+  ];
+  const landFilter = [
+    { value: 1652.89, menu: "500평 이하" },
+    { value: 3305.79, menu: "1000평 이하" },
+    { value: 66115.702, menu: "2000평 이하" },
+    { value: 0, menu: "2000평 이상" },
+  ];
 
   // 검색 선택
   const [search, setSearch] = useState({
-    property: "",
-    land: "",
-    building: "",
-    number: "",
+    type: "",
+    dealType: "",
+    building: 0,
+    land: 0,
   });
 
   // 검색하기
@@ -55,7 +52,7 @@ const Home = () => {
     try {
       const response = await axios({
         method: "get",
-        url: `/property/search?type=${search.property}&landAreaPy=${search.land}&buildingAreaPy=${search.building}&id=`,
+        url: `http://15.164.232.13/property/search?type=${search.type}&landAreaPy=${search.land}&buildingAreaPy=${search.building}&id=`,
       });
       console.log(response);
     } catch (err) {
@@ -87,20 +84,28 @@ const Home = () => {
                 sx={{ width: "100%" }}
               >
                 <SelectBox
-                  type="property"
+                  type="type"
                   search={search}
                   setSearch={setSearch}
                   label="매물구분"
                 >
-                  {items01}
+                  {typeList.map((item, i) => (
+                    <StyledMenuItem key={`li_${i}`} value={item.value}>
+                      {item.menu}
+                    </StyledMenuItem>
+                  ))}
                 </SelectBox>
                 <SelectBox
-                  type="land"
+                  type="dealType"
                   search={search}
                   setSearch={setSearch}
-                  label="대지면적"
+                  label="가격구분"
                 >
-                  {items02}
+                  {dealTypeList.map((item, i) => (
+                    <StyledMenuItem key={`li_${i}`} value={item.value}>
+                      {item.menu}
+                    </StyledMenuItem>
+                  ))}
                 </SelectBox>
                 <SelectBox
                   type="building"
@@ -108,14 +113,24 @@ const Home = () => {
                   setSearch={setSearch}
                   label="건물면적"
                 >
-                  {items02}
+                  {buildingFilter.map((item, i) => (
+                    <StyledMenuItem key={`li_${i}`} value={item.value}>
+                      {item.menu}
+                    </StyledMenuItem>
+                  ))}
                 </SelectBox>
                 <SelectBox
-                  type="number"
+                  type="land"
                   search={search}
                   setSearch={setSearch}
-                  label="매물번호"
-                ></SelectBox>
+                  label="토지면적"
+                >
+                  {landFilter.map((item, i) => (
+                    <StyledMenuItem key={`li_${i}`} value={item.value}>
+                      {item.menu}
+                    </StyledMenuItem>
+                  ))}
+                </SelectBox>
                 <Button
                   variant="contained"
                   size="small"

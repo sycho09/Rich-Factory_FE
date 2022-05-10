@@ -113,7 +113,7 @@ export const fakedata = [
     store: "무송부동산",
     manager: "염규대",
     tel: "031-023-1234",
-    address: "경기도 용인",
+    storeAddress: "경기도 용인",
     registerId: "2894728",
 
     type: "공장창고임대",

@@ -2,22 +2,17 @@ import React, { useEffect, useState } from "react";
 import {
   styled,
   Grid,
-  Paper,
   InputBase,
   Typography,
   Divider,
-  Button,
   Stack,
-  Chip,
   Box,
   TextField,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { fakedata } from "../util/mockup";
 import { AllInfo } from "../util/atom";
 import testImg from "./testImg.png";
-
 const labeling = [
   {
     store: " 상호",
@@ -27,8 +22,9 @@ const labeling = [
     registerId: "등록번호",
   },
   {
+    _id: "매물번호",
     type: "매물종류",
-    propertyId: "매물번호",
+    dealType: "매물구분",
     address: "소재지",
     status: "계약상태",
   },
@@ -45,278 +41,311 @@ const labeling = [
   { unitPrice: "평당가격", price: "매매가" },
   { highway: "고속도로", roadNearby: "인접도로" },
   { feature: " 간략특징", detailInfo: "세부특징" },
+  { images: [] },
 ];
 
-const CardDetailContent = () => {
+const CardDetailContent = ({ printRef }) => {
   const { id } = useParams();
 
+  const [isLoading, setLoading] = useState(true);
   const [allInfo, setAllInfo] = useRecoilState(AllInfo);
   const [sections, setSections] = useState([]);
 
+  // 임대 or 매매
+  const [isSale, setIsSale] = useState(true);
+
+  // 건축물정보 포함 or not
+  const [hasBuilding, setHasBuilding] = useState(true);
+
+  const noBuildingList = ["임야", "전", "답", "토지"];
   useEffect(() => {
-    setAllInfo(fakedata);
-    // 불러온 매물 정보 카테고리별로 입력
-    if (allInfo.length > 0) {
-      for (var key in labeling) {
-        const newArr = Object.keys(allInfo[0])
-          .filter((data) => Object.keys(labeling[key]).includes(data))
-          .reduce((obj, key) => {
-            obj[key] = allInfo[0][key];
-            return obj;
-          }, {});
-        setSections((old) => [...old, { ...newArr }]);
-      }
+    if (allInfo.dealType !== "매매") {
+      setIsSale(false);
     }
-  }, [allInfo, setAllInfo]);
+    const noBuilding = noBuildingList.some((el) => allInfo.type.includes(el));
+    setHasBuilding(!noBuilding);
 
-  // 업로드한 이미지(form data 형태로 전송)
-  const [saveImgs, setSaveImgs] = useState([]);
-  // 미리보기 이미지(화면에 표시)
-  const [previewImgs, setPreviewImgs] = useState([]);
+    // 불러온 매물 정보 카테고리별로 입력
+    for (var key in labeling) {
+      const newArr = Object.keys(allInfo)
+        .filter((data) => Object.keys(labeling[key]).includes(data))
+        .reduce((obj, key) => {
+          obj[key] = allInfo[key];
+          return obj;
+        }, {});
+      setSections((old) => [...old, { ...newArr }]);
+    }
+    setLoading(false);
+  }, []);
+  console.log(sections);
 
-  const onImageChange = (e) => {};
   return (
     <>
       <Divider sx={{ marginBottom: "20px" }} />
-      <Box mb={20} p={1}>
-        <Grid container spacing={2}>
-          <Grid item sm={6}>
-            {sections.length > 0 && (
-              <>
-                <StyledTitle>☑ 매물 사진</StyledTitle>
-                <div style={{ height: 300 }}>
-                  {allInfo[0].images.length > 0 ? (
-                    <img src={allInfo[0].images[0]} style={{ width: "100%" }} />
-                  ) : (
+      {!isLoading && (
+        <Box mb={20} p={1} ref={printRef}>
+          <Grid container>
+            <Grid item xs={6}>
+              {sections.length > 0 && (
+                <>
+                  <StyledTitle>☑ 매물 사진</StyledTitle>
+                  <div style={{ height: 200 }}>
+                    {sections[8].images.length > 0 ? (
+                      <img
+                        src={sections[8].images[0]}
+                        style={{ width: "100%" }}
+                      />
+                    ) : (
+                      <img
+                        src={testImg}
+                        style={{
+                          border: "2px solid #eaeaea",
+                          maxHeight: 200,
+                          width: "100%",
+                          objectFit: "scale-down",
+                        }}
+                      />
+                    )}
+                  </div>
+                </>
+              )}
+            </Grid>
+            <Grid item xs={6}>
+              {sections.length > 0 && (
+                <>
+                  <StyledTitle>☑ 담당자 안내</StyledTitle>
+                  <Divider />
+                  {Object.entries(labeling[0]).map((label, i) => (
+                    <React.Fragment key={label[1]}>
+                      <Grid container sx={{ width: "100%" }}>
+                        <Grid item xs={4} sm={4}>
+                          <StyledLabel>{label[1]}</StyledLabel>
+                        </Grid>
+                        <Grid item xs={8} sm={8}>
+                          <StyledInput
+                            id={label[1]}
+                            disabled
+                            name={label[0]}
+                            value={sections[0][label[0]]}
+                          />
+                        </Grid>
+                      </Grid>
+                    </React.Fragment>
+                  ))}
+                </>
+              )}
+            </Grid>
+            <Grid item sm={12}>
+              <Stack
+                direction="row"
+                spacing={1}
+                mt={1}
+                sx={{ overflowX: "scroll" }}
+              >
+                {[1, 2, 3, 4, 5, 6, 7].map((item) => (
+                  <Box key={item}>
                     <img
                       src={testImg}
                       style={{
                         border: "2px solid #eaeaea",
-                        maxHeight: 300,
+                        maxHeight: 80,
                         width: "100%",
                         objectFit: "scale-down",
                       }}
                     />
-                  )}
-                </div>
-              </>
-            )}
+                  </Box>
+                ))}
+              </Stack>
+            </Grid>
           </Grid>
-          <Grid item sm={6}>
-            {sections.length > 0 && (
-              <>
-                <StyledTitle>☑ 담당자 안내</StyledTitle>
-                <Divider />
-                {Object.values(labeling[0]).map((label, i) => (
-                  <React.Fragment key={label}>
-                    <Grid container rowspacing={1} sx={{ width: "100%" }}>
-                      <Grid item xs={4} sm={4}>
-                        <StyledLabel>{label}</StyledLabel>
-                      </Grid>
-                      <Grid item xs={8} sm={8}>
+
+          <StyledTitle>☑ 매물 정보</StyledTitle>
+          <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
+            {Object.entries(labeling[1]).map((label, i) => (
+              <React.Fragment key={label[1]}>
+                <Grid item xs={2} sm={2}>
+                  {/* <StyledLabel>{label[1]}</StyledLabel> */}
+                  <StyledLabel>{label[1]}</StyledLabel>
+                </Grid>
+                <Grid item xs={4} sm={4}>
+                  <StyledInput
+                    id={label[1]}
+                    disabled
+                    name={label[0]}
+                    value={sections[1][label[0]]}
+                  />
+                </Grid>
+              </React.Fragment>
+            ))}
+          </Grid>
+
+          <StyledTitle>☑ 토지 정보</StyledTitle>
+          <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
+            {Object.entries(labeling[2]).map((label, i) => (
+              <React.Fragment key={label[1]}>
+                <Grid item xs={2} sm={2}>
+                  <StyledLabel>{label[1]}</StyledLabel>
+                </Grid>
+                <Grid item xs={4} sm={4}>
+                  {label[0] !== "landArea" ? (
+                    <StyledInput
+                      id={label[1]}
+                      disabled
+                      name={label[0]}
+                      value={sections[2][label[0]]}
+                    />
+                  ) : (
+                    <Stack direction="row">
+                      <StyledInput
+                        id={label[1]}
+                        disabled
+                        name={label[0]}
+                        value={`${sections[2][label[0]]}㎡`}
+                      />
+                      <StyledPyInput
+                        value={`${(sections[2][label[0]] * 0.3025).toFixed(
+                          2
+                        )}평`}
+                      />
+                    </Stack>
+                  )}
+                </Grid>
+              </React.Fragment>
+            ))}
+          </Grid>
+
+          {hasBuilding && (
+            <>
+              <StyledTitle>☑ 건축물 정보</StyledTitle>
+              <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
+                {Object.entries(labeling[3]).map((label, i) => (
+                  <React.Fragment key={label[1]}>
+                    <Grid item xs={2} sm={2}>
+                      <StyledLabel>{label[1]}</StyledLabel>
+                    </Grid>
+                    <Grid item xs={4} sm={4}>
+                      {label[0] !== "buildingArea" ? (
                         <StyledInput
-                          id={`${label}_content`}
+                          id={label[1]}
                           disabled
-                          name={Object.values(sections[0])[i]}
-                          value={Object.values(sections[0])[i]}
+                          name={label[0]}
+                          value={sections[3][label[0]]}
                         />
-                      </Grid>
+                      ) : (
+                        <Stack direction="row">
+                          <StyledInput
+                            id={label[1]}
+                            disabled
+                            name={label[0]}
+                            value={`${sections[3][label[0]]}㎡`}
+                          />
+                          <StyledPyInput
+                            value={`${(sections[3][label[0]] * 0.3025).toFixed(
+                              2
+                            )}평`}
+                          />
+                        </Stack>
+                      )}
                     </Grid>
                   </React.Fragment>
                 ))}
-              </>
-            )}
-          </Grid>
-          <Grid item sm={12}>
-            <Stack direction="row" spacing={1} sx={{ overflowX: "scroll" }}>
-              {[1, 2, 3, 4, 5, 6, 7].map((item) => (
-                <Box sx={{ border: "1px solid #cfcfcf" }}>
-                  <img
-                    src={testImg}
-                    style={{
-                      border: "2px solid #eaeaea",
-                      maxHeight: 100,
-                      width: "100%",
-                      objectFit: "scale-down",
-                    }}
+              </Grid>
+            </>
+          )}
+          {isSale ? (
+            <>
+              <StyledTitle>☑ 매매가격</StyledTitle>
+              <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
+                {Object.entries(labeling[5]).map((label, i) => (
+                  <React.Fragment key={label[1]}>
+                    <Grid item xs={2} sm={2}>
+                      <StyledLabel>{label[1]}</StyledLabel>
+                    </Grid>
+                    <Grid item xs={4} sm={4}>
+                      <StyledInput
+                        id={label[1]}
+                        disabled
+                        name={label[0]}
+                        value={sections[5][label[0]]}
+                      />
+                    </Grid>
+                  </React.Fragment>
+                ))}
+              </Grid>
+            </>
+          ) : (
+            <>
+              <StyledTitle>☑ 임대가격</StyledTitle>
+              <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
+                {Object.entries(labeling[4]).map((label, i) => (
+                  <React.Fragment key={label[1]}>
+                    <Grid item xs={2} sm={2}>
+                      <StyledLabel>{label[1]}</StyledLabel>
+                    </Grid>
+                    <Grid item xs={4} sm={4}>
+                      <StyledInput
+                        id={label[1]}
+                        disabled
+                        name={label[0]}
+                        value={sections[4][label[0]]}
+                      />
+                    </Grid>
+                  </React.Fragment>
+                ))}
+              </Grid>
+            </>
+          )}
+          <StyledTitle>☑ 매물 입지 정보</StyledTitle>
+          <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
+            {Object.entries(labeling[6]).map((label, i) => (
+              <React.Fragment key={label[1]}>
+                <Grid item xs={2} sm={2}>
+                  <StyledLabel>{label[1]}</StyledLabel>
+                </Grid>
+                <Grid item xs={4} sm={4}>
+                  <StyledInput
+                    id={label[1]}
+                    disabled
+                    name={label[0]}
+                    value={sections[6][label[0]]}
                   />
-                </Box>
-              ))}
-            </Stack>
+                </Grid>
+              </React.Fragment>
+            ))}
           </Grid>
-        </Grid>
-        {sections.length > 0 && (
-          <>
-            <StyledTitle>☑ 매물 정보</StyledTitle>
-            <Grid
-              container
-              rowspacing={1}
-              sx={{ borderTop: "1px solid #cfcfcf" }}
-            >
-              {Object.values(labeling[1]).map((label, i) => (
-                <React.Fragment key={label}>
-                  <Grid item xs={4} sm={2}>
-                    <StyledLabel>{label}</StyledLabel>
-                  </Grid>
-                  <Grid item xs={8} sm={4}>
-                    <StyledInput
-                      id={`${label}_content`}
-                      disabled
-                      name={Object.values(sections[1])[i]}
-                      value={Object.values(sections[1])[i]}
-                    />
-                  </Grid>
-                </React.Fragment>
-              ))}
+
+          <StyledTitle>☑ 매물특징</StyledTitle>
+          <Grid container>
+            <Grid item xs={2} sm={2}>
+              <StyledLabel>{labeling[7]["feature"]}</StyledLabel>
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <StyledTextField
+                rows={1}
+                multiline
+                disabled
+                name="feature"
+                value={sections[7]["feature"]}
+              />
             </Grid>
 
-            <StyledTitle>☑ 토지 정보</StyledTitle>
-            <Grid
-              container
-              rowspacing={1}
-              sx={{ borderTop: "1px solid #cfcfcf" }}
-            >
-              {Object.values(labeling[2]).map((label, i) => (
-                <React.Fragment key={label}>
-                  <Grid item xs={4} sm={2}>
-                    <StyledLabel>{label}</StyledLabel>
-                  </Grid>
-                  <Grid item xs={8} sm={4}>
-                    <StyledInput
-                      id={`${label}_content`}
-                      disabled
-                      name={Object.values(sections[2])[i]}
-                      value={Object.values(sections[2])[i]}
-                    />
-                  </Grid>
-                </React.Fragment>
-              ))}
+            <Grid item xs={2} sm={2}>
+              <StyledLabel>{labeling[7]["detailInfo"]}</StyledLabel>
             </Grid>
-
-            <StyledTitle>☑ 건축물 정보</StyledTitle>
-            <Grid
-              container
-              rowspacing={1}
-              sx={{ borderTop: "1px solid #cfcfcf" }}
-            >
-              {Object.values(labeling[3]).map((label, i) => (
-                <React.Fragment key={label}>
-                  <Grid item xs={4} sm={2}>
-                    <StyledLabel>{label}</StyledLabel>
-                  </Grid>
-                  <Grid item xs={8} sm={4}>
-                    <StyledInput
-                      id={`${label}_content`}
-                      disabled
-                      name={Object.values(sections[3])[i]}
-                      value={Object.values(sections[3])[i]}
-                    />
-                  </Grid>
-                </React.Fragment>
-              ))}
+            <Grid item xs={12} sm={12}>
+              <StyledTextField
+                rows={3}
+                multiline
+                disabled
+                name="detailInfo"
+                value={sections[7]["detailInfo"]}
+              />
             </Grid>
+          </Grid>
 
-            <StyledTitle>☑ 임대가격</StyledTitle>
-            <Grid
-              container
-              rowspacing={1}
-              sx={{ borderTop: "1px solid #cfcfcf" }}
-            >
-              {Object.values(labeling[4]).map((label, i) => (
-                <React.Fragment key={label}>
-                  <Grid item xs={4} sm={2}>
-                    <StyledLabel>{label}</StyledLabel>
-                  </Grid>
-                  <Grid item xs={8} sm={4}>
-                    <StyledInput
-                      id={`${label}_content`}
-                      disabled
-                      name={Object.values(sections[4])[i]}
-                      value={Object.values(sections[4])[i]}
-                    />
-                  </Grid>
-                </React.Fragment>
-              ))}
-            </Grid>
-
-            <StyledTitle>☑ 매매가격</StyledTitle>
-            <Grid
-              container
-              rowspacing={1}
-              sx={{ borderTop: "1px solid #cfcfcf" }}
-            >
-              {Object.values(labeling[5]).map((label, i) => (
-                <React.Fragment key={label}>
-                  <Grid item xs={4} sm={2}>
-                    <StyledLabel>{label}</StyledLabel>
-                  </Grid>
-                  <Grid item xs={8} sm={4}>
-                    <StyledInput
-                      id={`${label}_content`}
-                      disabled
-                      name={Object.values(sections[5])[i]}
-                      value={Object.values(sections[5])[i]}
-                    />
-                  </Grid>
-                </React.Fragment>
-              ))}
-            </Grid>
-
-            <StyledTitle>☑ 매물 입지 정보</StyledTitle>
-            <Grid
-              container
-              rowspacing={1}
-              sx={{ borderTop: "1px solid #cfcfcf" }}
-            >
-              {Object.values(labeling[6]).map((label, i) => (
-                <React.Fragment key={label}>
-                  <Grid item xs={4} sm={2}>
-                    <StyledLabel>{label}</StyledLabel>
-                  </Grid>
-                  <Grid item xs={8} sm={4}>
-                    <StyledInput
-                      id={`${label}_content`}
-                      disabled
-                      name={Object.values(sections[6])[i]}
-                      value={Object.values(sections[6])[i]}
-                    />
-                  </Grid>
-                </React.Fragment>
-              ))}
-            </Grid>
-
-            <StyledTitle>☑ 매물특징</StyledTitle>
-            <Grid container rowspacing={1}>
-              <Grid item xs={4} sm={2}>
-                <StyledLabel>{Object.values(labeling[7])[0]}</StyledLabel>
-              </Grid>
-              <Grid item xs={8} sm={12}>
-                <StyledTextField
-                  rows={1}
-                  multiline
-                  disabled
-                  name={Object.values(sections[7])[0]}
-                  value={Object.values(sections[7])[0]}
-                />
-              </Grid>
-
-              <Grid item xs={4} sm={2}>
-                <StyledLabel>{Object.values(labeling[7])[1]}</StyledLabel>
-              </Grid>
-              <Grid item xs={8} sm={12}>
-                <StyledTextField
-                  rows={3}
-                  multiline
-                  disabled
-                  name={Object.values(sections[7])[1]}
-                  value={Object.values(sections[7])[1]}
-                />
-              </Grid>
-            </Grid>
-          </>
-        )}
-        <br />
-      </Box>
+          <br />
+        </Box>
+      )}
     </>
   );
 };
@@ -326,7 +355,10 @@ export default CardDetailContent;
 export const StyledTitle = styled(Typography)(({ theme }) => ({
   fontSize: 16,
   fontWeight: 700,
-  padding: "2rem 0 0.5rem 0.2rem",
+  padding: "1.5rem 0 0.2rem 0.2rem",
+  ["@media print"]: {
+    fontSize: "10px",
+  },
 }));
 
 export const StyledLabel = styled(Box)(({ theme }) => ({
@@ -334,7 +366,7 @@ export const StyledLabel = styled(Box)(({ theme }) => ({
   fontWeight: 700,
   color: theme.palette.grey.second,
   wordBreak: "keep-all",
-  padding: "5px",
+  padding: "5px 0",
   borderBottom: "1px solid #cfcfcf",
   [theme.breakpoints.down("sm")]: {
     minWidth: "50px",
@@ -357,9 +389,15 @@ export const StyledTextField = styled(TextField)({
     fontWeight: 500,
     WebkitTextFillColor: "#000",
   },
-  // "& .css-i43bvf-MuiInputBase-root-MuiOutlinedInput-root.Mui-disabled": {
-  //   padding: '2px ',
-  // },
+  "& .MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
+    WebkitTextFillColor: "#000",
+  },
+  "& .Mui-disabled": {
+    WebkitTextFillColor: "#000",
+  },
+  ["@media print"]: {
+    fontSize: "12px",
+  },
 });
 
 export const StyledInput = styled(InputBase)({
@@ -369,6 +407,7 @@ export const StyledInput = styled(InputBase)({
   // padding: "5px",
   paddingRight: "20px",
   borderBottom: "1px solid #cfcfcf",
+  borderRight: "1px solid #cfcfcf",
   "& .Mui-disabled": {
     WebkitTextFillColor: "#000",
   },
@@ -384,4 +423,35 @@ export const StyledInput = styled(InputBase)({
     fontWeight: 500,
     WebkitTextFillColor: "#000",
   },
+  ["@media print"]: {
+    fontSize: "10px",
+  },
 });
+
+export const StyledPyInput = styled(InputBase)(({ theme }) => ({
+  width: "100%",
+  height: "100%",
+  boxSizing: "border-box",
+  // padding: "5px",
+  paddingRight: "20px",
+  borderBottom: "1px solid #cfcfcf",
+  borderRight: "1px solid #cfcfcf",
+  "& .Mui-disabled": {
+    WebkitTextFillColor: theme.palette.red.main,
+  },
+  "& .css-yz9k0d-MuiInputBase-input.Mui-disabled": {
+    WebkitTextFillColor: theme.palette.red.main,
+  },
+  "& .MuiInputBase-input": {
+    position: "relative",
+    fontSize: 16,
+    width: "100%",
+    // lineHeight: 2,
+    paddingLeft: "10px",
+    fontWeight: 500,
+    WebkitTextFillColor: theme.palette.red.main,
+  },
+  ["@media print"]: {
+    fontSize: "10px",
+  },
+}));
