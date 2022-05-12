@@ -6,6 +6,8 @@ import Write from "../pages/Write";
 import HomeLayout from "../layout/HomeLayout/HomeLayout";
 import Intro from "../pages/Intro";
 import FAQ from "../pages/FAQ";
+import Land from "../pages/Land";
+import Factory from "../pages/Factory";
 
 const routes = [
   {
@@ -24,6 +26,8 @@ const routes = [
       { path: "page/:id", element: <CardDetail /> },
       { path: "write", element: <Write /> },
       { path: "faq", element: <FAQ /> },
+      { path: "land", element: <Land /> },
+      { path: "factory", element: <Factory /> },
     ],
   },
 ];

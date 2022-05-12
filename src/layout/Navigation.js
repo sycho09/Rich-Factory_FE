@@ -151,11 +151,16 @@ const Navigation = (props) => {
 
         <NavbarWrapper>
           <MainNavigationLink>
-            <MenuTitle isHome={isHome}>공장창고</MenuTitle>
+            <MenuTitle
+              isHome={isHome}
+              onClick={() => navigate("/main/factory")}
+            >
+              공장창고
+            </MenuTitle>
           </MainNavigationLink>
           <DropDown>
             <MenuItemsWrapper>
-              <MenuItem onClick={() => alert("hi")}>공장/창고 임대</MenuItem>
+              <MenuItem>공장/창고 임대</MenuItem>
               <MenuItem>공장/창고 매매</MenuItem>
             </MenuItemsWrapper>
           </DropDown>
@@ -163,7 +168,9 @@ const Navigation = (props) => {
 
         <NavbarWrapper>
           <MainNavigationLink>
-            <MenuTitle isHome={isHome}>토지 </MenuTitle>
+            <MenuTitle isHome={isHome} onClick={() => navigate("/main/land")}>
+              토지{" "}
+            </MenuTitle>
           </MainNavigationLink>
         </NavbarWrapper>
 

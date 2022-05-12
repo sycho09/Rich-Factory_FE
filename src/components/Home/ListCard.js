@@ -8,7 +8,6 @@ import {
   Typography,
   Chip,
   Box,
-  styled,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -23,9 +22,8 @@ const ListCard = () => {
   const [propertyList, setPropertyList] = useRecoilState(PropertyList);
   const setList = async () => {
     try {
-      const response = await axios({
-        method: "get",
-        url: "http://15.164.232.13/property",
+      const response = await axios.get("http://15.164.232.13/property", {
+        // withCredentials: true,
       });
       setPropertyList(response.data.propertyList);
     } catch (err) {
@@ -129,7 +127,7 @@ const ListItem = ({ content }) => {
             <div>
               <Chip
                 color="primary"
-                label="매매"
+                label={content.dealType}
                 size="small"
                 sx={{ fontSize: "12px" }}
               />
@@ -182,6 +180,7 @@ const ListItem = ({ content }) => {
               </Typography>
               <Typography variant="caption">({content.landArea}㎡)</Typography>
             </Box>
+
             <Box>
               <Chip
                 size="small"
@@ -194,15 +193,26 @@ const ListItem = ({ content }) => {
                 label="건물"
               />
               &nbsp;
-              <Typography
-                component="span"
-                sx={{ fontSize: "14px", fontWeight: 700 }}
-              >
-                {Math.round(content.buildingArea * 0.3025)}평
-              </Typography>
-              <Typography variant="caption">
-                ({content.buildingArea}㎡)
-              </Typography>
+              {content.type.includes("토지") || content.type.includes("전") ? (
+                <Typography
+                  component="span"
+                  sx={{ fontSize: "14px", fontWeight: 700 }}
+                >
+                  해당없음
+                </Typography>
+              ) : (
+                <>
+                  <Typography
+                    component="span"
+                    sx={{ fontSize: "14px", fontWeight: 700 }}
+                  >
+                    {Math.round(content.buildingArea * 0.3025)}평
+                  </Typography>
+                  <Typography variant="caption">
+                    ({content.buildingArea}㎡)
+                  </Typography>
+                </>
+              )}
             </Box>
           </Stack>
         </CardContent>
