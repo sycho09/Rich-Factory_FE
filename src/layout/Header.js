@@ -1,80 +1,86 @@
-import { Grid, styled, Toolbar, Container, Typography } from "@mui/material";
-import MapsHomeWorkIcon from "@mui/icons-material/MapsHomeWork";
+import {
+  Box,
+  Stack,
+  Button,
+  styled,
+  Toolbar,
+  Container,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import Navigation from "./Navigation";
 import { BackgroundHeader } from "./HomeLayout/Banner";
+import { CgPhone } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
+
+const ManagerBtn = styled(Button)(({ theme }) => ({
+  padding: "5px 20px",
+  margin: "0 20px",
+  color: "#fff",
+  backgroundColor: theme.palette.primary.dark,
+  borderRadius: "5px",
+  fontSize: "14px",
+  fontWeight: 400,
+  "&: hover": {
+    border: "1px solid black",
+    color: theme.palette.primary.dark,
+  },
+}));
 
 const Header = (props) => {
   const { isHome } = props;
   const navigate = useNavigate();
   return (
     <>
-      {isHome && (
+      <>
         <BackgroundHeader>
-          <StyledContainer sx={{ minWith: "600px" }} maxWidth="lg">
+          <StyledContainer>
             <Toolbar sx={{ height: 200 }}>
-              <Grid
-                container
-                direction="column"
+              <Stack
+                alignItems="flex-start"
+                justifyContent="space-between"
                 sx={{
-                  alignItems: "stretch",
+                  width: "100%",
                   height: "100%",
-                  justifyContent: "space-between",
+                  padding: { xs: "0 0 10px 0", sm: "0 20px" },
+                  flexDirection: { xs: "column", sm: "row" },
                 }}
               >
-                <Grid item>
-                  <HomeLogoTitle onClick={() => navigate("/home")}>
-                    무송부동산
-                  </HomeLogoTitle>
-                  <Typography
-                    pl={1}
-                    sx={{
-                      width: "80%",
-                      fontSize: 22,
-                      fontWeight: 700,
-                      paddingLeft: 2,
-                      borderRadius: "50px 0 0 50px",
-                      fontStyle: "italic",
-                      fontFamily: "Gowun Batang, serif",
-                      background: "rgb(255,255,255)",
-                      background:
-                        "linear-gradient(121deg, rgba(255,255,255,0.9) 18%, rgba(255,255,255,0) 100%)",
-                      color: "black",
-                    }}
-                  >
-                    010-9020-0202
+                <HomeLogoTitle onClick={() => navigate("/home")}>
+                  무송부동산
+                </HomeLogoTitle>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  sx={{
+                    height: 30,
+                    margin: "30px 0 0",
+                    width: { xs: "100%", sm: "auto" },
+                    paddingBottom: { xs: 5, sm: 0 },
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography sx={{ fontWeight: 600, fontSize: "1.4rem" }}>
+                    <CgPhone style={{ verticalAlign: "-2px" }} /> 010
+                    <span style={{ fontWeight: 400 }}>-</span>5477
+                    <span style={{ fontWeight: 400 }}>-</span>8787
                   </Typography>
-                </Grid>
-                <Grid item>
-                  <Navigation
-                    isHome={true}
-                    // style={{ border: "1px solid white" }}
-                  />
-                </Grid>
-              </Grid>
+                  <ManagerBtn>관리자모드</ManagerBtn>
+                </Stack>
+              </Stack>
             </Toolbar>
           </StyledContainer>
         </BackgroundHeader>
-      )}
-      {!isHome && (
-        <BackgroundHeader>
-          <StyledContainer sx={{ minWith: "600px" }} maxWidth="lg">
-            <Toolbar>
-              <Grid container sx={{ alignItems: "center" }}>
-                <Grid item xs={12} md={4} sx={{ height: "100%" }}>
-                  <LogoTitle onClick={() => navigate("/home")}>
-                    무송부동산
-                  </LogoTitle>
-                </Grid>
-                <Grid item xs={12} md={8}>
-                  <Navigation />
-                </Grid>
-              </Grid>
-            </Toolbar>
+        <Box
+          sx={{
+            backgroundColor: (theme) => theme.palette.primary.lightdark,
+          }}
+        >
+          <StyledContainer>
+            <Navigation isHome={true} />
           </StyledContainer>
-        </BackgroundHeader>
-      )}
+        </Box>
+      </>
     </>
   );
 };
@@ -82,16 +88,16 @@ const Header = (props) => {
 export default Header;
 
 const HomeLogoTitle = styled(Typography)(({ theme }) => ({
-  fontSize: "3rem",
-  fontFamily: "Gowun Batang, serif",
-  fontWeight: 400,
+  fontSize: "3.8rem",
+  // fontFamily: "Gowun Batang, serif",
+  fontWeight: 700,
   cursor: "pointer",
-  padding: "12px 10px 3px",
-  [theme.breakpoints.down("md")]: {
+  padding: "14px 0 0",
+  [theme.breakpoints.down("sm")]: {
+    padding: "0",
     display: "flex",
     justifyContent: "center",
-    fontSize: "2.2rem",
-    padding: "10px 0",
+    width: "100%",
   },
 }));
 
@@ -108,6 +114,9 @@ const LogoTitle = styled(Typography)(({ theme }) => ({
 }));
 
 const StyledContainer = styled(Container)(({ theme }) => ({
+  "& .MuiToolbar-root": {
+    padding: 0,
+  },
   [theme.breakpoints.down("md")]: {
     paddingRight: 0,
     paddingLeft: 0,

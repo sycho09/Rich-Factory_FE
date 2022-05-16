@@ -31,11 +31,9 @@ export default HomeLayout;
 
 const LayoutContainer = styled(Container)(({ theme }) => ({
   paddingTop: 5,
-  //   [theme.breakpoints.down("md")]: {
   paddingRight: 0,
   paddingLeft: 0,
   "& .MuiContainer-root": {
     padding: 0,
   },
-  //   },
 }));

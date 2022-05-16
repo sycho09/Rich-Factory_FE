@@ -7,162 +7,136 @@ import {
   TableRow,
   Paper,
   Typography,
-  Stack,
-  Button,
+  Box,
+  styled,
+  Collapse,
+  Chip,
 } from "@mui/material";
-import React from "react";
+import { tableCellClasses } from "@mui/material/TableCell";
+import React, { useState } from "react";
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
+    fontSize: 18,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 18,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    // backgroundColor: theme.palette.action.hover,
+    backgroundColor: theme.palette.grey.main,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
 
 const FAQ = () => {
-  function createData(id, name, category, type, area, date) {
-    return { id, name, category, type, area, date };
+  function createData(id, name, content) {
+    return { id, name, content };
   }
 
   const rows = [
-    createData(1, "김**", "매수", "공장/창고", "용인, 화성", "2022-04-02"),
-    createData(2, "이**", "매도", "토지", "화성 전지역", "2022-04-21"),
-    createData(3, "이**", "매도", "토지", "화성", "2022-04-21"),
-    createData(4, "김**", "매수", "공장/창고", "용인", "2022-05-02"),
-    createData(5, "김**", "매수", "공장/창고", "세종", "2022-05-02"),
-    createData(6, "김**", "매수", "공장/창고", "평택", "2022-05-04"),
-    createData(7, "박**", "매수", "토지", "화성", "2022-05-04"),
-    createData(8, "김**", "매수", "공장/창고", "용인", "2022-05-04"),
-    createData(9, "이**", "분양", "주택", "용인", "2022-05-04"),
+    createData(1, "매매", "모든 부동산의 실거래가를 제공하나요?"),
+    createData(2, "매매", "질문 등록 전입니다"),
+    createData(3, "매매", "질문 등록 전입니다"),
+    createData(4, "매매", "질문 등록 전입니다"),
+    createData(5, "분양", "질문 등록 전입니다"),
   ];
 
   return (
     <div style={{ padding: "2rem 3rem" }}>
-      <Stack direction="row" justifyContent="space-between">
-        <Typography variant="h5" sx={{ fontWeight: 600 }}>
-          문의게시판
-        </Typography>
-        <Button variant="outlined" size="small" sx={{ adding: "0 1rem" }}>
-          작성하기
-        </Button>
-      </Stack>
-      <TableContainer component={Paper} sx={{ marginTop: 2 }}>
-        {/* <TableContainer> */}
-        <Table sx={{ minWidth: 650 }} size="small">
-          <TableHead
-            sx={{
-              background: (theme) => theme.palette.primary.main,
-            }}
-          >
-            <TableRow>
-              <TableCell
-                sx={{
-                  color: "#fff",
-                  fontWeight: 400,
-                  borderRight: "1px solid #fff",
-                  fontSize: 16,
-                  width: 70,
-                }}
-              >
-                번호
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "#fff",
-                  fontWeight: 400,
-                  borderRight: "1px solid #fff",
-                  fontSize: 16,
+      <Typography variant="h5" sx={{ fontWeight: 600 }}>
+        자주 묻는 질문
+      </Typography>
+      <Paper elevation={3}>
+        <TableContainer sx={{ marginTop: 2 }}>
+          {/* <TableContainer> */}
+          <Table sx={{ minWidth: 650 }}>
+            <TableHead
+              sx={{
+                background: (theme) => theme.palette.primary.main,
+              }}
+            >
+              <StyledTableRow>
+                <StyledTableCell
+                  sx={{
+                    width: "5%",
+                  }}
+                ></StyledTableCell>
 
-                  width: 120,
-                }}
-              >
-                작성자
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "#fff",
-                  fontWeight: 400,
-                  borderRight: "1px solid #fff",
-                  fontSize: 16,
-                  width: 100,
-                }}
-              >
-                구분
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "#fff",
-                  fontWeight: 400,
-                  borderRight: "1px solid #fff",
-                  fontSize: 16,
-                  width: 150,
-                }}
-              >
-                종류
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "#fff",
-                  fontWeight: 400,
-                  borderRight: "1px solid #fff",
-                  fontSize: 16,
-                  width: 180,
-                }}
-              >
-                지역정보
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "#fff",
-                  fontWeight: 400,
-                  borderRight: "1px solid #fff",
-                  fontSize: 16,
-                  width: 200,
-                }}
-              >
-                조회
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                key={row.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.id}
-                </TableCell>
-                <TableCell
-                  sx={{ fontWeight: 600, fontSize: 16, cursor: "pointer" }}
-                  onClick={() => alert("작성자만 열람할 수 있습니다")}
+                <StyledTableCell
+                  align="center"
+                  sx={{
+                    width: "15%",
+                  }}
                 >
-                  {row.name}
-                </TableCell>
-                <TableCell
-                  sx={{ fontWeight: 600, fontSize: 16, cursor: "pointer" }}
-                  onClick={() => alert("작성자만 열람할 수 있습니다")}
+                  구분
+                </StyledTableCell>
+                <StyledTableCell
+                  sx={{
+                    width: "80%",
+                  }}
                 >
-                  {row.category}
-                </TableCell>
-                <TableCell
-                  sx={{ fontWeight: 600, fontSize: 16, cursor: "pointer" }}
-                  onClick={() => alert("작성자만 열람할 수 있습니다")}
-                >
-                  {row.type}
-                </TableCell>
-                <TableCell
-                  sx={{ fontWeight: 600, fontSize: 16, cursor: "pointer" }}
-                  onClick={() => alert("작성자만 열람할 수 있습니다")}
-                >
-                  {row.area}
-                </TableCell>
-                <TableCell
-                  sx={{ fontWeight: 600, fontSize: 16, cursor: "pointer" }}
-                  onClick={() => alert("작성자만 열람할 수 있습니다")}
-                >
-                  {row.date}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                  조회
+                </StyledTableCell>
+              </StyledTableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <Row key={row.id} row={row} />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
     </div>
   );
 };
 
 export default FAQ;
+
+const Row = ({ row }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <React.Fragment>
+      <StyledTableRow
+        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+      >
+        <StyledTableCell component="th" scope="row">
+          {row.id}
+        </StyledTableCell>
+        <StyledTableCell
+          align="center"
+          sx={{ fontWeight: 600, cursor: "pointer" }}
+          onClick={() => setOpen(!open)}
+        >
+          <Chip label={row.name} color="success" sx={{ fontSize: 16 }} />
+        </StyledTableCell>
+
+        <StyledTableCell
+          sx={{ fontWeight: 600, cursor: "pointer" }}
+          onClick={() => setOpen(!open)}
+        >
+          {row.content}
+        </StyledTableCell>
+      </StyledTableRow>
+      <StyledTableRow>
+        <StyledTableCell
+          style={{ paddingBottom: 0, paddingTop: 0 }}
+          colSpan={6}
+        >
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box p={2}> 답변 등록 전입니다</Box>
+          </Collapse>
+        </StyledTableCell>
+      </StyledTableRow>
+    </React.Fragment>
+  );
+};

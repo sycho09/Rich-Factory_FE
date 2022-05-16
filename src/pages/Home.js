@@ -7,7 +7,9 @@ import {
   styled,
   MenuItem,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { PropertyList } from "../util/atom";
 import axios from "axios";
 import { SelectBox } from "../components/Common";
 import ListCard from "../components/Home/ListCard";
@@ -20,7 +22,7 @@ const Home = () => {
     { value: "토지", menu: "토지" },
     { value: "공장부지", menu: "공장부지" },
     { value: "주택부지", menu: "주택부지" },
-    { value: "주택/상가/원룸", menu: "주택/상가/원룸" },
+    { value: "주택상가원룸", menu: "주택/상가/원룸" },
   ];
   const dealTypeList = [
     { value: "임대", menu: "임대" },
@@ -28,23 +30,26 @@ const Home = () => {
     { value: "분양", menu: "분양" },
   ];
   const buildingFilter = [
-    { value: 330.579, menu: "100평 이하" }, // 330.579제곱미터, 0.3025
-    { value: 661.157, menu: "200평 이하" },
-    { value: 0, menu: "200평 이상" },
+    { value: 1, menu: "100평 이하" }, // 330.579제곱미터, 0.3025
+    { value: 2, menu: "100~200평 이하" },
+    { value: 3, menu: "200평 이상" },
   ];
   const landFilter = [
-    { value: 1652.89, menu: "500평 이하" },
-    { value: 3305.79, menu: "1000평 이하" },
-    { value: 66115.702, menu: "2000평 이하" },
-    { value: 0, menu: "2000평 이상" },
+    { value: 1, menu: "500평 이하" },
+    { value: 2, menu: "500~1000평 이하" },
+    { value: 3, menu: "1000~2000평 이하" },
+    { value: 4, menu: "2000평 이상" },
   ];
+
+  // 리스트 저장
+  const [propertyList, setPropertyList] = useRecoilState(PropertyList);
 
   // 검색 선택
   const [search, setSearch] = useState({
     type: "",
     dealType: "",
-    building: 0,
-    land: 0,
+    building: "",
+    land: "",
   });
 
   // 검색하기
@@ -52,31 +57,59 @@ const Home = () => {
     try {
       const response = await axios({
         method: "get",
-        url: `http://15.164.232.13/property/search?type=${search.type}&landAreaPy=${search.land}&buildingAreaPy=${search.building}&id=`,
+        url: `http://15.164.232.13/property/search?type=${search.type}&dealType=${search.dealType}&buildingArea=${search.building}&landArea=${search.landArea}`,
       });
       console.log(response);
+      setPropertyList(response.data.propertyList);
     } catch (err) {
       console.log(err);
     }
   };
 
+  //전체매물
+
+  const setList = async () => {
+    console.log("loading List......");
+    try {
+      const response = await axios.get("http://15.164.232.13/property");
+      const allList = [];
+      Object.values(response.data).map((el) => {
+        el.map((el2) => allList.push(el2));
+      });
+      const allPropertyList = allList.sort((a, b) => (a._id > b._id ? -1 : 1));
+      setPropertyList(allPropertyList);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    setList();
+  }, []);
   return (
     <>
       <Stack>
-        {/* Search - 매물 찾기 */}
         <Grid py={5} m={0} container spacing={2}>
           <Grid item xs={12}>
             <Typography
               variant="h6"
               fontWeight={700}
-              sx={{ paddingLeft: "5px" }}
+              sx={{
+                paddingLeft: "5px",
+                color: (theme) => theme.palette.primary.dark,
+              }}
             >
               🔎 매물상세검색
             </Typography>
             <Divider sx={{ margin: "0.2rem 0 " }} />
           </Grid>
           <Grid item xs={12}>
-            <Stack justifyContent="center" alignItems="center">
+            <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              px={1.5}
+            >
               <Stack
                 direction="row"
                 spacing={1}
@@ -131,15 +164,8 @@ const Home = () => {
                     </StyledMenuItem>
                   ))}
                 </SelectBox>
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={{ padding: "0.4rem 1.2rem" }}
-                  onClick={handleSearch}
-                >
-                  검색
-                </Button>
               </Stack>
+              <SearchBtn onClick={handleSearch}>검색</SearchBtn>
             </Stack>
           </Grid>
         </Grid>
@@ -150,7 +176,10 @@ const Home = () => {
             <Typography
               variant="h6"
               fontWeight={700}
-              sx={{ paddingLeft: "5px" }}
+              sx={{
+                paddingLeft: "5px",
+                color: (theme) => theme.palette.primary.dark,
+              }}
             >
               🔎 빠른검색
             </Typography>
@@ -161,15 +190,27 @@ const Home = () => {
           </Grid>
           {/* Property List - 매물 리스트 */}
           <Grid item xs={12} md={9}>
-            <Typography
-              variant="h6"
-              fontWeight={700}
-              sx={{ paddingLeft: "5px" }}
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
             >
-              📣 매물 리스트
-            </Typography>
+              <Typography
+                variant="h6"
+                fontWeight={700}
+                sx={{
+                  paddingLeft: "5px",
+                  color: (theme) => theme.palette.primary.dark,
+                }}
+              >
+                📣 매물 리스트
+              </Typography>
+              <Button variant="outlined" size="small" onClick={setList}>
+                전체 매물 보기
+              </Button>
+            </Stack>
             <Divider sx={{ margin: "0.2rem 0 " }} />
-            <ListCard />
+            <ListCard propertyList={propertyList} />
           </Grid>
         </Grid>
       </Stack>
@@ -182,4 +223,23 @@ export default Home;
 const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   padding: "3px 15px",
   fontSize: "0.9rem",
+}));
+
+const SearchBtn = styled(Button)(({ theme }) => ({
+  width: "180px",
+  padding: "6px 20px",
+  marginLeft: "20px",
+  color: "#fff",
+  backgroundColor: theme.palette.primary.dark,
+  borderRadius: "5px",
+  fontSize: "14px",
+  fontWeight: 400,
+  "&: hover": {
+    border: "1px solid black",
+    color: theme.palette.primary.dark,
+    opacity: 1,
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: "120px",
+  },
 }));

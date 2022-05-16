@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 const NavContainer = styled.div`
   display: flex;
+  padding: 0 20px;
   justify-content: ${(props) => (props.isHome ? "space-between" : "flex-end")};
 `;
 
@@ -18,10 +19,10 @@ const Navbar = styled.nav`
 `;
 
 const MenuItemsWrapper = styled.div`
-  padding: 10px;
-  width: 146px;
-  border-top: 2px solid #1a73e8;
-  border-bottom: 2px solid #1a73e8;
+  padding: 10px 0;
+  width: ${(props) => (props.size === "small" ? "90px" : "150px")};
+  border-radius: 0 0 5px 5px;
+  background-color: ${(props) => props.theme.palette.primary.dark};
 `;
 
 const MainNavigationLink = styled.a.attrs({
@@ -35,21 +36,27 @@ const MainNavigationLink = styled.a.attrs({
   display: flex;
   flex-flow: row nowrap;
   height: 100%;
-  padding: 0 10px;
+  padding: 0 15px;
   text-decoration: none;
   :hover {
     color: #1a73e8;
   }
+  @media (max-width: 768px) {
+    padding: 0 8px;
+  }
 `;
 
 const MenuItem = styled.strong`
-  color: #000;
+  color: #fff;
   display: block;
-  font-size: 18px;
-  font-weight: 500;
-  margin-bottom: 5px;
-  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 300;
+  padding: 5px 10px 5px 20px;
   cursor: pointer;
+  :hover {
+    color: ${(props) => props.theme.palette.primary.lightdark};
+    border-left: 3px solid ${(props) => props.theme.palette.primary.lightdark};
+  }
 `;
 
 const YoutubeNavigationLink = styled.a.attrs({
@@ -61,10 +68,13 @@ const YoutubeNavigationLink = styled.a.attrs({
   display: flex;
   flex-flow: row nowrap;
   height: 100%;
-  padding: 0 12px;
+  padding: 0 15px;
   text-decoration: none;
   :hover {
     color: #1a73e8;
+  }
+  @media (max-width: 768px) {
+    padding: 0 8px;
   }
 `;
 
@@ -84,9 +94,8 @@ const RegisterNavigationLink = styled.a.attrs({
 `;
 
 const DropDown = styled.div`
-  background-color: rgba(255, 255, 255, 0.8);
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
   display: none;
   position: absolute;
   left: 0;
@@ -102,19 +111,23 @@ const NavbarWrapper = styled.div`
   }
 `;
 const MenuTitle = styled.span`
-  color: #fff;
-  font-weight: ${(props) => (props.isHome ? 500 : 400)};
+  color: ${(props) => props.theme.palette.primary.dark};
+  font-weight: ${(props) => (props.isHome ? 600 : 400)};
   font-size: ${(props) => (props.isHome ? "22px" : "20px")};
   line-height: 1;
   cursor: pointer;
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 const RegisterItem = styled.span`
-  font-size: 15px;
-  font-weight: 600;
-  padding: 0.2rem 0.4rem;
-  color: #f00;
-  border: 1px solid #f00;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid;
+  border-color: ${(props) => props.theme.palette.primary.dark};
+  /* color: ${(props) => props.theme.palette.red.main}; */
   border-radius: 50px;
   line-height: 1;
   cursor: pointer;
@@ -153,49 +166,82 @@ const Navigation = (props) => {
           <MainNavigationLink>
             <MenuTitle
               isHome={isHome}
-              onClick={() => navigate("/main/factory")}
+              onClick={() => navigate("/property/factorage")}
             >
               공장창고
             </MenuTitle>
           </MainNavigationLink>
           <DropDown>
             <MenuItemsWrapper>
-              <MenuItem>공장/창고 임대</MenuItem>
-              <MenuItem>공장/창고 매매</MenuItem>
+              <MenuItem onClick={() => navigate("/property/factorage-rent")}>
+                공장/창고 임대
+              </MenuItem>
+              <MenuItem onClick={() => navigate("/property/factorage-buy")}>
+                공장/창고 매매
+              </MenuItem>
             </MenuItemsWrapper>
           </DropDown>
         </NavbarWrapper>
 
         <NavbarWrapper>
           <MainNavigationLink>
-            <MenuTitle isHome={isHome} onClick={() => navigate("/main/land")}>
-              토지{" "}
+            <MenuTitle
+              isHome={isHome}
+              onClick={() => navigate("/property/land")}
+            >
+              토지
             </MenuTitle>
           </MainNavigationLink>
         </NavbarWrapper>
 
         <NavbarWrapper>
           <MainNavigationLink>
-            <MenuTitle isHome={isHome}>분양 </MenuTitle>
+            <MenuTitle
+              isHome={isHome}
+              onClick={() => navigate("/property/divide")}
+            >
+              분양
+            </MenuTitle>
           </MainNavigationLink>
           <DropDown>
             <MenuItemsWrapper>
-              <MenuItem>공장부지</MenuItem>
-              <MenuItem>공장/창고</MenuItem>
-              <MenuItem>주택부지</MenuItem>
+              <MenuItem
+                onClick={() => navigate("/property/divide-factory-land")}
+              >
+                공장부지
+              </MenuItem>
+              <MenuItem
+                onClick={() => navigate("/property/divide-factory-storage")}
+              >
+                공장/창고
+              </MenuItem>
+              <MenuItem onClick={() => navigate("/property/divide-home-land")}>
+                주택부지
+              </MenuItem>
             </MenuItemsWrapper>
           </DropDown>
         </NavbarWrapper>
 
         <NavbarWrapper>
           <MainNavigationLink>
-            <MenuTitle isHome={isHome}>기타 </MenuTitle>
+            <MenuTitle
+              isHome={isHome}
+              onClick={() => navigate("/property/etc")}
+            >
+              기타
+            </MenuTitle>
           </MainNavigationLink>
           <DropDown>
-            <MenuItemsWrapper>
-              <MenuItem>주택</MenuItem>
-              <MenuItem>상가</MenuItem>
-              <MenuItem>원룸</MenuItem>
+            <MenuItemsWrapper size="small">
+              <MenuItem onClick={() => navigate("/property/etc-house")}>
+                주택
+              </MenuItem>
+              <MenuItem onClick={() => navigate("/property/etc-commercial")}>
+                상가
+              </MenuItem>
+              <MenuItem onClick={() => navigate("/property/etc-room")}>
+                원룸
+              </MenuItem>
             </MenuItemsWrapper>
           </DropDown>
         </NavbarWrapper>

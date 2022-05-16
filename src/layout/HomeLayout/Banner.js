@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid, Stack, Alert, AlertTitle, Chip } from "@mui/material";
+import { Grid, Stack, Alert, AlertTitle, Chip, Box } from "@mui/material";
 import SwipeableViews from "react-swipeable-views";
 
 import Map from "./Map";
@@ -15,22 +15,23 @@ const BackgroundBox = styled.div`
   width: 100%;
   position: relative;
   background-color: rgba(41, 52, 92, 0.8);
-  /* border-radius: 10px 0 0 10px; */
+  border-radius: 10px;
   :before {
     content: "";
     top: 0;
-    left: 0;
+    right: 0;
     width: 100%;
     height: 100%;
     position: absolute;
+    border-radius: 10px;
     background-repeat: no-repeat;
     background-image: url(${bgImg});
-    background-size: 100%;
+    /* background-size: 100%; */
     /* border-radius: 10px 0 0 10px; */
-    filter: grayscale(100%);
-    -webkit-filter: grayscale(100%);
     /* filter: blur(2px);
     -webkit-filter: blur(2px); */
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
     z-index: -2;
   }
 `;
@@ -38,36 +39,22 @@ const BackgroundBox = styled.div`
 export const BackgroundHeader = styled.div`
   width: 100%;
   position: relative;
-  color: #fff;
+  color: ${(props) => props.theme.palette.primary.dark};
   :before {
     content: "";
     top: 0;
-    left: 0;
-    width: 100%;
+    right: 0;
     height: 100%;
+    width: 100%;
     position: absolute;
     background-repeat: no-repeat;
     background-image: url(${headerImg});
-    background-position: left bottom;
-    background-size: 100%;
-    object-fit: contain;
-    /* filter: grayscale(100%);
-    -webkit-filter: grayscale(100%); */
-    /* filter: blur(2px);
-    -webkit-filter: blur(2px); */
+    background-size: 80%;
+    background-color: ${(props) => props.theme.palette.primary.light};
+    background-position: right bottom;
+    /* object-fit: cover; */
     z-index: -2;
   }
-`;
-
-const AdBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  border-radius: 0 10px 10px 0;
-  background-color: #eaeaea;
-  font-size: 2rem;
 `;
 
 const Banner = () => {
@@ -88,13 +75,14 @@ const Banner = () => {
   return (
     <>
       <Grid
-        m={0}
-        px={5}
-        py={2}
         container
         maxWidth="lg"
-        pb={2}
-        sx={{ margin: "0 auto" }}
+        columnSpacing={2}
+        sx={{
+          margin: "20px auto 0",
+          padding: "0 2rem",
+          // border: "1px solid red",
+        }}
       >
         <Grid
           item
@@ -108,8 +96,26 @@ const Banner = () => {
             <Map />
           </BackgroundBox>
         </Grid>
-        <Grid item xs={12} md={4} sx={{ height: { xs: 200, md: 400 } }}>
-          <AdBox>
+        <Grid item xs={12} md={4}>
+          <Grid
+            item
+            xs={12}
+            md={12}
+            sx={{ height: { sm: 80, md: 190 }, marginBottom: 1.8 }}
+          >
+            <Box
+              sx={{
+                padding: 2,
+                margin: { sm: "14px 0 0", md: 0 },
+                height: { sm: 80, md: 190 },
+                borderRadius: 5,
+                backgroundColor: (theme) => theme.palette.primary.light,
+              }}
+            >
+              sconte
+            </Box>
+          </Grid>
+          <Grid item xs={12} md={12} sx={{ height: 190 }}>
             <AutoPlaySwipeableViews
               interval={4000}
               index={activeStep}
@@ -122,6 +128,7 @@ const Banner = () => {
             >
               {["추천매물", "급매", "분양"].map((item, i) => (
                 <Stack
+                  key={`li_${i}`}
                   direction="column"
                   justifyContent="space-between"
                   sx={{
@@ -130,7 +137,11 @@ const Banner = () => {
                   }}
                 >
                   <Alert
-                    sx={{ height: { xs: 198, md: 398 }, padding: 2 }}
+                    sx={{
+                      padding: 2,
+                      height: 190,
+                      borderRadius: 5,
+                    }}
                     variant="filled"
                     size="small"
                     severity={i === 1 ? "error" : i === 2 ? "info" : "success"}
@@ -146,7 +157,7 @@ const Banner = () => {
                 </Stack>
               ))}
             </AutoPlaySwipeableViews>
-          </AdBox>
+          </Grid>
         </Grid>
       </Grid>
     </>

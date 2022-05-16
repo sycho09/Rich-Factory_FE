@@ -1,7 +1,31 @@
 import { Box, Chip, Stack, styled, Typography } from "@mui/material";
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import { useRecoilState } from "recoil";
+import { PropertyList } from "../../util/atom";
 
 const QuickSearch = () => {
+  const [propertyList, setPropertyList] = useRecoilState(PropertyList);
+
+  const handleBuildingArea = async (py) => {
+    try {
+      const response = await axios.get(
+        `http://15.164.232.13/side/building/${py}`
+      );
+      setPropertyList(response.data.propertyList);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleLandArea = async (py) => {
+    try {
+      const response = await axios.get(`http://15.164.232.13/side/land/${py}`);
+      setPropertyList(response.data.propertyList);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Stack spacing={2} mt={1} sx={{ paddingRight: "20px" }}>
       <QuickBox>
@@ -9,15 +33,15 @@ const QuickSearch = () => {
           <QuickTitle>공장/창고 검색</QuickTitle>
           <QuickItem>
             화성공장/창고
-            <Buttons />
+            <Buttons city="hs" />
           </QuickItem>
           <QuickItem>
             용인공장/창고
-            <Buttons />
+            <Buttons city="yi" />
           </QuickItem>
           <QuickItem>
             세종공장/창고
-            <Buttons />
+            <Buttons city="sj" />
           </QuickItem>
         </Stack>
       </QuickBox>
@@ -27,20 +51,29 @@ const QuickSearch = () => {
           <QuickTitle>건물면적</QuickTitle>
           <QuickItem>
             100평 이하
-            <QuickDarkBlueBtn component="span" onClick={() => alert("hi")}>
-              보러가기
+            <QuickDarkBlueBtn
+              component="span"
+              onClick={() => handleBuildingArea(1)}
+            >
+              검색
             </QuickDarkBlueBtn>
           </QuickItem>
           <QuickItem>
-            200평 이하
-            <QuickDarkBlueBtn component="span" onClick={() => alert("hi")}>
-              보러가기
+            100~200평 이하
+            <QuickDarkBlueBtn
+              component="span"
+              onClick={() => handleBuildingArea(2)}
+            >
+              검색
             </QuickDarkBlueBtn>
           </QuickItem>
           <QuickItem>
             200평 이상
-            <QuickDarkBlueBtn component="span" onClick={() => alert("hi")}>
-              보러가기
+            <QuickDarkBlueBtn
+              component="span"
+              onClick={() => handleBuildingArea(3)}
+            >
+              검색
             </QuickDarkBlueBtn>
           </QuickItem>
         </Stack>
@@ -51,26 +84,38 @@ const QuickSearch = () => {
           <QuickTitle>토지면적</QuickTitle>
           <QuickItem>
             ~500평 이하
-            <QuickDarkBlueBtn component="span" onClick={() => alert("hi")}>
-              보러가기
+            <QuickDarkBlueBtn
+              component="span"
+              onClick={() => handleLandArea(1)}
+            >
+              검색
             </QuickDarkBlueBtn>
           </QuickItem>
           <QuickItem>
-            ~1000평 이하
-            <QuickDarkBlueBtn component="span" onClick={() => alert("hi")}>
-              보러가기
+            500~1000평 이하
+            <QuickDarkBlueBtn
+              component="span"
+              onClick={() => handleLandArea(2)}
+            >
+              검색
             </QuickDarkBlueBtn>
           </QuickItem>
           <QuickItem>
-            ~2000평 이히
-            <QuickDarkBlueBtn component="span" onClick={() => alert("hi")}>
-              보러가기
+            1000~2000평 이하
+            <QuickDarkBlueBtn
+              component="span"
+              onClick={() => handleLandArea(3)}
+            >
+              검색
             </QuickDarkBlueBtn>
           </QuickItem>
           <QuickItem>
             2000평 이상
-            <QuickDarkBlueBtn component="span" onClick={() => alert("hi")}>
-              이동하기
+            <QuickDarkBlueBtn
+              component="span"
+              onClick={() => handleLandArea(4)}
+            >
+              검색
             </QuickDarkBlueBtn>
           </QuickItem>
         </Stack>
@@ -81,13 +126,32 @@ const QuickSearch = () => {
 
 export default QuickSearch;
 
-const Buttons = () => {
+const Buttons = ({ city }) => {
+  const [propertyList, setPropertyList] = useRecoilState(PropertyList);
+  const handleFactorage = async (city, dealType) => {
+    try {
+      const response = await axios.get(
+        `http://15.164.232.13/side/factorage/${city}/${dealType}`
+      );
+      console.log(response);
+      setPropertyList(response.data.propertyList);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
-      <QuickBlueBtn component="span" onClick={() => alert("hi")}>
+      <QuickBlueBtn
+        component="span"
+        onClick={() => handleFactorage(city, "임대")}
+      >
         임
       </QuickBlueBtn>
-      <QuickRedBtn component="span" onClick={() => alert("hi")}>
+      <QuickRedBtn
+        component="span"
+        onClick={() => handleFactorage(city, "매매")}
+      >
         매
       </QuickRedBtn>
     </>
@@ -111,11 +175,11 @@ const QuickItem = styled(Typography)(({ theme }) => ({
 }));
 
 const QuickBlueBtn = styled(Typography)(({ theme }) => ({
-  backgroundColor: theme.palette.primary.main,
+  backgroundColor: theme.palette.primary.lightdark,
   color: "#fff",
   borderRadius: "10px",
-  padding: "3px 4px",
-  marginLeft: "12px",
+  padding: "3px 5px",
+  marginLeft: "8px",
   fontSize: "0.8rem",
   cursor: "pointer",
 }));
@@ -123,16 +187,16 @@ const QuickRedBtn = styled(Typography)(({ theme }) => ({
   backgroundColor: theme.palette.red.main,
   color: "#fff",
   borderRadius: "10px",
-  padding: "3px 4px",
+  padding: "3px 5px",
   marginLeft: "4px",
   fontSize: "0.8rem",
   cursor: "pointer",
 }));
 const QuickDarkBlueBtn = styled(Typography)(({ theme }) => ({
-  backgroundColor: "#235eab",
+  backgroundColor: theme.palette.primary.lightdark,
   color: "#fff",
   borderRadius: "10px",
-  padding: "3px 6px",
+  padding: "3px 8px",
   marginLeft: "4px",
   fontSize: "0.8rem",
   cursor: "pointer",

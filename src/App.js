@@ -1,4 +1,5 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import { ThemeProvider as StyledThemeProvider } from "styled-components";
 import { useRoutes } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import routes from "./util/routes";
@@ -9,8 +10,10 @@ function App() {
   return (
     <RecoilRoot>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        {routers}
+        <StyledThemeProvider theme={theme}>
+          <CssBaseline />
+          {routers}
+        </StyledThemeProvider>
       </ThemeProvider>
     </RecoilRoot>
   );

@@ -4,28 +4,32 @@ import {
   Grid,
   MenuItem,
   styled,
+  Button,
   Paper,
   Typography,
   Box,
-  Button,
+  Divider,
   InputBase,
   Stack,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const WriteContent = (props) => {
+  const navigate = useNavigate();
   const { printRef } = props;
 
-  const { control, register, handleSubmit, setValue, formState } = useForm({
-    defaultValues: {
-      type: "공장",
-      dealType: "매매",
-    },
-
-    mode: "onChange",
-  });
+  const { control, register, handleSubmit, setValue, watch, getValues, reset } =
+    useForm({
+      defaultValues: {
+        type: "공장",
+        dealType: "매매",
+        status: "possible",
+      },
+      mode: "onSubmit",
+    });
 
   // 미리보기 이미지(화면에 표시)
   const [previewImgs, setPreviewImgs] = useState([]);
@@ -45,11 +49,11 @@ const WriteContent = (props) => {
     });
   };
 
-  // react-hook-form 사용 이미지 업롣
+  // react-hook-form 사용 이미지 업로드
   const fileInput = React.createRef();
 
-  // 파일 전송
-  const onSubmit = async (data) => {
+  const onSubmit = async (data, e) => {
+    console.log(data);
     const formdata = new FormData();
     for (let key in img) {
       formdata.append("images", img[key]);
@@ -70,20 +74,26 @@ const WriteContent = (props) => {
       });
       console.log(response);
       console.log("--------");
+      e.target.reset();
       alert(response.data.msg);
+      navigate("/home");
     } catch (err) {
       alert(err);
     }
   };
+  // const onSubmit = (data, e) => {
+  //   console.log(data);
+  //   e.target.reset();
+  // };
+
+  console.log(watch("status"));
 
   // 이미지 초기화
   const isResetAll = () => {
-    const isReset = window.confirm("really?");
+    const isReset = window.confirm("모든 이미지를 초기화 하시겠습니까?");
     if (isReset) {
       setImg([]);
       setPreviewImgs([]);
-    } else {
-      return;
     }
   };
 
@@ -113,8 +123,9 @@ const WriteContent = (props) => {
   };
 
   useEffect(() => {
-    register("landArea", { required: true });
-    register("buildingArea", { required: true });
+    register("landArea");
+    register("buildingArea");
+    register("status", { required: true });
     console.log("----register");
   }, [register]);
 
@@ -124,26 +135,48 @@ const WriteContent = (props) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container>
           <Grid item xs={6}>
-            <CategoryTitle>✍️ 사진 선택</CategoryTitle>
-            <input
-              accept="image/*"
-              type="file"
-              name="pics"
-              multiple
-              ref={fileInput}
-              onChange={onImageChange}
-            />
-            <button onClick={isResetAll}>이미지 초기화</button>
-            {previewImgs.length > 0 && (
-              <img
-                src={previewImgs[0]}
-                style={{
-                  // maxHeight: 80,
-                  width: "100%",
-                  objectFit: "scale-down",
-                }}
-              />
-            )}
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              alignItems="flex-end"
+            >
+              <CategoryTitle>✍️ 사진 선택</CategoryTitle>
+              <Box mb={0.5}>
+                <Button variant="contained" component="label" size="small">
+                  <input
+                    accept="image/*"
+                    type="file"
+                    name="pics"
+                    hidden
+                    multiple
+                    ref={fileInput}
+                    onChange={onImageChange}
+                  />
+                  사진선택
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={isResetAll}
+                  size="small"
+                  sx={{ marginLeft: 1 }}
+                >
+                  이미지 초기화
+                </Button>
+                {previewImgs.length > 0 && (
+                  <img
+                    src={previewImgs[0]}
+                    style={{
+                      // maxHeight: 80,
+                      width: "100%",
+                      objectFit: "scale-down",
+                    }}
+                  />
+                )}
+              </Box>
+            </Stack>
+
+            <Divider sx={{ marginBottom: 1 }} />
           </Grid>
           <Grid item xs={6} pl={1}>
             <CategoryTitle>✍️ 담당자안내</CategoryTitle>
@@ -215,6 +248,7 @@ const WriteContent = (props) => {
                     sx={{
                       minWidth: "200px",
                       display: "flex",
+                      height: "100%",
                       justifyContent: "flex-end",
                       "& .css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
                         {
@@ -228,7 +262,9 @@ const WriteContent = (props) => {
                     <MenuItem value="토지">토지</MenuItem>
                     <MenuItem value="공장부지">공장부지</MenuItem>
                     <MenuItem value="주택부지">주택부지</MenuItem>
-                    <MenuItem value="주택/상가/원룸">주택/상가/원룸</MenuItem>
+                    <MenuItem value="주택">주택</MenuItem>
+                    <MenuItem value="상가">상가</MenuItem>
+                    <MenuItem value="원룸">원룸</MenuItem>
                   </Select>
                 </>
               )}
@@ -249,6 +285,7 @@ const WriteContent = (props) => {
                     sx={{
                       minWidth: "200px",
                       display: "flex",
+                      height: "100%",
                       justifyContent: "flex-end",
                       "& .css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
                         {
@@ -267,31 +304,56 @@ const WriteContent = (props) => {
             />
           </Grid>
 
-          {[
-            // { helperText: "매물번호", name: "propertyId" },
-            { helperText: "소재지", name: "address" },
-            { helperText: "계약상태", name: "status" },
-          ].map((item) => (
-            <React.Fragment key={item.name}>
-              <Grid item xs={2} sm={2}>
-                <StyledLabel>{item.helperText}</StyledLabel>
-              </Grid>
-              <Grid item xs={4} sm={4}>
-                <Controller
-                  name={item.name}
-                  control={control}
-                  render={({ field }) => (
-                    <StyledInput
-                      size="small"
-                      variant="filled"
-                      required
-                      {...field}
-                    />
-                  )}
+          <Grid item xs={2} sm={2}>
+            <StyledLabel>계약상태</StyledLabel>
+          </Grid>
+          <Grid item xs={4} sm={4}>
+            <Controller
+              name="status"
+              control={control}
+              render={({ field }) => (
+                <>
+                  <Select
+                    {...field}
+                    size="small"
+                    sx={{
+                      minWidth: "200px",
+                      display: "flex",
+                      height: "100%",
+                      justifyContent: "flex-end",
+                      "& .css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+                        {
+                          padding: "3px 10px",
+                        },
+                    }}
+                    defaultValue="possible"
+                  >
+                    <MenuItem value="possible">계약가능</MenuItem>
+                    <MenuItem value="done">계약완료</MenuItem>
+                    <MenuItem value="pending">계약대기</MenuItem>
+                  </Select>
+                </>
+              )}
+            />
+          </Grid>
+
+          <Grid item xs={2} sm={2}>
+            <StyledLabel>소재지</StyledLabel>
+          </Grid>
+          <Grid item xs={4} sm={4}>
+            <Controller
+              name="address"
+              control={control}
+              render={({ field }) => (
+                <StyledInput
+                  size="small"
+                  variant="filled"
+                  required
+                  {...field}
                 />
-              </Grid>
-            </React.Fragment>
-          ))}
+              )}
+            />
+          </Grid>
         </Grid>
 
         <CategoryTitle>✍️ 토지정보</CategoryTitle>
@@ -336,13 +398,22 @@ const WriteContent = (props) => {
             alignItems="center"
           >
             <input
-              style={{ width: 150, fontSize: 16 }}
+              style={{
+                width: 150,
+                fontSize: 16,
+                height: "100%",
+              }}
               name="landArea"
               type="number"
               placeholder="㎡"
               onChange={(e) => handleChangeFab(e, e.target.name)}
             />
-            <button onClick={handleLandArea} style={{ width: 100 }}>
+            <button
+              onClick={handleLandArea}
+              style={{
+                width: 100,
+              }}
+            >
               계산
             </button>
             {landPy !== "" && (
@@ -374,7 +445,7 @@ const WriteContent = (props) => {
             alignItems="center"
           >
             <input
-              style={{ width: 150, fontSize: 16 }}
+              style={{ width: 150, fontSize: 16, height: "100%" }}
               name="buildingArea"
               type="number"
               placeholder="㎡"
@@ -516,31 +587,22 @@ const WriteContent = (props) => {
           ))}
         </Grid>
 
-        <Box
-          sx={{
-            width: "100%",
-            ["@media print"]: {
-              display: "none",
-            },
+        <input
+          type="submit"
+          value="매물 등록하기"
+          style={{
+            border: 0,
+            outline: 0,
+            backgroundColor: "#1a73e8",
+            color: "#fff",
+            fontSize: 16,
+            padding: 10,
+            display: "flex",
+            margin: "20px auto 5px",
+            borderRadius: 10,
+            cursor: "pointer",
           }}
-        >
-          <input
-            type="submit"
-            value="매물 등록하기"
-            style={{
-              border: 0,
-              outline: 0,
-              backgroundColor: "#1a73e8",
-              color: "#fff",
-              fontSize: 16,
-              padding: 10,
-              display: "flex",
-              margin: "20px auto 5px",
-              borderRadius: 10,
-              cursor: "pointer",
-            }}
-          />
-        </Box>
+        />
       </form>
     </Box>
   );
@@ -598,9 +660,9 @@ export const StyledTextField = styled(TextField)({
   "& .Mui-disabled": {
     WebkitTextFillColor: "#000",
   },
-  ["@media print"]: {
-    fontSize: "12px",
-  },
+  // ["@media print"]: {
+  //   fontSize: "12px",
+  // },
 });
 
 export const StyledInput = styled(InputBase)({
@@ -628,17 +690,17 @@ export const StyledInput = styled(InputBase)({
   },
 });
 
-const HelperText = styled(Typography)(({ theme }) => ({
-  color: theme.palette.primary.main,
-  fontSize: 13,
-  fontWeight: 600,
-}));
+// const HelperText = styled(Typography)(({ theme }) => ({
+//   color: theme.palette.primary.main,
+//   fontSize: 16,
+//   fontWeight: 600,
+// }));
 
 const CategoryTitle = styled(Typography)(({ theme }) => ({
-  marginTop: 15,
+  marginTop: 20,
   marginBottom: 5,
-  fontSize: 14,
-  fontWeight: 700,
+  fontSize: 20,
+  fontWeight: 500,
   color: "rgba(0,0,0,0.7)",
 }));
 
@@ -657,6 +719,6 @@ export const StyledLabel = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     minWidth: "50px",
   },
-  fontSize: 14,
+  fontSize: 16,
   background: "#eaeaea",
 }));

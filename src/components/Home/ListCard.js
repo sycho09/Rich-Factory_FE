@@ -18,36 +18,45 @@ import fac from "../../layout/factory_bg.jpg";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 
-const ListCard = () => {
-  const [propertyList, setPropertyList] = useRecoilState(PropertyList);
-  const setList = async () => {
-    try {
-      const response = await axios.get("http://15.164.232.13/property", {
-        // withCredentials: true,
-      });
-      setPropertyList(response.data.propertyList);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  useEffect(() => {
-    setList();
-  }, []);
-
-  console.log(propertyList);
+const ListCard = ({ propertyList }) => {
+  // const [propertyList, setPropertyList] = useRecoilState(PropertyList);
+  // const setList = async () => {
+  //   try {
+  //     const response = await axios.get("http://15.164.232.13/property");
+  //     const allList = [];
+  //     Object.values(response.data).map((el) => {
+  //       el.map((el2) => allList.push(el2));
+  //     });
+  //     const allPropertyList = allList.sort((a, b) => (a._id > b._id ? -1 : 1));
+  //     setPropertyList(allPropertyList);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+  // useEffect(() => {
+  //   setList();
+  // }, []);
 
   return (
     <Grid container spacing={2} sx={{ marginBottom: 15 }}>
-      {propertyList?.map((el, i) => (
-        <Grid key={i} item xs={12} sm={6} md={3} mb={2}>
-          <ListItem content={el} />
+      {!propertyList.length < 1 ? (
+        <>
+          {propertyList?.map((el, i) => (
+            <Grid key={i} item xs={12} sm={6} md={3} mb={2}>
+              <ListItem content={el} />
+            </Grid>
+          ))}
+        </>
+      ) : (
+        <Grid item justifyContent="center" sx={{ margin: "40px auto" }}>
+          <Typography variant="h5">매물이 없습니다</Typography>
         </Grid>
-      ))}
+      )}
     </Grid>
   );
 };
 
-const ListItem = ({ content }) => {
+export const ListItem = ({ content }) => {
   const navigate = useNavigate();
 
   return (
@@ -115,7 +124,7 @@ const ListItem = ({ content }) => {
           sx={{ padding: "10px 15px 0", "&:last-child": { paddingBottom: 1 } }}
         >
           <Typography variant="body1" sx={{ fontWeight: 700 }}>
-            {content.address}
+            {content._id}_{content.address}
           </Typography>
           <Typography
             variant="body2"
@@ -142,10 +151,13 @@ const ListItem = ({ content }) => {
             </div>
             <div>
               <Chip
-                color="success"
                 label="평당"
                 size="small"
-                sx={{ fontSize: "12px" }}
+                sx={{
+                  fontSize: "12px",
+                  color: "#fff",
+                  backgroundColor: (theme) => theme.palette.primary.lightdark,
+                }}
               />
               &nbsp;
               <Typography
@@ -165,7 +177,7 @@ const ListItem = ({ content }) => {
                 size="small"
                 icon={<LocationOnIcon />}
                 sx={{
-                  fontWeight: 700,
+                  fontWeight: 600,
                   fontSize: 12,
                   "& .css-wjsjww-MuiChip-label": { padding: "0 4px" },
                 }}
@@ -178,7 +190,17 @@ const ListItem = ({ content }) => {
               >
                 {Math.round(content.landArea * 0.3025)}평
               </Typography>
-              <Typography variant="caption">({content.landArea}㎡)</Typography>
+              <Typography
+                component="span"
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  color: (theme) => theme.palette.red.main,
+                  marginLeft: 1,
+                }}
+              >
+                {content.landArea}㎡
+              </Typography>
             </Box>
 
             <Box>
@@ -186,7 +208,7 @@ const ListItem = ({ content }) => {
                 size="small"
                 icon={<LocationCityIcon />}
                 sx={{
-                  fontWeight: 700,
+                  fontWeight: 600,
                   fontSize: 12,
                   "& .css-wjsjww-MuiChip-label": { padding: "0 4px" },
                 }}
@@ -208,8 +230,17 @@ const ListItem = ({ content }) => {
                   >
                     {Math.round(content.buildingArea * 0.3025)}평
                   </Typography>
-                  <Typography variant="caption">
-                    ({content.buildingArea}㎡)
+                  <Typography
+                    v
+                    component="span"
+                    sx={{
+                      fontSize: "14px",
+                      fontWeight: 600,
+                      color: (theme) => theme.palette.red.main,
+                      marginLeft: 1,
+                    }}
+                  >
+                    {content.buildingArea}㎡
                   </Typography>
                 </>
               )}

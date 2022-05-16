@@ -9,12 +9,12 @@ const Map = () => {
         // boxShadow: (theme) => theme.shape.boxShadow,
         borderRadius: "10px",
         margin: "0 auto",
-        padding: "1.8rem",
+        padding: "1.8rem 3rem",
         boxSizing: "border-box",
         width: "100%",
       }}
     >
-      <div style={{ width: "480px" }}>
+      <Box sx={{ width: "480px" }}>
         <svg
           id="Layer_7"
           data-name="Layer 7"
@@ -401,7 +401,7 @@ const Map = () => {
             고덕면
           </text>
         </svg>
-      </div>
+      </Box>
     </Box>
   );
 };

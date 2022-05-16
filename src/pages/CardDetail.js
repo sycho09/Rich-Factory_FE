@@ -14,6 +14,7 @@ const CardDetail = () => {
   const { id } = useParams();
 
   // 매물 상세 정보
+  const [isLoading, setLoading] = useState(true);
   const [allInfo, setAllInfo] = useRecoilState(AllInfo);
   const [allInfoKeys, setInfoKeys] = useState([]);
   const [allInfoValues, setInfoValues] = useState([]);
@@ -27,6 +28,7 @@ const CardDetail = () => {
       setAllInfo(response.data);
       setInfoKeys(() => Object.keys(allInfo));
       setInfoValues(() => Object.values(allInfo));
+      setLoading(false);
     } catch (err) {
       alert(err);
     }
@@ -34,32 +36,36 @@ const CardDetail = () => {
 
   useEffect(() => {
     getPropertyInfo();
-  }, []);
+  }, [setAllInfo, setInfoKeys, setInfoValues]);
 
   return (
-    <React.Fragment>
-      <Stack direction="row" mt={4} mb={1} justifyContent="space-between">
-        <Typography variant="h5">
-          <Chip
-            label="0"
-            size="small"
-            color="primary"
-            sx={{ fontSize: "16px", margin: "5px 10px 7px", padding: 0.2 }}
-          />
-          매물 상세보기
-        </Typography>
-        <ReactToPrint
-          trigger={() => (
-            <Button size="small" variant="contained" sx={{ px: 2 }}>
-              프린트하기
-            </Button>
-          )}
-          // pageStyle="@page { size: auto; margin: 5mm; }"
-          content={() => componentRef.current}
-        />
-      </Stack>
-      <CardDetailContent printRef={componentRef} />
-    </React.Fragment>
+    <>
+      {!isLoading && (
+        <React.Fragment>
+          <Stack direction="row" mt={4} mb={1} justifyContent="space-between">
+            <Typography variant="h5">
+              <Chip
+                label="0"
+                size="small"
+                color="primary"
+                sx={{ fontSize: "16px", margin: "5px 10px 7px", padding: 0.2 }}
+              />
+              매물 상세보기
+            </Typography>
+            <ReactToPrint
+              trigger={() => (
+                <Button size="small" variant="contained" sx={{ px: 2 }}>
+                  프린트하기
+                </Button>
+              )}
+              // pageStyle="@page { size: auto; margin: 5mm; }"
+              content={() => componentRef.current}
+            />
+          </Stack>
+          <CardDetailContent printRef={componentRef} />
+        </React.Fragment>
+      )}
+    </>
   );
 };
 
