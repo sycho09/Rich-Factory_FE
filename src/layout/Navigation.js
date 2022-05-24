@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { AiFillHome } from "react-icons/ai";
 
 const NavContainer = styled.div`
   display: flex;
@@ -41,7 +42,7 @@ const MainNavigationLink = styled.a.attrs({
   :hover {
     color: #1a73e8;
   }
-  @media (max-width: 768px) {
+  @media (max-width: 969px) {
     padding: 0 8px;
   }
 `;
@@ -68,13 +69,13 @@ const YoutubeNavigationLink = styled.a.attrs({
   display: flex;
   flex-flow: row nowrap;
   height: 100%;
-  padding: 0 15px;
+  padding: 0 14px;
   text-decoration: none;
   :hover {
     color: #1a73e8;
   }
-  @media (max-width: 768px) {
-    padding: 0 8px;
+  @media (max-width: 969px) {
+    padding: 0 7px;
   }
 `;
 
@@ -116,7 +117,7 @@ const MenuTitle = styled.span`
   font-size: ${(props) => (props.isHome ? "22px" : "20px")};
   line-height: 1;
   cursor: pointer;
-  @media (max-width: 768px) {
+  @media (max-width: 780px) {
     font-size: 1rem;
   }
 `;
@@ -124,13 +125,18 @@ const MenuTitle = styled.span`
 const RegisterItem = styled.span`
   font-size: 16px;
   font-weight: 500;
-  padding: 0.4rem 0.8rem;
+  padding: 0.4rem;
   border: 1px solid;
   border-color: ${(props) => props.theme.palette.primary.dark};
   /* color: ${(props) => props.theme.palette.red.main}; */
   border-radius: 50px;
   line-height: 1;
   cursor: pointer;
+  @media (max-width: 969px) {
+    font-size: 14px;
+
+    padding: 0.4rem 0.2rem;
+  }
 `;
 
 const Navigation = (props) => {
@@ -164,9 +170,16 @@ const Navigation = (props) => {
 
         <NavbarWrapper>
           <MainNavigationLink>
+            <MenuTitle isHome={isHome} onClick={() => navigate("/home")}>
+              <AiFillHome />
+            </MenuTitle>
+          </MainNavigationLink>
+        </NavbarWrapper>
+        <NavbarWrapper>
+          <MainNavigationLink>
             <MenuTitle
               isHome={isHome}
-              onClick={() => navigate("/property/factorage")}
+              // onClick={() => navigate("/property/factorage-rent")}
             >
               공장창고
             </MenuTitle>
@@ -198,7 +211,7 @@ const Navigation = (props) => {
           <MainNavigationLink>
             <MenuTitle
               isHome={isHome}
-              onClick={() => navigate("/property/divide")}
+              // onClick={() => navigate("/property/divide")}
             >
               분양
             </MenuTitle>
@@ -226,7 +239,7 @@ const Navigation = (props) => {
           <MainNavigationLink>
             <MenuTitle
               isHome={isHome}
-              onClick={() => navigate("/property/etc")}
+              // onClick={() => navigate("/property/etc")}
             >
               기타
             </MenuTitle>
@@ -260,6 +273,14 @@ const Navigation = (props) => {
               }
             </MenuTitle>
           </YoutubeNavigationLink>
+        </NavbarWrapper>
+
+        <NavbarWrapper>
+          <MainNavigationLink>
+            <MenuTitle isHome={isHome} onClick={() => navigate("/main/faq")}>
+              게시판
+            </MenuTitle>
+          </MainNavigationLink>
         </NavbarWrapper>
 
         <NavbarWrapper>

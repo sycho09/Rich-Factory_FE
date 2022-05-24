@@ -59,7 +59,6 @@ const Home = () => {
         method: "get",
         url: `http://15.164.232.13/property/search?type=${search.type}&dealType=${search.dealType}&buildingArea=${search.building}&landArea=${search.landArea}`,
       });
-      console.log(response);
       setPropertyList(response.data.propertyList);
     } catch (err) {
       console.log(err);
@@ -89,7 +88,7 @@ const Home = () => {
   return (
     <>
       <Stack>
-        <Grid py={5} m={0} container spacing={2}>
+        <Grid pt={2} m={0} container spacing={2}>
           <Grid item xs={12}>
             <Typography
               variant="h6"
@@ -170,7 +169,7 @@ const Home = () => {
           </Grid>
         </Grid>
 
-        <Grid py={5} m={0} container spacing={2}>
+        <Grid pt={2} m={0} container spacing={2}>
           {/* Quick Search - 빠른 찾기 */}
           <Grid item xs={12} md={3}>
             <Typography
@@ -209,7 +208,7 @@ const Home = () => {
                 전체 매물 보기
               </Button>
             </Stack>
-            <Divider sx={{ margin: "0.2rem 0 " }} />
+            <Divider sx={{ margin: "0.2rem 0 0.8rem" }} />
             <ListCard propertyList={propertyList} />
           </Grid>
         </Grid>
@@ -226,7 +225,8 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 }));
 
 const SearchBtn = styled(Button)(({ theme }) => ({
-  width: "180px",
+  // width: "180px",
+  width: "300px",
   padding: "6px 20px",
   marginLeft: "20px",
   color: "#fff",

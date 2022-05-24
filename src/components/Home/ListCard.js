@@ -114,21 +114,28 @@ export const ListItem = ({ content }) => {
           <CardMedia
             component="img"
             height="100"
-            image={
-              content._id === 65 ? `/static/image/${content.file[0]}` : fac
-            }
+            // image={
+            //   content._id === 65 ? `/static/image/${content.file[0]}` : fac
+            // }
+            image={content.images[0]}
             alt="img"
           />
         </Box>
         <CardContent
-          sx={{ padding: "10px 15px 0", "&:last-child": { paddingBottom: 1 } }}
+          sx={{ padding: "10px 12px 0", "&:last-child": { paddingBottom: 1 } }}
         >
-          <Typography variant="body1" sx={{ fontWeight: 700 }}>
-            {content._id}_{content.address}
+          <Typography
+            variant="caption"
+            sx={{ verticalAlign: "text-top", paddingRight: 1 }}
+          >
+            {content._id}&nbsp;|
+          </Typography>
+          <Typography variant="body1" component="span" sx={{ fontWeight: 700 }}>
+            {content.address}
           </Typography>
           <Typography
             variant="body2"
-            sx={{ fontWeight: 700, color: "#f44336" }}
+            sx={{ fontWeight: 700, color: "#7d7d7d" }}
           >
             {content.useArea || "-"}
           </Typography>
@@ -136,7 +143,7 @@ export const ListItem = ({ content }) => {
             <div>
               <Chip
                 color="primary"
-                label={content.dealType}
+                label={content.dealType === "매매" ? "매매가" : "보증금"}
                 size="small"
                 sx={{ fontSize: "12px" }}
               />
@@ -145,13 +152,19 @@ export const ListItem = ({ content }) => {
                 component="span"
                 sx={{ fontSize: "16px", fontWeight: 700 }}
               >
-                {content.price}
+                {content.dealType === "매매"
+                  ? content.price.toLocaleString(undefined, {
+                      maximumFractionDigits: 1,
+                    })
+                  : content.deposit.toLocaleString(undefined, {
+                      maximumFractionDigits: 1,
+                    })}
               </Typography>
               <Typography variant="caption"> 만원</Typography>
             </div>
             <div>
               <Chip
-                label="평당"
+                label={content.dealType === "매매" ? "평당" : "월세"}
                 size="small"
                 sx={{
                   fontSize: "12px",
@@ -165,7 +178,13 @@ export const ListItem = ({ content }) => {
                 color="success"
                 sx={{ fontSize: "16px", fontWeight: 700 }}
               >
-                {content.unitPrice}
+                {content.dealType === "매매"
+                  ? content.unitPrice.toLocaleString(undefined, {
+                      maximumFractionDigits: 1,
+                    })
+                  : content.monthlyRent.toLocaleString(undefined, {
+                      maximumFractionDigits: 1,
+                    })}
               </Typography>
               <Typography variant="caption"> 만원</Typography>
             </div>
@@ -175,10 +194,14 @@ export const ListItem = ({ content }) => {
             <Box>
               <Chip
                 size="small"
-                icon={<LocationOnIcon />}
+                icon={
+                  <LocationOnIcon
+                    style={{ marginLeft: "0.5px", fontSize: 15 }}
+                  />
+                }
                 sx={{
                   fontWeight: 600,
-                  fontSize: 12,
+                  fontSize: 11,
                   "& .css-wjsjww-MuiChip-label": { padding: "0 4px" },
                 }}
                 label="대지"
@@ -186,30 +209,45 @@ export const ListItem = ({ content }) => {
               &nbsp;
               <Typography
                 component="span"
-                sx={{ fontSize: "14px", fontWeight: 700 }}
+                sx={{
+                  fontSize: "14px",
+                  letterSpacing: "-0.8px",
+                  fontWeight: 700,
+                }}
               >
-                {Math.round(content.landArea * 0.3025)}평
+                {(content.landArea * 0.3025).toLocaleString(undefined, {
+                  maximumFractionDigits: 1,
+                })}
+                평
               </Typography>
               <Typography
                 component="span"
                 sx={{
                   fontSize: "14px",
+                  letterSpacing: "-0.8px",
                   fontWeight: 600,
                   color: (theme) => theme.palette.red.main,
-                  marginLeft: 1,
+                  marginLeft: 0.5,
                 }}
               >
-                {content.landArea}㎡
+                {content.landArea.toLocaleString(undefined, {
+                  maximumFractionDigits: 1,
+                })}
+                ㎡
               </Typography>
             </Box>
 
             <Box>
               <Chip
                 size="small"
-                icon={<LocationCityIcon />}
+                icon={
+                  <LocationCityIcon
+                    style={{ marginLeft: "0.5px", fontSize: 15 }}
+                  />
+                }
                 sx={{
                   fontWeight: 600,
-                  fontSize: 12,
+                  fontSize: 11,
                   "& .css-wjsjww-MuiChip-label": { padding: "0 4px" },
                 }}
                 label="건물"
@@ -226,21 +264,31 @@ export const ListItem = ({ content }) => {
                 <>
                   <Typography
                     component="span"
-                    sx={{ fontSize: "14px", fontWeight: 700 }}
+                    sx={{
+                      fontSize: "14px",
+                      letterSpacing: "-0.8px",
+                      fontWeight: 700,
+                    }}
                   >
-                    {Math.round(content.buildingArea * 0.3025)}평
+                    {(content.buildingArea * 0.3025).toLocaleString(undefined, {
+                      maximumFractionDigits: 1,
+                    })}
+                    평
                   </Typography>
                   <Typography
-                    v
                     component="span"
                     sx={{
                       fontSize: "14px",
                       fontWeight: 600,
+                      letterSpacing: "-0.8px",
                       color: (theme) => theme.palette.red.main,
-                      marginLeft: 1,
+                      marginLeft: 0.5,
                     }}
                   >
-                    {content.buildingArea}㎡
+                    {content.buildingArea.toLocaleString(undefined, {
+                      maximumFractionDigits: 1,
+                    })}
+                    ㎡
                   </Typography>
                 </>
               )}

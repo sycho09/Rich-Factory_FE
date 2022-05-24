@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Divider, Stack, Typography } from "@mui/material";
+import { Box, Divider, Stack, Typography, Grid } from "@mui/material";
 import { ListItem } from "../components/Home/ListCard";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
@@ -24,7 +24,6 @@ const Divide = () => {
   useEffect(() => {
     getList(location.pathname);
     setLoading(false);
-    console.log(divideList);
   }, [location]);
   return (
     <Box mx={5}>
@@ -42,9 +41,7 @@ const Divide = () => {
           </Stack>
           <Divider sx={{ margin: "1rem 0" }} />
           <Typography variant="body1" sx={{ fontWeight: 600, marginBottom: 2 }}>
-            분양 매물 페이지입니다. 공장 부지, 공장/창고 부지, 주택 부지를 각각
-            확인하기 위해서는 상단 네이비게이션 공장창고에서 하위 메뉴를
-            선택해주세요
+            분양 매물 페이지입니다.
           </Typography>
           <Grid container spacing={2} sx={{ marginBottom: 15 }}>
             {divideList?.map((el, i) => (

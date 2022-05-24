@@ -9,6 +9,7 @@ import FAQ from "../pages/FAQ";
 import Land from "../pages/Land";
 import Factory from "../pages/Factory";
 import Etc from "../pages/Etc";
+import Divide from "../pages/Divide";
 
 const routes = [
   {
@@ -46,10 +47,10 @@ const routes = [
       { path: "factorage-rent", element: <Factory /> },
       { path: "factorage-buy", element: <Factory /> },
       { path: "land", element: <Land /> },
-      { path: "divide", element: <Factory /> },
-      { path: "divide-factory-land", element: <Factory /> },
-      { path: "divide-factory-storage", element: <Factory /> },
-      { path: "divide-home-land", element: <Factory /> },
+      { path: "divide", element: <Divide /> },
+      { path: "divide-factory-land", element: <Divide /> },
+      { path: "divide-factory-storage", element: <Divide /> },
+      { path: "divide-home-land", element: <Divide /> },
       { path: "etc", element: <Etc /> },
       { path: "etc-house", element: <Etc /> },
       { path: "etc-commercial", element: <Etc /> },

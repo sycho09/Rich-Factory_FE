@@ -16,8 +16,9 @@ import { tableCellClasses } from "@mui/material/TableCell";
 import React, { useState } from "react";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  padding: "0.8rem 0",
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.primary.dark,
     color: theme.palette.common.white,
     fontSize: 18,
   },
@@ -43,11 +44,11 @@ const FAQ = () => {
   }
 
   const rows = [
-    createData(1, "매매", "모든 부동산의 실거래가를 제공하나요?"),
-    createData(2, "매매", "질문 등록 전입니다"),
+    createData(1, "기타", "매매계약시 필수로 확인해야 하는 부분은 무엇인가요?"),
+    createData(2, "매매", "모든 부동산의 실거래가를 제공하나요?"),
     createData(3, "매매", "질문 등록 전입니다"),
     createData(4, "매매", "질문 등록 전입니다"),
-    createData(5, "분양", "질문 등록 전입니다"),
+    createData(5, "매매", "질문 등록 전입니다"),
   ];
 
   return (
@@ -74,14 +75,14 @@ const FAQ = () => {
                 <StyledTableCell
                   align="center"
                   sx={{
-                    width: "15%",
+                    width: "10%",
                   }}
                 >
                   구분
                 </StyledTableCell>
                 <StyledTableCell
                   sx={{
-                    width: "80%",
+                    width: "85%",
                   }}
                 >
                   조회
@@ -109,15 +110,31 @@ const Row = ({ row }) => {
       <StyledTableRow
         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
       >
-        <StyledTableCell component="th" scope="row">
+        <StyledTableCell component="th" scope="row" align="center">
           {row.id}
         </StyledTableCell>
         <StyledTableCell
           align="center"
-          sx={{ fontWeight: 600, cursor: "pointer" }}
+          sx={{ fontWeight: 500, cursor: "pointer" }}
           onClick={() => setOpen(!open)}
         >
-          <Chip label={row.name} color="success" sx={{ fontSize: 16 }} />
+          {row.name === "매매" ? (
+            <Chip
+              label={row.name}
+              sx={{
+                fontSize: 14,
+                fontWeight: 300,
+                color: "#fff",
+                backgroundColor: (theme) => theme.palette.primary.lightdark,
+              }}
+            />
+          ) : (
+            <Chip
+              label={row.name}
+              color="primary"
+              sx={{ fontSize: 14, fontWeight: 300 }}
+            />
+          )}
         </StyledTableCell>
 
         <StyledTableCell

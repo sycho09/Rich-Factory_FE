@@ -133,7 +133,6 @@ const Buttons = ({ city }) => {
       const response = await axios.get(
         `http://15.164.232.13/side/factorage/${city}/${dealType}`
       );
-      console.log(response);
       setPropertyList(response.data.propertyList);
     } catch (err) {
       console.log(err);
@@ -161,7 +160,7 @@ const Buttons = ({ city }) => {
 const QuickBox = styled(Box)(({ theme }) => ({
   borderRadius: 2,
   backgroundColor: "#f2f2f2",
-  padding: "15px 20px",
+  padding: "15px 5px 15px 20px",
 }));
 
 const QuickTitle = styled(Typography)(({ theme }) => ({
@@ -193,10 +192,11 @@ const QuickRedBtn = styled(Typography)(({ theme }) => ({
   cursor: "pointer",
 }));
 const QuickDarkBlueBtn = styled(Typography)(({ theme }) => ({
+  display: "inline-block",
   backgroundColor: theme.palette.primary.lightdark,
   color: "#fff",
   borderRadius: "10px",
-  padding: "3px 8px",
+  padding: "2px 6px",
   marginLeft: "4px",
   fontSize: "0.8rem",
   cursor: "pointer",

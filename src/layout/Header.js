@@ -92,7 +92,7 @@ const HomeLogoTitle = styled(Typography)(({ theme }) => ({
   // fontFamily: "Gowun Batang, serif",
   fontWeight: 700,
   cursor: "pointer",
-  padding: "14px 0 0",
+  padding: "14px 0 0 10px",
   [theme.breakpoints.down("sm")]: {
     padding: "0",
     display: "flex",

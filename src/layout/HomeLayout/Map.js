@@ -9,7 +9,7 @@ const Map = () => {
         // boxShadow: (theme) => theme.shape.boxShadow,
         borderRadius: "10px",
         margin: "0 auto",
-        padding: "1.8rem 3rem",
+        padding: "1.2rem 0 1.2rem 4rem ",
         boxSizing: "border-box",
         width: "100%",
       }}

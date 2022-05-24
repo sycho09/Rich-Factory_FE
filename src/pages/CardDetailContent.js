@@ -30,7 +30,7 @@ const labeling = [
   },
   { category: "지목", useArea: "용도지역", landArea: "대지면적" },
   {
-    buildingArea: "  건물면적",
+    buildingArea: "건물면적(연면적)",
     groundArea: "바닥면적",
     floorArea: "층별면적",
     hoist: "호이스트",
@@ -40,7 +40,7 @@ const labeling = [
   { deposit: " 보증금", monthlyRent: "월세" },
   { unitPrice: "평당가격", price: "매매가" },
   { highway: "고속도로", roadNearby: "인접도로" },
-  { feature: " 간략특징", detailInfo: "세부특징" },
+  { feature: " 간략특징" },
   { images: [] },
 ];
 
@@ -89,30 +89,39 @@ const CardDetailContent = ({ printRef }) => {
               {sections.length > 0 && (
                 <>
                   <StyledTitle>☑ 매물 사진</StyledTitle>
-                  <div style={{ height: 200 }}>
+                  <PrintBox
+                    style={{
+                      width: "100%",
+                    }}
+                  >
                     {sections[8].images.length > 0 ? (
                       <img
                         src={sections[8].images[0]}
-                        style={{ width: "100%" }}
-                      />
-                    ) : (
-                      <img
-                        src={testImg}
                         style={{
-                          border: "2px solid #eaeaea",
-                          maxHeight: 200,
                           width: "100%",
-                          objectFit: "scale-down",
+                          maxHeight: "100%",
+                          border: "2px solid #cfcfcf",
                         }}
                       />
+                    ) : (
+                      <Box
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderTop: "1px solid #cfcfcf",
+                        }}
+                      >
+                        <p>이미지가 없습니다</p>
+                      </Box>
                     )}
-                  </div>
+                  </PrintBox>
                 </>
               )}
             </Grid>
             <Grid item xs={6}>
               {sections.length > 0 && (
-                <>
+                <div style={{ paddingLeft: "4px" }}>
                   <StyledTitle>☑ 담당자 안내</StyledTitle>
                   <Divider />
                   {Object.entries(labeling[0]).map((label, i) => (
@@ -132,7 +141,7 @@ const CardDetailContent = ({ printRef }) => {
                       </Grid>
                     </React.Fragment>
                   ))}
-                </>
+                </div>
               )}
             </Grid>
             <Grid item sm={12}>
@@ -200,12 +209,17 @@ const CardDetailContent = ({ printRef }) => {
                         id={label[1]}
                         disabled
                         name={label[0]}
-                        value={`${sections[2][label[0]]}㎡`}
+                        value={`${sections[2][label[0]].toLocaleString(
+                          undefined,
+                          { maximumFractionDigits: 1 }
+                        )}㎡`}
                       />
                       <StyledPyInput
-                        value={`${(sections[2][label[0]] * 0.3025).toFixed(
-                          2
-                        )}평`}
+                        value={`${(
+                          sections[2][label[0]] * 0.3025
+                        ).toLocaleString(undefined, {
+                          maximumFractionDigits: 1,
+                        })}평`}
                       />
                     </Stack>
                   )}
@@ -224,25 +238,54 @@ const CardDetailContent = ({ printRef }) => {
                       <StyledLabel>{label[1]}</StyledLabel>
                     </Grid>
                     <Grid item xs={4} sm={4}>
-                      {label[0] !== "buildingArea" ? (
-                        <StyledInput
-                          id={label[1]}
-                          disabled
-                          name={label[0]}
-                          value={sections[3][label[0]]}
-                        />
-                      ) : (
+                      {label[0] !== "buildingArea" &&
+                        label[0] !== "groundArea" && (
+                          <StyledInput
+                            id={label[1]}
+                            disabled
+                            name={label[0]}
+                            value={sections[3][label[0]]}
+                          />
+                        )}
+
+                      {label[0] === "buildingArea" && (
                         <Stack direction="row">
                           <StyledInput
                             id={label[1]}
                             disabled
                             name={label[0]}
-                            value={`${sections[3][label[0]]}㎡`}
+                            value={`${sections[3][label[0]].toLocaleString(
+                              undefined,
+                              { maximumFractionDigits: 1 }
+                            )}㎡`}
                           />
                           <StyledPyInput
-                            value={`${(sections[3][label[0]] * 0.3025).toFixed(
-                              2
-                            )}평`}
+                            value={`${(
+                              sections[3][label[0]] * 0.3025
+                            ).toLocaleString(undefined, {
+                              maximumFractionDigits: 1,
+                            })}평`}
+                          />
+                        </Stack>
+                      )}
+
+                      {label[0] === "groundArea" && (
+                        <Stack direction="row">
+                          <StyledInput
+                            id={label[1]}
+                            disabled
+                            name={label[0]}
+                            value={`${sections[3][label[0]].toLocaleString(
+                              undefined,
+                              { maximumFractionDigits: 1 }
+                            )}㎡`}
+                          />
+                          <StyledPyInput
+                            value={`${(
+                              sections[3][label[0]] * 0.3025
+                            ).toLocaleString(undefined, {
+                              maximumFractionDigits: 1,
+                            })}평`}
                           />
                         </Stack>
                       )}
@@ -266,7 +309,12 @@ const CardDetailContent = ({ printRef }) => {
                         id={label[1]}
                         disabled
                         name={label[0]}
-                        value={sections[5][label[0]]}
+                        value={`${sections[5][label[0]].toLocaleString(
+                          undefined,
+                          {
+                            maximumFractionDigits: 1,
+                          }
+                        )}만원`}
                       />
                     </Grid>
                   </React.Fragment>
@@ -287,7 +335,12 @@ const CardDetailContent = ({ printRef }) => {
                         id={label[1]}
                         disabled
                         name={label[0]}
-                        value={sections[4][label[0]]}
+                        value={`${sections[4][label[0]].toLocaleString(
+                          undefined,
+                          {
+                            maximumFractionDigits: 1,
+                          }
+                        )}만원`}
                       />
                     </Grid>
                   </React.Fragment>
@@ -321,24 +374,11 @@ const CardDetailContent = ({ printRef }) => {
             </Grid>
             <Grid item xs={12} sm={12}>
               <StyledTextField
-                rows={1}
+                rows={3}
                 multiline
                 disabled
                 name="feature"
                 value={sections[7]["feature"]}
-              />
-            </Grid>
-
-            <Grid item xs={2} sm={2}>
-              <StyledLabel>{labeling[7]["detailInfo"]}</StyledLabel>
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <StyledTextField
-                rows={3}
-                multiline
-                disabled
-                name="detailInfo"
-                value={sections[7]["detailInfo"]}
               />
             </Grid>
           </Grid>
@@ -355,9 +395,10 @@ export default CardDetailContent;
 export const StyledTitle = styled(Typography)(({ theme }) => ({
   fontSize: 16,
   fontWeight: 700,
-  padding: "1.5rem 0 0.2rem 0.2rem",
+  padding: "1.5rem 0 0.2rem",
   ["@media print"]: {
-    fontSize: "10px",
+    fontSize: "12px",
+    padding: "4px 0 1px",
   },
 }));
 
@@ -380,6 +421,9 @@ export const StyledTextField = styled(TextField)({
   height: "100%",
   boxSizing: "border-box",
   padding: "0",
+  "& .css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
+    WebkitTextFillColor: "#000",
+  },
   "& .MuiInputBase-input": {
     position: "relative",
     fontSize: 16,
@@ -389,6 +433,7 @@ export const StyledTextField = styled(TextField)({
     fontWeight: 500,
     WebkitTextFillColor: "#000",
   },
+
   "& .MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
     WebkitTextFillColor: "#000",
   },
@@ -424,7 +469,7 @@ export const StyledInput = styled(InputBase)({
     WebkitTextFillColor: "#000",
   },
   ["@media print"]: {
-    fontSize: "10px",
+    fontSize: "12px",
   },
 });
 
@@ -452,6 +497,13 @@ export const StyledPyInput = styled(InputBase)(({ theme }) => ({
     WebkitTextFillColor: theme.palette.red.main,
   },
   ["@media print"]: {
-    fontSize: "10px",
+    fontSize: "12px",
+  },
+}));
+
+export const PrintBox = styled(Box)(({ theme }) => ({
+  height: 380,
+  ["@media print"]: {
+    height: 280,
   },
 }));

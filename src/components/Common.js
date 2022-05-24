@@ -4,18 +4,14 @@ import {
   Select,
   MenuItem,
   styled,
-  Box,
-  Divider,
-  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 
 export const SelectBox = (props) => {
   const { children, label, search, type, setSearch } = props;
