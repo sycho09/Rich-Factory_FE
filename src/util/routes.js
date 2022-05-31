@@ -1,15 +1,18 @@
 import { Navigate } from "react-router-dom";
 import CardDetail from "../pages/CardDetail";
+import BoardDetail from "../components/Board/BoardDetail";
 import Layout from "../layout/Layout";
-import Home from "../pages/Home";
-import Write from "../pages/Write";
+import Home from "../pages/00_Home";
+import Write from "../pages/09_Write";
 import HomeLayout from "../layout/HomeLayout/HomeLayout";
-import Intro from "../pages/Intro";
-import FAQ from "../pages/FAQ";
-import Land from "../pages/Land";
-import Factory from "../pages/Factory";
-import Etc from "../pages/Etc";
-import Divide from "../pages/Divide";
+import Intro from "../pages/01_Intro";
+import FAQ from "../pages/08_FAQ";
+import Land from "../pages/03_Land";
+import Factory from "../pages/02_Factory";
+import Etc from "../pages/05_Etc";
+import Divide from "../pages/04_Divide";
+import Board from "../pages/07_Board";
+import BoardWrite from "../components/Board/BoardWrite";
 
 const routes = [
   {
@@ -27,16 +30,16 @@ const routes = [
     children: [
       { path: "page/:id", element: <CardDetail /> },
       { path: "write", element: <Write /> },
-      { path: "faq", element: <FAQ /> },
       { path: "land", element: <Land /> },
       {
-        path: "factorage",
-        element: <Factory />,
+        path: "board",
         children: [
-          { path: "factorage-rent", element: <Factory /> },
-          { path: "factorage-buy", element: <Factory /> },
+          { path: "", element: <Board /> },
+          { path: ":id", element: <BoardDetail /> },
+          { path: "write", element: <BoardWrite /> },
         ],
       },
+      { path: "faq", element: <FAQ /> },
     ],
   },
   {

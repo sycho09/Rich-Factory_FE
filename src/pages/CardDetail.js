@@ -45,7 +45,7 @@ const CardDetail = () => {
           <Stack direction="row" mt={4} mb={1} justifyContent="space-between">
             <Typography variant="h5">
               <Chip
-                label="0"
+                label={id}
                 size="small"
                 color="primary"
                 sx={{ fontSize: "16px", margin: "5px 10px 7px", padding: 0.2 }}

@@ -10,8 +10,10 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Box,
+  TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 
 export const SelectBox = (props) => {
   const { children, label, search, type, setSearch } = props;
@@ -99,3 +101,57 @@ export const PropertyTable = ({ list }) => {
     </TableContainer>
   );
 };
+
+export const DefaultInput = styled(InputBase)({
+  width: "100%",
+  height: "100%",
+  boxSizing: "border-box",
+  paddingRight: "20px",
+  borderBottom: "1px solid #cfcfcf",
+  "& .Mui-disabled": {
+    WebkitTextFillColor: "#000",
+  },
+  "& .css-yz9k0d-MuiInputBase-input.Mui-disabled": {
+    WebkitTextFillColor: "#000",
+  },
+  "& .MuiInputBase-input": {
+    position: "relative",
+    fontSize: 16,
+    width: "100%",
+    paddingLeft: "10px",
+    fontWeight: 500,
+    WebkitTextFillColor: "#000",
+  },
+});
+
+export const DefaultLabel = styled(Box)(({ theme }) => ({
+  fontWeight: 700,
+  color: theme.palette.grey.second,
+  wordBreak: "keep-all",
+  padding: "5px 0",
+  [theme.breakpoints.down("sm")]: {
+    minWidth: "50px",
+  },
+}));
+
+export const DefaultTextField = styled(TextField)({
+  width: "100%",
+  height: "100%",
+  boxSizing: "border-box",
+  padding: "0",
+  "& .MuiInputBase-input": {
+    position: "relative",
+    fontSize: 16,
+    width: "100%",
+    lineHeight: 2,
+    paddingLeft: "10px",
+    fontWeight: 500,
+    WebkitTextFillColor: "#000",
+  },
+  "& .MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
+    WebkitTextFillColor: "#000",
+  },
+  "& .Mui-disabled": {
+    WebkitTextFillColor: "#000",
+  },
+});

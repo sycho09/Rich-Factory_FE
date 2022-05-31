@@ -277,7 +277,7 @@ const Navigation = (props) => {
 
         <NavbarWrapper>
           <MainNavigationLink>
-            <MenuTitle isHome={isHome} onClick={() => navigate("/main/faq")}>
+            <MenuTitle isHome={isHome} onClick={() => navigate("/main/board")}>
               게시판
             </MenuTitle>
           </MainNavigationLink>
