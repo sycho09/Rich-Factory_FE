@@ -65,26 +65,32 @@ const Home = () => {
     }
   };
 
-  //전체매물
+  // 전체매물
+  // 페이지네이션
+  const [totalPage, setTotalPage] = useState(0);
 
-  const setList = async () => {
+  const setList = async (page) => {
     console.log("loading List......");
     try {
-      const response = await axios.get("http://15.164.232.13/property");
-      const allList = [];
-      Object.values(response.data).forEach((el) => {
-        el.forEach((el2) => allList.push(el2));
-      });
-      const allPropertyList = allList.sort((a, b) => (a._id > b._id ? -1 : 1));
+      const response = await axios.get(
+        `http://15.164.232.13/propertyall?per=20&page=${page}`
+      );
+      console.log(response.data);
+      setTotalPage(response.data.lastPage);
+      const allPropertyList = response.data.propertyList.sort((a, b) =>
+        a._id > b._id ? -1 : 1
+      );
       setPropertyList(allPropertyList);
     } catch (err) {
       console.log(err);
     }
   };
 
+  // 처음 렌더링
   useEffect(() => {
-    setList();
+    setList(1);
   }, []);
+
   return (
     <>
       <Stack>
@@ -204,6 +210,20 @@ const Home = () => {
               >
                 📣 매물 리스트
               </Typography>
+              <div>
+                {totalPage > 1 && (
+                  <p>
+                    페이지:
+                    {Array(totalPage)
+                      .fill()
+                      .map((_, i) => (
+                        <button key={i + 1} onClick={() => setList(i + 1)}>
+                          {i + 1}
+                        </button>
+                      ))}
+                  </p>
+                )}
+              </div>
               <Button variant="outlined" size="small" onClick={setList}>
                 전체 매물 보기
               </Button>

@@ -58,71 +58,83 @@ const Factory = () => {
   }, [location]);
 
   //
-  const sorting = (e, sort) => {
-    // e.preventDefault();
-    if (sort === "low") {
-      console.log(factorageList);
-      const newList = factorageList.sort((a, b) => {
-        if (a.price === b.price) {
-          return a._id - b._id;
-        }
-        return a.price - b.price;
-      });
-      setFactorageList(newList);
-    }
+  // const sorting = (e, sort) => {
+  //   // e.preventDefault();
+  //   if (sort === "low") {
+  //     console.log(factorageList);
+  //     const newList = factorageList.sort((a, b) => {
+  //       if (a.price === b.price) {
+  //         return a._id - b._id;
+  //       }
+  //       return a.price - b.price;
+  //     });
+  //     setFactorageList(newList);
+  //   }
 
-    if (sort === "high") {
-      const newList = factorageList.sort((a, b) => {
-        if (a.price === b.price) {
-          return a._id - b._id;
-        }
-        return b.price - a.price;
-      });
-      setFactorageList(newList);
-    }
-    if (sort === "abc") {
-      const newList = factorageList.sort((a, b) => {
-        const [provinceA, cityA, roadA] = a.address.split(" ");
-        const [provinceB, cityB, roadB] = b.address.split(" ");
+  //   if (sort === "high") {
+  //     const newList = factorageList.sort((a, b) => {
+  //       if (a.price === b.price) {
+  //         return a._id - b._id;
+  //       }
+  //       return b.price - a.price;
+  //     });
+  //     setFactorageList(newList);
+  //   }
+  //   if (sort === "abc") {
+  //     const newList = factorageList.sort((a, b) => {
+  //       const [provinceA, cityA, roadA] = a.address.split(" ");
+  //       const [provinceB, cityB, roadB] = b.address.split(" ");
 
-        if (provinceA !== provinceB && cityA !== cityB) {
-          if (provinceA > provinceB) return 1;
-          if (provinceA < provinceB) return -1;
-          if (provinceA === provinceB) return 0;
-        }
-        if (provinceA === provinceB && cityA !== cityB) {
-          if (cityA > cityB) return 1;
-          if (cityA < cityB) return -1;
-          if (cityA === cityB) return 0;
-        }
+  //       if (provinceA !== provinceB && cityA !== cityB) {
+  //         if (provinceA > provinceB) return 1;
+  //         if (provinceA < provinceB) return -1;
+  //         if (provinceA === provinceB) return 0;
+  //       }
+  //       if (provinceA === provinceB && cityA !== cityB) {
+  //         if (cityA > cityB) return 1;
+  //         if (cityA < cityB) return -1;
+  //         if (cityA === cityB) return 0;
+  //       }
 
-        if (roadA > roadB) return 1;
-        if (roadA < roadB) return -1;
-        if (roadA === roadB) return 0;
-      });
-      setFactorageList(newList);
-    }
-    if (sort === "zyx") {
-      const newList = factorageList.sort((b, a) => {
-        const [provinceA, cityA, roadA] = a.address.split(" ");
-        const [provinceB, cityB, roadB] = b.address.split(" ");
+  //       if (roadA > roadB) return 1;
+  //       if (roadA < roadB) return -1;
+  //       if (roadA === roadB) return 0;
+  //     });
+  //     setFactorageList(newList);
+  //   }
+  //   if (sort === "zyx") {
+  //     const newList = factorageList.sort((b, a) => {
+  //       const [provinceA, cityA, roadA] = a.address.split(" ");
+  //       const [provinceB, cityB, roadB] = b.address.split(" ");
 
-        if (provinceA !== provinceB && cityA !== cityB) {
-          if (provinceA > provinceB) return 1;
-          if (provinceA < provinceB) return -1;
-          if (provinceA === provinceB) return 0;
-        }
-        if (provinceA === provinceB && cityA !== cityB) {
-          if (cityA > cityB) return 1;
-          if (cityA < cityB) return -1;
-          if (cityA === cityB) return 0;
-        }
+  //       if (provinceA !== provinceB && cityA !== cityB) {
+  //         if (provinceA > provinceB) return 1;
+  //         if (provinceA < provinceB) return -1;
+  //         if (provinceA === provinceB) return 0;
+  //       }
+  //       if (provinceA === provinceB && cityA !== cityB) {
+  //         if (cityA > cityB) return 1;
+  //         if (cityA < cityB) return -1;
+  //         if (cityA === cityB) return 0;
+  //       }
 
-        if (roadA > roadB) return 1;
-        if (roadA < roadB) return -1;
-        if (roadA === roadB) return 0;
-      });
-      setFactorageList(newList);
+  //       if (roadA > roadB) return 1;
+  //       if (roadA < roadB) return -1;
+  //       if (roadA === roadB) return 0;
+  //     });
+  //     setFactorageList(newList);
+  //   }
+  // };
+
+  // sorting
+  const sortItems = async (item) => {
+    try {
+      const response = await axios.get(
+        `http://15.164.232.13//property/factorage?sort=${item}`
+      );
+      setFactorageList(response.data.propertyList);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -142,14 +154,20 @@ const Factory = () => {
               {rentOrSale === "/property/factorage-rent" ? "임대" : "매매"}
             </Typography>
             <Stack direction="row">
-              <SortBtn onClick={(e) => sorting(e, "high")}>높은가격순</SortBtn>
+              {/* <SortBtn onClick={(e) => sorting(e, "high")}>높은가격순</SortBtn>
               <SortBtn onClick={(e) => sorting(e, "low")}>낮은가격순</SortBtn>
               <SortBtn onClick={(e) => sorting(e, "abc")}>
                 지역(오름차순)
               </SortBtn>
               <SortBtn onClick={(e) => sorting(e, "zyx")}>
                 지역(내림차순)
+              </SortBtn> */}
+              <SortBtn onClick={(e) => sortItems("price")}>높은가격순</SortBtn>
+              <SortBtn onClick={(e) => sortItems("price")}>낮은가격순</SortBtn>
+              <SortBtn onClick={(e) => sortItems("local")}>
+                지역(오름차순)
               </SortBtn>
+              <SortBtn onClick={(e) => sortItems("size")}>면적순</SortBtn>
             </Stack>
           </Stack>
           <Divider sx={{ margin: "1rem 0" }} />
