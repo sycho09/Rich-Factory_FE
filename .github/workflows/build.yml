@@ -1,0 +1,19 @@
+name: Build
+
+on:
+  push:
+    branches: [dev]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Install modules
+        run: npm install
+
+      - name: Build modules
+        run: npm run build
