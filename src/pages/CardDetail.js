@@ -1,9 +1,9 @@
-import { Button, Chip, Divider, Stack, Typography } from "@mui/material";
+import { Button, Chip, Stack, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 import CardDetailContent from "./CardDetailContent";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { AllInfo } from "../util/atom";
 import axios from "axios";
 
@@ -15,19 +15,16 @@ const CardDetail = () => {
 
   // 매물 상세 정보
   const [isLoading, setLoading] = useState(true);
-  const [allInfo, setAllInfo] = useRecoilState(AllInfo);
-  const [allInfoKeys, setInfoKeys] = useState([]);
-  const [allInfoValues, setInfoValues] = useState([]);
+  const setAllInfo = useSetRecoilState(AllInfo);
 
   const getPropertyInfo = async () => {
     try {
       const response = await axios({
         method: "get",
-        url: `http://15.164.232.13/property/${id}`,
+        url: `https://www.richfactory.click/property/${id}`,
       });
       setAllInfo(response.data);
-      setInfoKeys(() => Object.keys(allInfo));
-      setInfoValues(() => Object.values(allInfo));
+
       setLoading(false);
     } catch (err) {
       alert(err);
@@ -36,7 +33,7 @@ const CardDetail = () => {
 
   useEffect(() => {
     getPropertyInfo();
-  }, [setAllInfo, setInfoKeys, setInfoValues]);
+  }, [setAllInfo]);
 
   return (
     <>

@@ -2,23 +2,24 @@ import React, { useState } from "react";
 import {
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
-  TableRow,
   Paper,
   Typography,
-  Box,
-  styled,
   Chip,
   Stack,
   Button,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { StyledTableCell, StyledTableRow } from "./08_FAQ";
+import { LoginInfo } from "../util/atom";
+import { useRecoilValue } from "recoil";
 
 const Board = () => {
   const navigate = useNavigate();
+
+  const isLogin = useRecoilValue(LoginInfo);
+
   function createData(id, category, title, writer, date) {
     return { id, category, title, writer, date };
   }
@@ -55,12 +56,14 @@ const Board = () => {
         <Typography variant="h5" sx={{ fontWeight: 600 }}>
           게시판
         </Typography>
-        <Button
-          variant="outlined"
-          onClick={() => navigate("/main/board/write")}
-        >
-          작성하기
-        </Button>
+        {isLogin && (
+          <Button
+            variant="outlined"
+            onClick={() => navigate("/main/board/write")}
+          >
+            작성하기
+          </Button>
+        )}
       </Stack>
       <Paper elevation={3}>
         <TableContainer sx={{ marginTop: 2 }}>

@@ -6,14 +6,26 @@ import {
   Button,
   styled,
   MenuItem,
+  FormControl,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { PropertyList } from "../util/atom";
 import axios from "axios";
+import { SortBtn } from "./02_Factory";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  IsSearch,
+  LoginInfo,
+  PropertyList,
+  RequestUrl,
+  TotalPage,
+} from "../util/atom";
 import { SelectBox } from "../components/Common";
+import PaginationComponent from "../components/Pagination";
 import ListCard from "../components/Home/ListCard";
 import QuickSearch from "../components/Home/QuickSearch";
+import ListTable from "../components/Home/ListTable";
 
 const Home = () => {
   const typeList = [
@@ -40,8 +52,12 @@ const Home = () => {
     { value: 3, menu: "1000~2000평 이하" },
     { value: 4, menu: "2000평 이상" },
   ];
+  // 로그인 정보 및 리스트 표시
+  const isLogin = useRecoilValue(LoginInfo);
+  const [showList, setShowList] = useState(false);
 
   // 리스트 저장
+  const [isloading, setIsLoading] = useState(true);
   const [propertyList, setPropertyList] = useRecoilState(PropertyList);
 
   // 검색 선택
@@ -52,44 +68,114 @@ const Home = () => {
     land: "",
   });
 
+  // 전체매물
+  // 페이지네이션 api & 총 페이지
+  const [requestUrl, setRequestUrl] = useRecoilState(RequestUrl);
+  const [totalPage, setTotalPage] = useRecoilState(TotalPage);
+
+  // 현재 페이지 저장
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [isSearch, setIsSearch] = useRecoilState(IsSearch);
+
   // 검색하기
   const handleSearch = async () => {
     try {
       const response = await axios({
         method: "get",
-        url: `http://15.164.232.13/property/search?type=${search.type}&dealType=${search.dealType}&buildingArea=${search.building}&landArea=${search.landArea}`,
+        url: `https://www.richfactory.click/property/search?type=${search.type}&dealType=${search.dealType}&buildingArea=${search.building}&landArea=${search.land}`,
       });
+      setRequestUrl(response.config.url);
+      setPropertyList(response.data.propertyList);
+      setTotalPage(response.data.lastPage);
+      if (isSearch) setIsSearch("");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const setList = async () => {
+    console.log("loading List......");
+    try {
+      const response = await axios({
+        method: "get",
+        url: `https://www.richfactory.click/propertyall`,
+      });
+      setRequestUrl(response.config.url);
+      setTotalPage(response.data.lastPage);
+      const allPropertyList = response.data.propertyList.sort((a, b) =>
+        a._id > b._id ? -1 : 1
+      );
+      setPropertyList(allPropertyList);
+      setIsLoading(false);
+      if (isSearch) setIsSearch("");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // sorting
+  const [isSort, setIsSort] = useState("");
+
+  const sortItems = (e, item) => {
+    e.preventDefault();
+    setIsSort(() => `?sort=${item}`);
+  };
+
+  useEffect(() => {
+    if (isloading) return;
+    sorting();
+  }, [isSort]);
+
+  useEffect(() => {
+    setIsSort("");
+  }, [requestUrl]);
+
+  const sorting = async () => {
+    try {
+      const response = await axios.get(`${requestUrl}${isSort}`);
+      setCurrentPage(1);
+      setRequestUrl(requestUrl);
       setPropertyList(response.data.propertyList);
     } catch (err) {
       console.log(err);
     }
   };
 
-  // 전체매물
-  // 페이지네이션
-  const [totalPage, setTotalPage] = useState(0);
-
-  const setList = async (page) => {
-    console.log("loading List......");
+  const handlePaging = async () => {
     try {
-      const response = await axios.get(
-        `http://15.164.232.13/propertyall?per=20&page=${page}`
-      );
-      console.log(response.data);
-      setTotalPage(response.data.lastPage);
-      const allPropertyList = response.data.propertyList.sort((a, b) =>
-        a._id > b._id ? -1 : 1
-      );
-      setPropertyList(allPropertyList);
+      if (!isSort) {
+        const response = await axios({
+          method: "get",
+          url: `${requestUrl}?per=20&page=${currentPage}`,
+        });
+        setPropertyList(response.data.propertyList);
+      }
+      if (isSort) {
+        const response = await axios({
+          method: "get",
+          url: `${requestUrl}${isSort}&per=20&page=${currentPage}`,
+        });
+
+        setPropertyList(response.data.propertyList);
+      }
     } catch (err) {
       console.log(err);
     }
   };
-
   // 처음 렌더링
   useEffect(() => {
-    setList(1);
+    if (!isloading) return;
+    setIsSearch("");
+    setList();
+    setShowList(false);
   }, []);
+
+  // pagination
+  useEffect(() => {
+    if (isloading) return;
+    handlePaging();
+  }, [currentPage]);
 
   return (
     <>
@@ -175,7 +261,7 @@ const Home = () => {
           </Grid>
         </Grid>
 
-        <Grid pt={2} m={0} container spacing={2}>
+        <Grid pt={2} pb={2} m={0} container spacing={2}>
           {/* Quick Search - 빠른 찾기 */}
           <Grid item xs={12} md={3}>
             <Typography
@@ -210,26 +296,58 @@ const Home = () => {
               >
                 📣 매물 리스트
               </Typography>
-              <div>
-                {totalPage > 1 && (
-                  <p>
-                    페이지:
-                    {Array(totalPage)
-                      .fill()
-                      .map((_, i) => (
-                        <button key={i + 1} onClick={() => setList(i + 1)}>
-                          {i + 1}
-                        </button>
-                      ))}
-                  </p>
+              <Stack direction="row" spacing={4}>
+                {isSearch === "city" && (
+                  <Stack direction="row" alignItems="center">
+                    <SortBtn onClick={(e) => sortItems(e, "local")}>
+                      지역별
+                    </SortBtn>
+                    <SortBtn onClick={(e) => sortItems(e, "price")}>
+                      가격별
+                    </SortBtn>
+                  </Stack>
                 )}
-              </div>
-              <Button variant="outlined" size="small" onClick={setList}>
-                전체 매물 보기
-              </Button>
+                {isSearch === "area" && (
+                  <Stack direction="row" alignItems="center">
+                    <SortBtn onClick={(e) => sortItems(e, "local")}>
+                      지역별
+                    </SortBtn>
+                    <SortBtn onClick={(e) => sortItems(e, "size")}>
+                      면적별
+                    </SortBtn>
+                  </Stack>
+                )}
+                <Stack direction="row" spacing={1}>
+                  <FormControl component="fieldset">
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          size="small"
+                          checked={showList}
+                          onChange={(e) => setShowList(e.target.checked)}
+                          name="show-list"
+                        />
+                      }
+                      label="리스트보기"
+                    />
+                  </FormControl>
+                  <Button variant="outlined" size="small" onClick={setList}>
+                    전체 매물 보기
+                  </Button>
+                </Stack>
+              </Stack>
             </Stack>
             <Divider sx={{ margin: "0.2rem 0 0.8rem" }} />
-            <ListCard propertyList={propertyList} />
+            {showList ? (
+              <ListTable propertyList={propertyList} />
+            ) : (
+              <ListCard propertyList={propertyList} />
+            )}
+            <PaginationComponent
+              totalPage={totalPage}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
           </Grid>
         </Grid>
       </Stack>

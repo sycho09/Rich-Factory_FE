@@ -12,33 +12,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
-import axios from "axios";
-import { PropertyList } from "../../util/atom";
-import fac from "../../layout/factory_bg.jpg";
-import { useEffect } from "react";
-import { useRecoilState } from "recoil";
 
 const ListCard = ({ propertyList }) => {
-  // const [propertyList, setPropertyList] = useRecoilState(PropertyList);
-  // const setList = async () => {
-  //   try {
-  //     const response = await axios.get("http://15.164.232.13/property");
-  //     const allList = [];
-  //     Object.values(response.data).map((el) => {
-  //       el.map((el2) => allList.push(el2));
-  //     });
-  //     const allPropertyList = allList.sort((a, b) => (a._id > b._id ? -1 : 1));
-  //     setPropertyList(allPropertyList);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-  // useEffect(() => {
-  //   setList();
-  // }, []);
-
   return (
-    <Grid container spacing={2} sx={{ marginBottom: 15 }}>
+    <Grid container spacing={2} sx={{ marginBottom: 5 }}>
       {!propertyList.length < 1 ? (
         <>
           {propertyList?.map((el, i) => (
@@ -82,7 +59,6 @@ export const ListItem = ({ content }) => {
             }}
             subheader={
               <>
-                {/* <Typography variant="caption">{content.dateWrite}</Typography> */}
                 <Stack direction="row" alignItems="center" spacing={1} sx={{}}>
                   <Chip
                     variant="outlined"
@@ -99,7 +75,6 @@ export const ListItem = ({ content }) => {
                   <Chip
                     label={`${content.type}`}
                     size="small"
-                    // color="warning"
                     sx={{
                       width: "100%",
                       fontSize: 16,
@@ -114,9 +89,6 @@ export const ListItem = ({ content }) => {
           <CardMedia
             component="img"
             height="100"
-            // image={
-            //   content._id === 65 ? `/static/image/${content.file[0]}` : fac
-            // }
             image={content.images[0]}
             alt="img"
           />

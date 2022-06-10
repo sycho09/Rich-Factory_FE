@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Box, Divider, Grid, Stack, Typography } from "@mui/material";
+import axios from "axios";
 import { ListItem } from "../components/Home/ListCard";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
-
+import { TotalPage, RequestUrl } from "../util/atom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import PaginationComponent from "../components/Pagination";
 
-const SortBtn = styled.a.attrs({
+export const SortBtn = styled.a.attrs({
   href: "#",
 })`
-  font-size: 13px;
+  font-size: 16px;
   cursor: pointer;
   color: ${(props) => props.theme.palette.primary.dark};
   font-weight: 600;
   background-color: #fff;
   text-decoration: none;
   border: none;
-  padding: 2px 4px;
+  padding: 2px 6px;
   :before {
     content: " ";
     display: inline-block;
@@ -38,15 +40,32 @@ const Factory = () => {
   const location = useLocation();
 
   const [isLoading, setLoading] = useState(true);
+
   const [rentOrSale, setRentOrSale] = useState("");
   const [factorageList, setFactorageList] = useState();
+
+  // 페이지네이션 api & 총 페이지
+  const [isSort, setIsSort] = useState("");
+  const [requestUrl, setRequestUrl] = useRecoilState(RequestUrl);
+  const [totalPage, setTotalPage] = useRecoilState(TotalPage);
+
+  // 현재 페이지 저장
+  const [currentPage, setCurrentPage] = useState(1);
+
   const getList = async (pathname) => {
     try {
-      const response = await axios.get(`http://15.164.232.13/${pathname}`);
+      const response = await axios.get(
+        `https://www.richfactory.click${pathname}`
+      );
       const allPropertyList = response.data.propertyList.sort((a, b) =>
         a._id > b._id ? -1 : 1
       );
+      console.log(response.config.url);
+      setRequestUrl(response.config.url);
+      setTotalPage(response.data.lastPage);
       setFactorageList(allPropertyList);
+      setIsSort("");
+      setCurrentPage(1);
     } catch (err) {
       console.log(err);
     }
@@ -55,90 +74,48 @@ const Factory = () => {
     getList(location.pathname);
     setRentOrSale(location.pathname);
     setLoading(false);
-  }, [location]);
+  }, [location.pathname]);
 
-  //
-  // const sorting = (e, sort) => {
-  //   // e.preventDefault();
-  //   if (sort === "low") {
-  //     console.log(factorageList);
-  //     const newList = factorageList.sort((a, b) => {
-  //       if (a.price === b.price) {
-  //         return a._id - b._id;
-  //       }
-  //       return a.price - b.price;
-  //     });
-  //     setFactorageList(newList);
-  //   }
-
-  //   if (sort === "high") {
-  //     const newList = factorageList.sort((a, b) => {
-  //       if (a.price === b.price) {
-  //         return a._id - b._id;
-  //       }
-  //       return b.price - a.price;
-  //     });
-  //     setFactorageList(newList);
-  //   }
-  //   if (sort === "abc") {
-  //     const newList = factorageList.sort((a, b) => {
-  //       const [provinceA, cityA, roadA] = a.address.split(" ");
-  //       const [provinceB, cityB, roadB] = b.address.split(" ");
-
-  //       if (provinceA !== provinceB && cityA !== cityB) {
-  //         if (provinceA > provinceB) return 1;
-  //         if (provinceA < provinceB) return -1;
-  //         if (provinceA === provinceB) return 0;
-  //       }
-  //       if (provinceA === provinceB && cityA !== cityB) {
-  //         if (cityA > cityB) return 1;
-  //         if (cityA < cityB) return -1;
-  //         if (cityA === cityB) return 0;
-  //       }
-
-  //       if (roadA > roadB) return 1;
-  //       if (roadA < roadB) return -1;
-  //       if (roadA === roadB) return 0;
-  //     });
-  //     setFactorageList(newList);
-  //   }
-  //   if (sort === "zyx") {
-  //     const newList = factorageList.sort((b, a) => {
-  //       const [provinceA, cityA, roadA] = a.address.split(" ");
-  //       const [provinceB, cityB, roadB] = b.address.split(" ");
-
-  //       if (provinceA !== provinceB && cityA !== cityB) {
-  //         if (provinceA > provinceB) return 1;
-  //         if (provinceA < provinceB) return -1;
-  //         if (provinceA === provinceB) return 0;
-  //       }
-  //       if (provinceA === provinceB && cityA !== cityB) {
-  //         if (cityA > cityB) return 1;
-  //         if (cityA < cityB) return -1;
-  //         if (cityA === cityB) return 0;
-  //       }
-
-  //       if (roadA > roadB) return 1;
-  //       if (roadA < roadB) return -1;
-  //       if (roadA === roadB) return 0;
-  //     });
-  //     setFactorageList(newList);
-  //   }
-  // };
-
-  // sorting
-  const sortItems = async (item) => {
+  // pagination
+  const handlePaging = async () => {
     try {
-      const response = await axios.get(
-        `http://15.164.232.13//property/factorage?sort=${item}`
-      );
+      const response = await axios({
+        method: "get",
+        url: `${requestUrl}${isSort}&per=20&page=${currentPage}`,
+      });
+      // setRequestUrl(requestUrl);
       setFactorageList(response.data.propertyList);
     } catch (err) {
       console.log(err);
     }
   };
 
-  console.log(factorageList);
+  useEffect(() => {
+    if (isLoading) return;
+    handlePaging();
+  }, [currentPage]);
+
+  // sorting
+  const sortItems = (item) => {
+    setIsSort(() => `?sort=${item}`);
+  };
+
+  useEffect(() => {
+    if (isLoading) return;
+    sorting();
+  }, [isSort]);
+
+  const sorting = async () => {
+    try {
+      const response = await axios.get(`${requestUrl}${isSort}`);
+      setCurrentPage(1);
+      setRequestUrl(requestUrl);
+      setFactorageList(response.data.propertyList);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Box mx={5}>
       {!isLoading && (
@@ -154,19 +131,11 @@ const Factory = () => {
               {rentOrSale === "/property/factorage-rent" ? "임대" : "매매"}
             </Typography>
             <Stack direction="row">
-              {/* <SortBtn onClick={(e) => sorting(e, "high")}>높은가격순</SortBtn>
-              <SortBtn onClick={(e) => sorting(e, "low")}>낮은가격순</SortBtn>
-              <SortBtn onClick={(e) => sorting(e, "abc")}>
-                지역(오름차순)
-              </SortBtn>
-              <SortBtn onClick={(e) => sorting(e, "zyx")}>
-                지역(내림차순)
-              </SortBtn> */}
-              <SortBtn onClick={(e) => sortItems("price")}>높은가격순</SortBtn>
-              <SortBtn onClick={(e) => sortItems("price")}>낮은가격순</SortBtn>
+              <SortBtn onClick={(e) => sortItems("price")}>가격순</SortBtn>
               <SortBtn onClick={(e) => sortItems("local")}>
                 지역(오름차순)
               </SortBtn>
+
               <SortBtn onClick={(e) => sortItems("size")}>면적순</SortBtn>
             </Stack>
           </Stack>
@@ -181,6 +150,11 @@ const Factory = () => {
               </Grid>
             ))}
           </Grid>
+          <PaginationComponent
+            totalPage={totalPage}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
         </>
       )}
     </Box>

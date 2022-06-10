@@ -11,7 +11,9 @@ const Divide = () => {
   const [divideList, setDiovideList] = useState([]);
   const getList = async (pathname) => {
     try {
-      const response = await axios.get(`http://15.164.232.13/${pathname}`);
+      const response = await axios.get(
+        `https://www.richfactory.click/${pathname}`
+      );
       const allPropertyList = response.data.propertyList.sort((a, b) =>
         a._id > b._id ? -1 : 1
       );

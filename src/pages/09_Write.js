@@ -1,6 +1,5 @@
 import {
   Select,
-  TextField,
   Grid,
   MenuItem,
   styled,
@@ -9,7 +8,6 @@ import {
   Typography,
   Box,
   Divider,
-  InputBase,
   Stack,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -68,7 +66,7 @@ const Write = () => {
     try {
       const response = await axios({
         method: "post",
-        url: "http://15.164.232.13/property/add",
+        url: "https://www.richfactory.click/property/add",
         data: formdata,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -161,7 +159,6 @@ const Write = () => {
             <Grid item xs={6}>
               <Stack
                 direction="row"
-                alignItems="center"
                 justifyContent="space-between"
                 alignItems="flex-end"
               >
@@ -246,6 +243,7 @@ const Write = () => {
                     <Box key={`${item}_i`}>
                       <img
                         src={item}
+                        alt={item}
                         style={{
                           border: "2px solid #eaeaea",
                           maxHeight: 80,

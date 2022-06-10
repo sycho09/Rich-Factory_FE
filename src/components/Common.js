@@ -39,35 +39,6 @@ export const SelectBox = (props) => {
   );
 };
 
-// styled elements
-const StyledInput = styled(InputBase)(({ theme }) => ({
-  "label + &": {
-    marginTop: theme.spacing(3),
-  },
-  "& .MuiInputBase-input": {
-    border: "1px solid #eaeaea",
-    backgroundColor: "#eaeaea",
-    borderRadius: 6,
-    fontSize: "16px",
-    color: theme.palette.primary.dark,
-    fontWeight: 600,
-    outline: "none",
-    height: "2rem",
-    lineHeight: "2rem",
-    textAlign: "center",
-    padding: "2px 10px 2px 15px",
-    // width: "100%",
-    [theme.breakpoints.down("sm")]: {
-      padding: "1px 5px 1px 10px",
-    },
-  },
-}));
-
-const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
-  padding: "3px 15px",
-  fontSize: "0.9rem",
-}));
-
 export const PropertyTable = ({ list }) => {
   return (
     <TableContainer>
@@ -101,6 +72,35 @@ export const PropertyTable = ({ list }) => {
     </TableContainer>
   );
 };
+
+// styled elements
+const StyledInput = styled(InputBase)(({ theme }) => ({
+  "label + &": {
+    marginTop: theme.spacing(3),
+  },
+  "& .MuiInputBase-input": {
+    border: "1px solid #eaeaea",
+    backgroundColor: "#eaeaea",
+    borderRadius: 6,
+    fontSize: "16px",
+    color: theme.palette.primary.dark,
+    fontWeight: 600,
+    outline: "none",
+    height: "2rem",
+    lineHeight: "2rem",
+    textAlign: "center",
+    padding: "2px 10px 2px 15px",
+    // width: "100%",
+    [theme.breakpoints.down("sm")]: {
+      padding: "1px 5px 1px 10px",
+    },
+  },
+}));
+
+const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
+  padding: "3px 15px",
+  fontSize: "0.9rem",
+}));
 
 export const DefaultInput = styled(InputBase)({
   width: "100%",

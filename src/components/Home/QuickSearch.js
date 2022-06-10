@@ -1,26 +1,37 @@
-import { Box, Chip, Stack, styled, Typography } from "@mui/material";
+import { Box, Stack, styled, Typography } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
-import { useRecoilState } from "recoil";
-import { PropertyList } from "../../util/atom";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { IsSearch, PropertyList, RequestUrl, TotalPage } from "../../util/atom";
 
 const QuickSearch = () => {
-  const [propertyList, setPropertyList] = useRecoilState(PropertyList);
-
+  const setPropertyList = useSetRecoilState(PropertyList);
+  const setRequestUrl = useSetRecoilState(RequestUrl);
+  const setTotalPage = useSetRecoilState(TotalPage);
+  const [isSearch, setIsSearch] = useRecoilState(IsSearch);
   const handleBuildingArea = async (py) => {
     try {
-      const response = await axios.get(
-        `http://15.164.232.13/side/building/${py}`
-      );
+      const response = await axios({
+        method: "get",
+        url: `https://www.richfactory.click/side/building/${py}`,
+      });
+      setRequestUrl(response.config.url);
       setPropertyList(response.data.propertyList);
+      setTotalPage(response.data.lastPage);
+      if (!isSearch || isSearch !== "area") setIsSearch("area");
     } catch (err) {
       console.log(err);
     }
   };
   const handleLandArea = async (py) => {
     try {
-      const response = await axios.get(`http://15.164.232.13/side/land/${py}`);
+      const response = await axios({
+        method: "get",
+        url: `https://www.richfactory.click/side/land/${py}`,
+      });
+      setRequestUrl(response.config.url);
       setPropertyList(response.data.propertyList);
+      setTotalPage(response.data.lastPage);
+      if (!isSearch || isSearch !== "area") setIsSearch("area");
     } catch (err) {
       console.log(err);
     }
@@ -127,13 +138,20 @@ const QuickSearch = () => {
 export default QuickSearch;
 
 const Buttons = ({ city }) => {
-  const [propertyList, setPropertyList] = useRecoilState(PropertyList);
+  const setPropertyList = useSetRecoilState(PropertyList);
+  const setTotalPage = useSetRecoilState(TotalPage);
+  const setRequestUrl = useSetRecoilState(RequestUrl);
+  const [isSearch, setIsSearch] = useRecoilState(IsSearch);
   const handleFactorage = async (city, dealType) => {
     try {
-      const response = await axios.get(
-        `http://15.164.232.13/side/factorage/${city}/${dealType}`
-      );
+      const response = await axios({
+        method: "get",
+        url: `https://www.richfactory.click/side/factorage/${city}/${dealType}`,
+      });
+      setRequestUrl(response.config.url);
+      setTotalPage(response.data.lastPage);
       setPropertyList(response.data.propertyList);
+      if (!isSearch || isSearch !== "city") setIsSearch("city");
     } catch (err) {
       console.log(err);
     }
