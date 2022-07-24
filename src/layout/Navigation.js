@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { AiFillHome } from "react-icons/ai";
+import { useRecoilValue } from "recoil";
+import { LoginInfo } from "../util/atom";
 
 const NavContainer = styled.div`
   display: flex;
@@ -143,6 +145,7 @@ const Navigation = (props) => {
   const { isHome } = props;
 
   const navigate = useNavigate();
+  const isLogin = useRecoilValue(LoginInfo);
   return (
     <NavContainer isHome={isHome}>
       {isHome && (
@@ -291,11 +294,13 @@ const Navigation = (props) => {
           </MainNavigationLink>
         </NavbarWrapper>
 
-        <NavbarWrapper>
-          <RegisterNavigationLink>
-            <RegisterItem isHome={isHome}> 매물등록</RegisterItem>
-          </RegisterNavigationLink>
-        </NavbarWrapper>
+        {isLogin && (
+          <NavbarWrapper>
+            <RegisterNavigationLink>
+              <RegisterItem isHome={isHome}> 매물등록</RegisterItem>
+            </RegisterNavigationLink>
+          </NavbarWrapper>
+        )}
       </Navbar>
     </NavContainer>
   );

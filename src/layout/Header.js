@@ -7,11 +7,14 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import Navigation from "./Navigation";
+import { getCookie, removeCookie } from "../util/cookie";
 import { BackgroundHeader } from "./HomeLayout/Banner";
 import { CgPhone } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
+import { LoginInfo } from "../util/atom";
+import { useRecoilState } from "recoil";
 
 const ManagerBtn = styled(Button)(({ theme }) => ({
   padding: "5px 20px",
@@ -30,6 +33,26 @@ const ManagerBtn = styled(Button)(({ theme }) => ({
 const Header = (props) => {
   const { isHome } = props;
   const navigate = useNavigate();
+
+  const [isLogin, setIsLogin] = useRecoilState(LoginInfo);
+
+  useEffect(() => {
+    const loginToken = getCookie("loginToken");
+
+    if (loginToken) {
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    removeCookie("loginToken", { path: "/" });
+    setIsLogin(false);
+    alert("로그아웃 되었습니다");
+    window.location.replace("/home");
+  };
+
   return (
     <>
       <>
@@ -65,7 +88,13 @@ const Header = (props) => {
                     <span style={{ fontWeight: 400 }}>-</span>5477
                     <span style={{ fontWeight: 400 }}>-</span>8787
                   </Typography>
-                  <ManagerBtn>관리자모드</ManagerBtn>
+                  {isLogin ? (
+                    <ManagerBtn onClick={handleLogout}>로그아웃</ManagerBtn>
+                  ) : (
+                    <ManagerBtn onClick={() => navigate("/login")}>
+                      관리자모드
+                    </ManagerBtn>
+                  )}
                 </Stack>
               </Stack>
             </Toolbar>

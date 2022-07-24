@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Divider, Stack, Grid, Typography } from "@mui/material";
 import { ListItem } from "../components/Home/ListCard";
-import { PropertyList } from "../util/atom";
-import { useRecoilValue } from "recoil";
 import axios from "axios";
 
 const Land = () => {
@@ -10,7 +8,9 @@ const Land = () => {
   const [factorageList, setFactorageList] = useState([]);
   const getList = async () => {
     try {
-      const response = await axios.get(`http://15.164.232.13/property/land`);
+      const response = await axios.get(
+        `https://www.richfactory.click/property/land`
+      );
       const allPropertyList = response.data.propertyList.sort((a, b) =>
         a._id > b._id ? -1 : 1
       );

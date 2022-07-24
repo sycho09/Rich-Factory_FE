@@ -12,6 +12,24 @@ export const PropertyList = atom({
   default: [],
 });
 
+// pagination api
+export const RequestUrl = atom({
+  key: "RequestUrl",
+  default: "",
+});
+
+// pagination total page
+export const TotalPage = atom({
+  key: "TotalPage",
+  default: 0,
+});
+
+// quick search flag
+export const IsSearch = atom({
+  key: "IsSearch",
+  default: "",
+});
+
 // 매물 등록하기
 export const TitleInfo = atom({
   key: "TitleInfo",

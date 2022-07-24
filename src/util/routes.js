@@ -13,6 +13,7 @@ import Etc from "../pages/05_Etc";
 import Divide from "../pages/04_Divide";
 import Board from "../pages/07_Board";
 import BoardWrite from "../components/Board/BoardWrite";
+import Login from "../pages/Login";
 
 const routes = [
   {
@@ -60,6 +61,10 @@ const routes = [
       { path: "etc-room", element: <Etc /> },
     ],
   },
+  {
+    path: 'login',
+    element: <Login />
+  }
 ];
 
 export default routes;
