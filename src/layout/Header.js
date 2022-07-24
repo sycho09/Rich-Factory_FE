@@ -47,7 +47,7 @@ const Header = (props) => {
   }, []);
 
   const handleLogout = () => {
-    removeCookie("loginToken", { path: "/" });
+    removeCookie("loginToken", { path: "/", domain: ".richfactory.click" });
     setIsLogin(false);
     alert("로그아웃 되었습니다");
     window.location.replace("/home");

@@ -144,7 +144,7 @@ const Factory = () => {
             공장/창고 매물 페이지입니다.
           </Typography>
           <Grid container spacing={2} sx={{ marginBottom: 15 }}>
-            {factorageList?.map((el, i) => (
+            {factorageList.map((el, i) => (
               <Grid key={i} item xs={12} sm={6} md={3} mb={2}>
                 <ListItem content={el} />
               </Grid>

@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Card,
   CardContent,
@@ -18,7 +19,7 @@ const ListCard = ({ propertyList }) => {
     <Grid container spacing={2} sx={{ marginBottom: 5 }}>
       {!propertyList.length < 1 ? (
         <>
-          {propertyList?.map((el, i) => (
+          {propertyList.map((el, i) => (
             <Grid key={i} item xs={12} sm={6} md={3} mb={2}>
               <ListItem content={el} />
             </Grid>

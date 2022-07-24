@@ -1,3 +1,5 @@
+/* eslint-disable */
+import React from "react";
 import {
   Table,
   TableBody,
@@ -44,7 +46,7 @@ const ListTable = ({ propertyList }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {propertyList?.map((el, i) => (
+              {propertyList.map((el, i) => (
                 <ListRow key={i} content={el} />
               ))}
             </TableBody>
