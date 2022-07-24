@@ -36,9 +36,12 @@ const Login = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
       const { result, token } = response.data;
-      alert(response.data);
+
       if (result === "success" && token) {
-        setCookie("loginToken", token, { path: "/" });
+        setCookie("loginToken", token, {
+          path: "/",
+          domain: ".richfactory.click",
+        });
         alert("로그인에 성공했습니다");
         navigate("/home");
       }

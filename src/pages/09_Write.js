@@ -1,3 +1,4 @@
+/* eslint-disable  */
 import {
   Select,
   Grid,
@@ -44,7 +45,7 @@ const Write = () => {
 
       let fileReader = new FileReader();
       fileReader.readAsDataURL(item);
-      fileReader.onload = function (f) {
+      fileReader.onload = function(f) {
         setPreviewImgs((o) => [...o, f.target.result]);
       };
     });
@@ -277,10 +278,9 @@ const Write = () => {
                         display: "flex",
                         height: "100%",
                         justifyContent: "flex-end",
-                        "& .css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-                          {
-                            padding: "3px 10px",
-                          },
+                        "& .css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input": {
+                          padding: "3px 10px",
+                        },
                       }}
                       defaultValue="공장"
                     >
@@ -314,10 +314,9 @@ const Write = () => {
                         display: "flex",
                         height: "100%",
                         justifyContent: "flex-end",
-                        "& .css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-                          {
-                            padding: "3px 10px",
-                          },
+                        "& .css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input": {
+                          padding: "3px 10px",
+                        },
                       }}
                       defaultValue="매매"
                     >
@@ -348,10 +347,9 @@ const Write = () => {
                         display: "flex",
                         height: "100%",
                         justifyContent: "flex-end",
-                        "& .css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-                          {
-                            padding: "3px 10px",
-                          },
+                        "& .css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-tn3m4m-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input": {
+                          padding: "3px 10px",
+                        },
                       }}
                       defaultValue="possible"
                     >

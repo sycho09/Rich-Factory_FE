@@ -1,3 +1,4 @@
+import React from "react";
 import { Navigate } from "react-router-dom";
 import CardDetail from "../pages/CardDetail";
 import BoardDetail from "../components/Board/BoardDetail";
@@ -62,9 +63,9 @@ const routes = [
     ],
   },
   {
-    path: 'login',
-    element: <Login />
-  }
+    path: "login",
+    element: <Login />,
+  },
 ];
 
 export default routes;

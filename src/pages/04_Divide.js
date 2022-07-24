@@ -46,7 +46,7 @@ const Divide = () => {
             분양 매물 페이지입니다.
           </Typography>
           <Grid container spacing={2} sx={{ marginBottom: 15 }}>
-            {divideList?.map((el, i) => (
+            {divideList.map((el, i) => (
               <Grid key={i} item xs={12} sm={6} md={3} mb={2}>
                 <ListItem content={el} />
               </Grid>
