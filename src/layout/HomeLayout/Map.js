@@ -1,19 +1,11 @@
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import "./tooltip.css";
+
 
 const Map = () => {
   return (
-    <Box
-      sx={{
-        // boxShadow: (theme) => theme.shape.boxShadow,
-        borderRadius: "10px",
-        margin: "0 auto",
-        padding: "1.2rem 0 1.2rem 4rem ",
-        boxSizing: "border-box",
-        width: "100%",
-      }}
-    >
+    <Mapbox>
       <Box sx={{ width: "480px" }}>
         <svg
           id="Layer_7"
@@ -402,8 +394,19 @@ const Map = () => {
           </text>
         </svg>
       </Box>
-    </Box>
+    </Mapbox>
   );
 };
 
 export default Map;
+
+const Mapbox = styled(Box)(({ theme }) => ({
+  borderRadius: "10px",
+  margin: "0 auto",
+  padding: "1.2rem 0 1.2rem 4.2rem ",
+  boxSizing: "border-box",
+  width: "100%",
+  [theme.breakpoints.down("laptop")]: {
+    padding: "1.2rem 0 1.2rem 1.2rem ",
+  },
+}));

@@ -15,7 +15,7 @@ import {
 import { tableCellClasses } from "@mui/material/TableCell";
 import React, { useState } from "react";
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "0.8rem 0",
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.primary.dark,
@@ -27,7 +27,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
+export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     // backgroundColor: theme.palette.action.hover,
     backgroundColor: theme.palette.grey.main,

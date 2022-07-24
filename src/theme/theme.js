@@ -42,6 +42,16 @@ const theme = createTheme({
     borderRadius: 2,
     boxShadow: "1px 1px 4px 1px rgba(0,0,0,0.2)",
   },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      laptop: 1040,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
 });
 
 export default theme;

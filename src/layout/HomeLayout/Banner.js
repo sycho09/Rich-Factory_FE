@@ -35,7 +35,7 @@ const BackgroundBox = styled.div`
     border-radius: 10px;
     background-repeat: no-repeat;
     background-image: url(${bgImg});
-    background-size: 100%;
+    background-size: 120%;
     /* border-radius: 10px 0 0 10px; */
     /* filter: blur(2px);
     -webkit-filter: blur(2px); */
@@ -109,13 +109,13 @@ const Banner = () => {
             item
             xs={12}
             md={12}
-            sx={{ height: { sm: 80, md: 175 }, marginBottom: 1.8 }}
+            sx={{ height: { sm: 80, md: 120 }, marginBottom: 1.8 }}
           >
             <Box
               sx={{
                 padding: 2,
                 margin: { sm: "14px 0 0", md: 0 },
-                height: { sm: 80, md: 175 },
+                height: { sm: 80, md: 120 },
                 borderRadius: 5,
                 display: "flex",
                 flexDirection: "column",
@@ -125,9 +125,6 @@ const Banner = () => {
                 backgroundColor: "#eaeaea",
               }}
             >
-              <Typography variant="h4" sx={{ textAlign: "center" }}>
-                📞
-              </Typography>
               <Typography
                 sx={{ fontSize: "1rem", paddingTop: 1, textAlign: "center" }}
               >
@@ -141,11 +138,11 @@ const Banner = () => {
                   textAlign: "center",
                 }}
               >
-                365일 전화 상담 가능합니다.
+                📞 365일 전화 상담 가능합니다.
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={12} md={12} sx={{ height: 190 }}>
+          <Grid item xs={12} md={12} sx={{ height: 245 }}>
             <AutoPlaySwipeableViews
               interval={4000}
               index={activeStep}
@@ -169,7 +166,7 @@ const Banner = () => {
                   <Alert
                     sx={{
                       padding: 2,
-                      height: 190,
+                      height: 245,
                       borderRadius: 5,
                     }}
                     variant="filled"

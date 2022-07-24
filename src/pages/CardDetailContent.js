@@ -9,10 +9,15 @@ import {
   Box,
   TextField,
 } from "@mui/material";
-import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { AllInfo } from "../util/atom";
 import testImg from "./testImg.png";
+import {
+  DefaultInput,
+  DefaultLabel,
+  DefaultTextField,
+} from "../components/Common";
+
 const labeling = [
   {
     store: " 상호",
@@ -45,8 +50,6 @@ const labeling = [
 ];
 
 const CardDetailContent = ({ printRef }) => {
-  const { id } = useParams();
-
   const [isLoading, setLoading] = useState(true);
   const [allInfo, setAllInfo] = useRecoilState(AllInfo);
   const [sections, setSections] = useState([]);
@@ -77,7 +80,6 @@ const CardDetailContent = ({ printRef }) => {
     }
     setLoading(false);
   }, []);
-  console.log(sections);
 
   return (
     <>
@@ -402,72 +404,25 @@ export const StyledTitle = styled(Typography)(({ theme }) => ({
   },
 }));
 
-export const StyledLabel = styled(Box)(({ theme }) => ({
+const StyledLabel = styled(DefaultLabel)(({ theme }) => ({
   textAlign: "center",
-  fontWeight: 700,
-  color: theme.palette.grey.second,
-  wordBreak: "keep-all",
-  padding: "5px 0",
-  borderBottom: "1px solid #cfcfcf",
-  [theme.breakpoints.down("sm")]: {
-    minWidth: "50px",
-  },
   fontSize: 14,
   background: "#eaeaea",
+  borderBottom: "1px solid #cfcfcf",
 }));
 
-export const StyledTextField = styled(TextField)({
-  width: "100%",
-  height: "100%",
-  boxSizing: "border-box",
-  padding: "0",
+export const StyledTextField = styled(DefaultTextField)({
   "& .css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
     WebkitTextFillColor: "#000",
   },
-  "& .MuiInputBase-input": {
-    position: "relative",
-    fontSize: 16,
-    width: "100%",
-    lineHeight: 2,
-    paddingLeft: "10px",
-    fontWeight: 500,
-    WebkitTextFillColor: "#000",
-  },
 
-  "& .MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
-    WebkitTextFillColor: "#000",
-  },
-  "& .Mui-disabled": {
-    WebkitTextFillColor: "#000",
-  },
   ["@media print"]: {
     fontSize: "12px",
   },
 });
 
-export const StyledInput = styled(InputBase)({
-  width: "100%",
-  height: "100%",
-  boxSizing: "border-box",
-  // padding: "5px",
-  paddingRight: "20px",
-  borderBottom: "1px solid #cfcfcf",
+export const StyledInput = styled(DefaultInput)({
   borderRight: "1px solid #cfcfcf",
-  "& .Mui-disabled": {
-    WebkitTextFillColor: "#000",
-  },
-  "& .css-yz9k0d-MuiInputBase-input.Mui-disabled": {
-    WebkitTextFillColor: "#000",
-  },
-  "& .MuiInputBase-input": {
-    position: "relative",
-    fontSize: 16,
-    width: "100%",
-    // lineHeight: 2,
-    paddingLeft: "10px",
-    fontWeight: 500,
-    WebkitTextFillColor: "#000",
-  },
   ["@media print"]: {
     fontSize: "12px",
   },

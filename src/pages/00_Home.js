@@ -72,8 +72,8 @@ const Home = () => {
     try {
       const response = await axios.get("http://15.164.232.13/property");
       const allList = [];
-      Object.values(response.data).map((el) => {
-        el.map((el2) => allList.push(el2));
+      Object.values(response.data).forEach((el) => {
+        el.forEach((el2) => allList.push(el2));
       });
       const allPropertyList = allList.sort((a, b) => (a._id > b._id ? -1 : 1));
       setPropertyList(allPropertyList);

@@ -13,9 +13,14 @@ import {
   Stack,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
+import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import {
+  DefaultInput,
+  DefaultLabel,
+  DefaultTextField,
+} from "../components/Common";
 
 const Write = () => {
   const navigate = useNavigate();
@@ -107,7 +112,7 @@ const Write = () => {
   const handleLandArea = (e) => {
     e.preventDefault();
     let pyvalue = Number(py) * 0.3025;
-    setLandPy(pyvalue.toFixed(2));
+    setLandPy(pyvalue.toFixed(1));
     setPy("");
   };
 
@@ -116,13 +121,23 @@ const Write = () => {
   const handleFabArea = (e) => {
     e.preventDefault();
     let pyvalue = Number(py) * 0.3025;
-    setFabPy(pyvalue.toFixed(2));
+    setFabPy(pyvalue.toFixed(1));
+    setPy("");
+  };
+
+  // 바닥면적
+  const [groundPy, setGroundPy] = useState("");
+  const handleGroundArea = (e) => {
+    e.preventDefault();
+    let pyvalue = Number(py) * 0.3025;
+    setGroundPy(pyvalue.toFixed(1));
     setPy("");
   };
 
   useEffect(() => {
     register("landArea");
     register("buildingArea");
+    register("groundArea");
     register("status", { required: true });
     console.log("----register");
   }, [register]);
@@ -479,9 +494,41 @@ const Write = () => {
                 </span>
               )}
             </Grid>
+            <Grid item xs={2} sm={2}>
+              <StyledLabel>바닥면적</StyledLabel>
+            </Grid>
+            <Grid
+              item
+              xs={10}
+              sm={10}
+              sx={{
+                borderRight: "1px solid #cfcfcf",
+                borderBottom: "1px solid #cfcfcf",
+              }}
+              alignItems="center"
+            >
+              <input
+                style={{ width: 150, fontSize: 16, height: "100%" }}
+                name="groundArea"
+                type="number"
+                placeholder="㎡"
+                onChange={(e) => handleChangeFab(e, e.target.name)}
+              />
+              <button onClick={handleGroundArea} style={{ width: 100 }}>
+                계산
+              </button>
+              {groundPy !== "" && (
+                <span>
+                  <strong
+                    style={{ marginLeft: 4, color: "#d74040", fontWeight: 700 }}
+                  >
+                    {groundPy}
+                  </strong>
+                  평
+                </span>
+              )}
+            </Grid>
             {[
-              // { helperText: "건물면적", name: "buildingArea" },
-              { helperText: "바닥면적", name: "groundArea" },
               { helperText: "층별면적", name: "floorArea" },
               { helperText: "호이스트", name: "hoist" },
               { helperText: "전력", name: "electric" },
@@ -574,31 +621,21 @@ const Write = () => {
           </Grid>
 
           <CategoryTitle>✍️ 매물특징</CategoryTitle>
-          <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
-            {[
-              { helperText: "간략특징", name: "feature" },
-              { helperText: "세부특징", name: "detailInfo" },
-            ].map((item) => (
-              <React.Fragment key={item.name}>
-                <Grid item xs={2} sm={2}>
-                  <StyledLabel>{item.helperText}</StyledLabel>
-                </Grid>
-                <Grid item xs={12} sm={12}>
-                  <Controller
-                    name={item.name}
-                    control={control}
-                    render={({ field }) => (
-                      <StyledTextField
-                        size="small"
-                        rows={item.name === "feature" ? 1 : 4}
-                        multiline
-                        {...field}
-                      />
-                    )}
-                  />
-                </Grid>
-              </React.Fragment>
-            ))}
+          <Grid container>
+            <Grid item xs={2} sm={2}>
+              <StyledLabel sx={{ borderTop: "1px solid #cfcfcf" }}>
+                간략특징
+              </StyledLabel>
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <Controller
+                name="feature"
+                control={control}
+                render={({ field }) => (
+                  <StyledTextField size="small" rows={3} multiline {...field} />
+                )}
+              />
+            </Grid>
           </Grid>
 
           <input
@@ -634,50 +671,10 @@ export const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: 0,
 }));
 
-export const StyledTextField = styled(TextField)({
-  width: "100%",
-  height: "100%",
-  boxSizing: "border-box",
-  padding: "0",
-  "& .MuiInputBase-input": {
-    position: "relative",
-    fontSize: 16,
-    width: "100%",
-    lineHeight: 2,
-    paddingLeft: "10px",
-    fontWeight: 500,
-    WebkitTextFillColor: "#000",
-  },
-  "& .MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
-    WebkitTextFillColor: "#000",
-  },
-  "& .Mui-disabled": {
-    WebkitTextFillColor: "#000",
-  },
-});
+export const StyledTextField = styled(DefaultTextField)({});
 
-export const StyledInput = styled(InputBase)({
-  width: "100%",
-  height: "100%",
-  boxSizing: "border-box",
-  paddingRight: "20px",
-  borderBottom: "1px solid #cfcfcf",
+export const StyledInput = styled(DefaultInput)({
   borderRight: "1px solid #cfcfcf",
-  "& .Mui-disabled": {
-    WebkitTextFillColor: "#000",
-  },
-  "& .css-yz9k0d-MuiInputBase-input.Mui-disabled": {
-    WebkitTextFillColor: "#000",
-  },
-  "& .MuiInputBase-input": {
-    position: "relative",
-    fontSize: 16,
-    width: "100%",
-    // lineHeight: 2,
-    paddingLeft: "10px",
-    fontWeight: 500,
-    WebkitTextFillColor: "#000",
-  },
 });
 
 const CategoryTitle = styled(Typography)(({ theme }) => ({
@@ -693,16 +690,9 @@ export const StyledTitle = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
   padding: "2rem 0 0.5rem 0.2rem",
 }));
-export const StyledLabel = styled(Box)(({ theme }) => ({
+const StyledLabel = styled(DefaultLabel)(({ theme }) => ({
   textAlign: "center",
-  fontWeight: 700,
-  color: theme.palette.grey.second,
-  wordBreak: "keep-all",
-  padding: "5px",
-  borderBottom: "1px solid #cfcfcf",
-  [theme.breakpoints.down("sm")]: {
-    minWidth: "50px",
-  },
   fontSize: 16,
   background: "#eaeaea",
+  borderBottom: "1px solid #cfcfcf",
 }));
