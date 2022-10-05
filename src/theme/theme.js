@@ -1,6 +1,17 @@
 import { createTheme } from "@mui/material";
 
 const theme = createTheme({
+  components: {
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          "&.Mui-disabled": {
+            WebkitTextFillColor: "#f0f",
+          },
+        },
+      },
+    },
+  },
   palette: {
     primary: {
       main: "#1a73e8",

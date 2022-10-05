@@ -108,10 +108,7 @@ export const DefaultInput = styled(InputBase)({
   boxSizing: "border-box",
   paddingRight: "20px",
   borderBottom: "1px solid #cfcfcf",
-  "& .Mui-disabled": {
-    WebkitTextFillColor: "#000",
-  },
-  "& .css-yz9k0d-MuiInputBase-input.Mui-disabled": {
+  "& .MuiInputBase-input.Mui-disabled": {
     WebkitTextFillColor: "#000",
   },
   "& .MuiInputBase-input": {
@@ -148,10 +145,7 @@ export const DefaultTextField = styled(TextField)({
     fontWeight: 500,
     WebkitTextFillColor: "#000",
   },
-  "& .MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
-    WebkitTextFillColor: "#000",
-  },
-  "& .Mui-disabled": {
+  "& .MuiInputBase-input.Mui-disabled": {
     WebkitTextFillColor: "#000",
   },
 });

@@ -38,16 +38,11 @@ const Header = (props) => {
 
   useEffect(() => {
     const loginToken = getCookie("loginToken");
-    console.log(loginToken);
     if (loginToken) {
       setIsLogin(true);
     } else {
       setIsLogin(false);
     }
-  }, []);
-
-  useEffect(() => {
-    console.log(isLogin);
   }, []);
 
   const handleLogout = () => {

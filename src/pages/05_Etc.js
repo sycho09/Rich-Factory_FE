@@ -1,8 +1,6 @@
 import React from "react";
 import { Box, Divider, Stack, Typography } from "@mui/material";
-// import { PropertyList } from "../util/atom";
-// import { useEffect } from "react";
-// import { useRecoilValue } from "recoil";
+
 const Etc = () => {
   return (
     <Box mx={5}>

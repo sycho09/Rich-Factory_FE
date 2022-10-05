@@ -12,7 +12,6 @@ import {
   Stack,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {
@@ -20,7 +19,6 @@ import {
   DefaultLabel,
   DefaultTextField,
 } from "../components/Common";
-import { useRecoilValue } from "recoil";
 import { factory_API } from "../util/axios";
 import { getCookie } from "../util/cookie";
 
@@ -67,40 +65,16 @@ const Write = () => {
     }
 
     const loginToken = getCookie("loginToken");
-    console.log(loginToken);
     factory_API.defaults.headers.common.Authorization = `Bearer ${loginToken}`;
     addSubmit(formdata);
-    // try {
-    //   const response = await axios({
-    //     method: "post",
-    //     url: "https://www.richfactory.click/property/add",
-    //     data: formdata,
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //       "Access-Control-Allow-Origin": "*",
-    //       Authorization: `Bearer ${loginToken}`,
-    //     },
-    //   });
-    //   console.log(response);
-    //   console.log("--------");
-    //   e.target.reset();
-    //   alert(response.data.msg);
-    //   navigate("/home");
-    // } catch (err) {
-    //   alert(err);
-    // }
   };
-  // const onSubmit = (data, e) => {
-  //   console.log(data);
-  //   e.target.reset();
-  // };
 
   const addSubmit = async (value) => {
     await factory_API
       .post("/property/add", value)
       .then((res) => {
-        console.log(res);
         alert("저장완료");
+        navigate("/home");
       })
       .catch((err) => {
         alert(err);
@@ -157,7 +131,6 @@ const Write = () => {
     register("buildingArea");
     register("groundArea");
     register("status", { required: true });
-    console.log("----register");
   }, [register]);
 
   return (
