@@ -6,6 +6,7 @@ import CardDetailContent from "./CardDetailContent";
 import { useSetRecoilState } from "recoil";
 import { AllInfo } from "../util/atom";
 import axios from "axios";
+import { factory_API } from "../util/axios";
 
 const CardDetail = () => {
   // 프린트
@@ -35,6 +36,21 @@ const CardDetail = () => {
     getPropertyInfo();
   }, [setAllInfo]);
 
+  const deleteProperty = async () => {
+    const isDelete = window.confirm("정말 매물을 삭제하시겠습니까?");
+
+    if (isDelete) {
+      await factory_API
+        .delete(`/property/${id}`)
+        .then((res) => {
+          console.log(res);
+          alert("complete");
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    }
+  };
   return (
     <>
       {!isLoading && (
@@ -49,15 +65,23 @@ const CardDetail = () => {
               />
               매물 상세보기
             </Typography>
-            <ReactToPrint
-              trigger={() => (
-                <Button size="small" variant="contained" sx={{ px: 2 }}>
-                  프린트하기
-                </Button>
-              )}
-              // pageStyle="@page { size: auto; margin: 5mm; }"
-              content={() => componentRef.current}
-            />
+            <Stack direction="row" spacing={0.5}>
+              <CardDetailButton type="outlined" event={() => alert("Edit")}>
+                수정
+              </CardDetailButton>
+              <CardDetailButton type="outlined" event={deleteProperty}>
+                삭제
+              </CardDetailButton>
+              <ReactToPrint
+                trigger={() => (
+                  <Button size="small" variant="contained" sx={{ px: 2 }}>
+                    프린트하기
+                  </Button>
+                )}
+                // pageStyle="@page { size: auto; margin: 5mm; }"
+                content={() => componentRef.current}
+              />
+            </Stack>
           </Stack>
           <CardDetailContent printRef={componentRef} />
         </React.Fragment>
@@ -67,3 +91,16 @@ const CardDetail = () => {
 };
 
 export default CardDetail;
+
+const CardDetailButton = ({ type, children, ...props }) => {
+  return (
+    <Button
+      size="small"
+      variant={type}
+      sx={props.sx || null}
+      onClick={props.event || null}
+    >
+      {children}
+    </Button>
+  );
+};
