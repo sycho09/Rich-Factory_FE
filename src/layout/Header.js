@@ -13,8 +13,8 @@ import { getCookie, removeCookie } from "../util/cookie";
 import { BackgroundHeader } from "./HomeLayout/Banner";
 import { CgPhone } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
-import { LoginInfo } from "../util/atom";
-import { useRecoilState } from "recoil";
+import { LoginInfo, Token } from "../util/atom";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 const ManagerBtn = styled(Button)(({ theme }) => ({
   padding: "5px 20px",
@@ -31,14 +31,14 @@ const ManagerBtn = styled(Button)(({ theme }) => ({
 }));
 
 const Header = (props) => {
-  const { isHome } = props;
   const navigate = useNavigate();
+  const token = useRecoilValue(Token);
 
   const [isLogin, setIsLogin] = useRecoilState(LoginInfo);
 
   useEffect(() => {
     const loginToken = getCookie("loginToken");
-
+    console.log(loginToken);
     if (loginToken) {
       setIsLogin(true);
     } else {
@@ -46,9 +46,14 @@ const Header = (props) => {
     }
   }, []);
 
+  useEffect(() => {
+    console.log(isLogin);
+  }, []);
+
   const handleLogout = () => {
+    console.log(isLogin);
     removeCookie("loginToken", { path: "/", domain: ".richfactory.click" });
-    setIsLogin(false);
+    setIsLogin("");
     alert("로그아웃 되었습니다");
     window.location.replace("/home");
   };

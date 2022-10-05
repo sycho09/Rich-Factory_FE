@@ -6,6 +6,11 @@ export const LoginInfo = atom({
   default: false,
 });
 
+export const Token = atom({
+  key: "Token",
+  default: "",
+});
+
 // 등록된 매물 리스트 불러오기
 export const PropertyList = atom({
   key: "PropertyList",

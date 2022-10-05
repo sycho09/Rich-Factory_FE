@@ -12,7 +12,8 @@ import axios from "axios";
 import { setCookie } from "../util/cookie";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { Token } from "../util/atom";
+import { useRecoilState } from "recoil";
 const Login = () => {
   const navigate = useNavigate();
 
@@ -20,6 +21,20 @@ const Login = () => {
     id: "",
     pw: "",
   });
+  const [token, setToken] = useRecoilState(Token);
+
+  const onSuccess = (token) => {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    setToken(token);
+    setCookie("loginToken", token, {
+      path: "/",
+      domain: ".richfactory.click",
+      secure: true,
+      sameSite: "strict",
+    });
+    alert("로그인에 성공했습니다");
+    navigate("/home");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,14 +51,15 @@ const Login = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
       const { result, token } = response.data;
+      console.log(response);
+      console.log(token);
 
       if (result === "success" && token) {
-        setCookie("loginToken", token, {
-          path: "/",
-          domain: ".richfactory.click",
-        });
-        alert("로그인에 성공했습니다");
-        navigate("/home");
+        onSuccess(token);
+      }
+
+      if (result !== "success" || !token) {
+        console.log(response);
       }
     } catch (err) {
       console.log(err);
