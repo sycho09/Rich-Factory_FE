@@ -18,15 +18,18 @@ const Divide = () => {
         a._id > b._id ? -1 : 1
       );
       setDiovideList(allPropertyList);
-      console.log(divideList);
     } catch (err) {
       console.log(err);
     }
   };
   useEffect(() => {
     getList(location.pathname);
-    setLoading(false);
   }, [location]);
+  useEffect(() => {
+    if (divideList) {
+      setLoading(false);
+    }
+  }, [divideList]);
   return (
     <Box mx={5}>
       {!isLoading && (

@@ -21,8 +21,12 @@ const Land = () => {
   };
   useEffect(() => {
     getList();
-    setLoading(false);
   }, []);
+  useEffect(() => {
+    if (factorageList) {
+      setLoading(false);
+    }
+  }, [factorageList]);
 
   return (
     <Box mx={5}>

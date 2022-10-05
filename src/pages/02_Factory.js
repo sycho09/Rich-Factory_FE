@@ -73,8 +73,10 @@ const Factory = () => {
   useEffect(() => {
     getList(location.pathname);
     setRentOrSale(location.pathname);
-    setLoading(false);
-  }, [location.pathname]);
+    if (factorageList) {
+      setLoading(false);
+    }
+  }, [location.pathname, factorageList]);
 
   // pagination
   const handlePaging = async () => {
