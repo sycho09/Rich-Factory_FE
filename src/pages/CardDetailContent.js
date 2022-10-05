@@ -67,6 +67,7 @@ const CardDetailContent = ({ printRef }) => {
     }
     const noBuilding = noBuildingList.some((el) => allInfo.type.includes(el));
     setHasBuilding(!noBuilding);
+    setSections([]);
 
     // 불러온 매물 정보 카테고리별로 입력
     for (var key in labeling) {
@@ -76,6 +77,7 @@ const CardDetailContent = ({ printRef }) => {
           obj[key] = allInfo[key];
           return obj;
         }, {});
+      console.log(newArr);
       setSections((old) => [...old, { ...newArr }]);
     }
     setLoading(false);
@@ -146,28 +148,30 @@ const CardDetailContent = ({ printRef }) => {
                 </div>
               )}
             </Grid>
-            <Grid item sm={12}>
-              <Stack
-                direction="row"
-                spacing={1}
-                mt={1}
-                sx={{ overflowX: "scroll" }}
-              >
-                {[1, 2, 3, 4, 5, 6, 7].map((item) => (
-                  <Box key={item}>
-                    <img
-                      src={testImg}
-                      style={{
-                        border: "2px solid #eaeaea",
-                        maxHeight: 80,
-                        width: "100%",
-                        objectFit: "scale-down",
-                      }}
-                    />
-                  </Box>
-                ))}
-              </Stack>
-            </Grid>
+            {sections[8].images.length > 1 && (
+              <Grid item sm={12}>
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  mt={1}
+                  sx={{ overflowX: "scroll" }}
+                >
+                  {sections[8].images.map((item) => (
+                    <Box key={item}>
+                      <img
+                        src={item}
+                        style={{
+                          border: "2px solid #eaeaea",
+                          maxHeight: 80,
+                          width: "100%",
+                          objectFit: "scale-down",
+                        }}
+                      />
+                    </Box>
+                  ))}
+                </Stack>
+              </Grid>
+            )}
           </Grid>
 
           <StyledTitle>☑ 매물 정보</StyledTitle>
@@ -213,7 +217,9 @@ const CardDetailContent = ({ printRef }) => {
                         name={label[0]}
                         value={`${sections[2][label[0]].toLocaleString(
                           undefined,
-                          { maximumFractionDigits: 1 }
+                          {
+                            maximumFractionDigits: 1,
+                          }
                         )}㎡`}
                       />
                       <StyledPyInput
@@ -258,7 +264,9 @@ const CardDetailContent = ({ printRef }) => {
                             name={label[0]}
                             value={`${sections[3][label[0]].toLocaleString(
                               undefined,
-                              { maximumFractionDigits: 1 }
+                              {
+                                maximumFractionDigits: 1,
+                              }
                             )}㎡`}
                           />
                           <StyledPyInput
@@ -279,7 +287,9 @@ const CardDetailContent = ({ printRef }) => {
                             name={label[0]}
                             value={`${sections[3][label[0]].toLocaleString(
                               undefined,
-                              { maximumFractionDigits: 1 }
+                              {
+                                maximumFractionDigits: 1,
+                              }
                             )}㎡`}
                           />
                           <StyledPyInput
@@ -412,9 +422,9 @@ const StyledLabel = styled(DefaultLabel)(({ theme }) => ({
 }));
 
 export const StyledTextField = styled(DefaultTextField)({
-  "& .css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
-    WebkitTextFillColor: "#000",
-  },
+  // "& .css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
+  //   WebkitTextFillColor: "#000",
+  // },
 
   ["@media print"]: {
     fontSize: "12px",
@@ -432,7 +442,6 @@ export const StyledPyInput = styled(InputBase)(({ theme }) => ({
   width: "100%",
   height: "100%",
   boxSizing: "border-box",
-  // padding: "5px",
   paddingRight: "20px",
   borderBottom: "1px solid #cfcfcf",
   borderRight: "1px solid #cfcfcf",
