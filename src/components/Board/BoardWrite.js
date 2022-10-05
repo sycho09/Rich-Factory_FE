@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Divider,
@@ -10,15 +10,51 @@ import {
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { DefaultInput, DefaultLabel, DefaultTextField } from "../Common";
+import { getCookie } from "../../util/cookie";
+import { factory_API } from "../../util/axios";
+import { useNavigate } from "react-router-dom";
 
 const BoardWrite = () => {
-  const { control, register, handleSubmit, setValue } = useForm({
+  const navigate = useNavigate();
+  const { control, register, handleSubmit, setValue, watch } = useForm({
     mode: "onSubmit",
   });
 
+  const [uploadFiles, setUploadFiles] = useState([]);
+
+  const uploadFile = (e) => {
+    Object.values(e.target.files).map((item) => {
+      setUploadFiles((file) => [...file, item]);
+    });
+  };
+
   const onSubmit = (data) => {
     console.log(data);
+    const formdata = new FormData();
+    for (let key in uploadFiles) {
+      formdata.append("attachedFiles", uploadFiles[key]);
+    }
+    for (let key in data) {
+      formdata.append(key, data[key]);
+    }
+    formdata.append("isForClient", "notice");
+    const loginToken = getCookie("loginToken");
+    factory_API.defaults.headers.common.Authorization = `Bearer ${loginToken}`;
+    addSubmit(formdata);
   };
+  const addSubmit = async (value) => {
+    await factory_API
+      .post("/board", value)
+      .then((res) => {
+        alert("저장완료");
+        navigate("/board");
+        console.log(res);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+  console.log(watch("status"));
   return (
     <Container maxWidth="md">
       <Stack direction="row" mt={3} justifyContent="space-between">
@@ -123,10 +159,17 @@ const BoardWrite = () => {
             <Grid item xs={10} sm={10}>
               <input
                 type="file"
+                multiple
                 accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .hwp"
                 label="Upload"
-                onChange={(e) => console.log(e.target.value)}
+                onChange={uploadFile}
               />
+              {uploadFiles.length > 0 &&
+                uploadFiles.map((el) => (
+                  <>
+                    <p>{el.name}</p>
+                  </>
+                ))}
             </Grid>
           </Grid>
 
