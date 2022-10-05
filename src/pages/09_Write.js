@@ -20,10 +20,12 @@ import {
   DefaultLabel,
   DefaultTextField,
 } from "../components/Common";
+import { useRecoilValue } from "recoil";
+import { factory_API } from "../util/axios";
+import { getCookie } from "../util/cookie";
 
 const Write = () => {
   const navigate = useNavigate();
-
   const { control, register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
       type: "공장",
@@ -64,29 +66,46 @@ const Write = () => {
       formdata.append(key, data[key]);
     }
 
-    try {
-      const response = await axios({
-        method: "post",
-        url: "https://www.richfactory.click/property/add",
-        data: formdata,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-      console.log(response);
-      console.log("--------");
-      e.target.reset();
-      alert(response.data.msg);
-      navigate("/home");
-    } catch (err) {
-      alert(err);
-    }
+    const loginToken = getCookie("loginToken");
+    console.log(loginToken);
+    factory_API.defaults.headers.common.Authorization = `Bearer ${loginToken}`;
+    addSubmit(formdata);
+    // try {
+    //   const response = await axios({
+    //     method: "post",
+    //     url: "https://www.richfactory.click/property/add",
+    //     data: formdata,
+    //     headers: {
+    //       "Content-Type": "multipart/form-data",
+    //       "Access-Control-Allow-Origin": "*",
+    //       Authorization: `Bearer ${loginToken}`,
+    //     },
+    //   });
+    //   console.log(response);
+    //   console.log("--------");
+    //   e.target.reset();
+    //   alert(response.data.msg);
+    //   navigate("/home");
+    // } catch (err) {
+    //   alert(err);
+    // }
   };
   // const onSubmit = (data, e) => {
   //   console.log(data);
   //   e.target.reset();
   // };
+
+  const addSubmit = async (value) => {
+    await factory_API
+      .post("/property/add", value)
+      .then((res) => {
+        console.log(res);
+        alert("저장완료");
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
 
   console.log(watch("status"));
 
