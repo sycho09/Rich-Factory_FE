@@ -118,7 +118,7 @@ export default Header;
 
 const HomeLogoTitle = styled(Typography)(({ theme }) => ({
   fontSize: "3.8rem",
-  // fontFamily: "Gowun Batang, serif",
+  fontFamily: "YDestreet",
   fontWeight: 700,
   cursor: "pointer",
   padding: "14px 0 0 10px",

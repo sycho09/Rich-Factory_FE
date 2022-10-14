@@ -63,7 +63,7 @@ const MenuItem = styled.strong`
 `;
 
 const YoutubeNavigationLink = styled.a.attrs({
-  href: "https://www.youtube.com/channel/UCpo7WnDj2ph8qsSXkxKK9Sg/featured",
+  href: "https://www.youtube.com/",
   target: "_blank",
 })`
   align-items: center;
@@ -271,7 +271,7 @@ const Navigation = (props) => {
                     className="fa fa-youtube-play"
                     style={{ color: "red" }}
                   ></i>
-                  토지헬퍼
+                  {/* 토지헬퍼 */}
                 </>
               }
             </MenuTitle>

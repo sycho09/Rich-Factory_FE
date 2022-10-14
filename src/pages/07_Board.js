@@ -180,6 +180,7 @@ const Row = ({ row }) => {
           {row.writer}
         </StyledTableCell>
         <StyledTableCell
+          className="date"
           sx={{ fontWeight: 600, cursor: "pointer" }}
           onClick={() => navigateItem(`${row._id}`)}
         >
