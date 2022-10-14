@@ -60,7 +60,7 @@ const Factory = () => {
       const allPropertyList = response.data.propertyList.sort((a, b) =>
         a._id > b._id ? -1 : 1
       );
-      console.log(response.config.url);
+      // console.log(response.config.url);
       setRequestUrl(response.config.url);
       setTotalPage(response.data.lastPage);
       setFactorageList(allPropertyList);

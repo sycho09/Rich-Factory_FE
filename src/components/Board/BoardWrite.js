@@ -29,7 +29,6 @@ const BoardWrite = () => {
   };
 
   const onSubmit = (data) => {
-    console.log(data);
     const formdata = new FormData();
     for (let key in uploadFiles) {
       formdata.append("attachedFiles", uploadFiles[key]);
@@ -47,8 +46,7 @@ const BoardWrite = () => {
       .post("/board", value)
       .then((res) => {
         alert("저장완료");
-        navigate("/board");
-        console.log(res);
+        navigate("/main/board");
       })
       .catch((err) => {
         alert(err);

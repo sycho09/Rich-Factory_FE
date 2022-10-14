@@ -1,7 +1,16 @@
-import { Container, Stack, Divider, Box, Chip, styled } from "@mui/material";
+import {
+  Container,
+  Stack,
+  Divider,
+  Box,
+  Chip,
+  styled,
+  Button,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { factory_API } from "../../util/axios";
+import { getCookie } from "../../util/cookie";
 
 const BoardDetail = () => {
   const { id } = useParams();
@@ -14,7 +23,6 @@ const BoardDetail = () => {
     try {
       const response = await factory_API.get(`/board/${id}`);
       setBoardItem(response.data);
-      console.log(response.data);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -42,11 +50,34 @@ const BoardContent = ({
   title,
   writer,
 }) => {
-  console.log(fileUrlList);
+  const deleteBoardItem = async (id) => {
+    const isConfirm = window.confirm("정말 게시물을 삭제하시겠습니까?");
+
+    if (isConfirm) {
+      const loginToken = getCookie("loginToken");
+      factory_API.defaults.headers.common.Authorization = `Bearer ${loginToken}`;
+      try {
+        const response = await factory_API.delete(`/board/${id}`);
+        console.log(response);
+      } catch (error) {
+        if (error.response.status === 401) {
+          alert("권한이 없습니다.");
+        }
+        if (error.response.status === 400) {
+          alert(error.response.data.msg);
+        }
+      }
+    }
+  };
 
   return (
     <Container maxWidth="md">
-      <Stack direction="row" mt={3} justifyContent="space-between">
+      <Stack
+        direction="row"
+        mt={3}
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <StyledBoardTitle>
           <Chip size="small" label={_id} />
           <p className="category">[{category}]</p> <p>{title}</p>
@@ -54,6 +85,15 @@ const BoardContent = ({
         <StyledBoardTitle>
           <span>{dateWrite.slice(2, 10).replaceAll("-", ".")}</span>
           <strong>{clientName}</strong>
+
+          <Button
+            variant="outlined"
+            onClick={() => deleteBoardItem(_id)}
+            size="small"
+            sx={{ minWidth: "auto" }}
+          >
+            게시물 삭제
+          </Button>
         </StyledBoardTitle>
       </Stack>
       <Divider sx={{ margin: "1rem 0" }} />

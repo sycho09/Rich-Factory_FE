@@ -28,7 +28,6 @@ const Board = () => {
     setIsLoading(true);
     try {
       const response = await factory_API.get("/board");
-      console.log(response.data.postList);
       const allBoardList = response.data.postList.sort((a, b) =>
         a._id > b._id ? -1 : 1
       );
