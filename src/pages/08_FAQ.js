@@ -25,6 +25,11 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontSize: 18,
   },
+  "& span.secret": {
+    fontSize: "0.8rem",
+    paddingLeft: 10,
+    color: theme.palette.primary.lightdark,
+  },
 }));
 
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({

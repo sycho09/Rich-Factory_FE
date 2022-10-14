@@ -5,9 +5,6 @@ import { useRoutes } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import routes from "./util/routes";
 import theme from "./theme/theme";
-import axios from "axios";
-
-// axios.defaults.withCredentials = true;
 
 function App() {
   const routers = useRoutes(routes);

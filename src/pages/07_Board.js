@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -14,41 +14,33 @@ import { useNavigate } from "react-router-dom";
 import { StyledTableCell, StyledTableRow } from "./08_FAQ";
 import { LoginInfo } from "../util/atom";
 import { useRecoilValue } from "recoil";
+import { factory_API } from "../util/axios";
 
 const Board = () => {
   const navigate = useNavigate();
 
   const isLogin = useRecoilValue(LoginInfo);
 
-  function createData(id, category, title, writer, date) {
-    return { id, category, title, writer, date };
-  }
+  const [isLoading, setIsLoading] = useState(true);
+  const [boardList, setBoardList] = useState([]);
 
-  const rows = [
-    createData(
-      1,
-      "기타",
-      "기타 계약서 다운로드(PDF, HWP)",
-      "관리자",
-      "2022-05-02"
-    ),
-    createData(2, "기타", "부동산 동향(22.05)", "관리자", "2022-05-02"),
-    createData(
-      3,
-      "기타",
-      "부동산 정보 통합 열람 사이트",
-      "관리자",
-      "2022-05-01"
-    ),
-    createData(4, "기타", "토지 규제 정보", "관리자", "2022-03-28"),
-    createData(
-      5,
-      "매매",
-      "매매 관련 계약서 다운로드(PDF, DOC)",
-      "관리자",
-      "2022-03-21"
-    ),
-  ];
+  const getBoardList = async () => {
+    setIsLoading(true);
+    try {
+      const response = await factory_API.get("/board");
+      console.log(response.data.postList);
+      const allBoardList = response.data.postList.sort((a, b) =>
+        a._id > b._id ? -1 : 1
+      );
+      setBoardList(allBoardList);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getBoardList();
+  }, []);
 
   return (
     <div style={{ padding: "2rem 3rem" }}>
@@ -66,59 +58,61 @@ const Board = () => {
         )}
       </Stack>
       <Paper elevation={3}>
-        <TableContainer sx={{ marginTop: 2 }}>
-          {/* <TableContainer> */}
-          <Table sx={{ minWidth: 650 }}>
-            <TableHead
-              sx={{
-                background: (theme) => theme.palette.primary.main,
-              }}
-            >
-              <StyledTableRow>
-                <StyledTableCell
-                  sx={{
-                    width: "5%",
-                  }}
-                ></StyledTableCell>
+        {!isLoading && (
+          <TableContainer sx={{ marginTop: 2 }}>
+            {/* <TableContainer> */}
+            <Table sx={{ minWidth: 650 }}>
+              <TableHead
+                sx={{
+                  background: (theme) => theme.palette.primary.main,
+                }}
+              >
+                <StyledTableRow>
+                  <StyledTableCell
+                    sx={{
+                      width: "5%",
+                    }}
+                  ></StyledTableCell>
 
-                <StyledTableCell
-                  align="center"
-                  sx={{
-                    width: "10%",
-                  }}
-                >
-                  구분
-                </StyledTableCell>
-                <StyledTableCell
-                  sx={{
-                    width: "60%",
-                  }}
-                >
-                  제목
-                </StyledTableCell>
-                <StyledTableCell
-                  sx={{
-                    width: "10%",
-                  }}
-                >
-                  작성자
-                </StyledTableCell>
-                <StyledTableCell
-                  sx={{
-                    width: "15%",
-                  }}
-                >
-                  등록일
-                </StyledTableCell>
-              </StyledTableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <Row key={row.id} row={row} />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                  <StyledTableCell
+                    align="center"
+                    sx={{
+                      width: "10%",
+                    }}
+                  >
+                    구분
+                  </StyledTableCell>
+                  <StyledTableCell
+                    sx={{
+                      width: "60%",
+                    }}
+                  >
+                    제목
+                  </StyledTableCell>
+                  <StyledTableCell
+                    sx={{
+                      width: "10%",
+                    }}
+                  >
+                    작성자
+                  </StyledTableCell>
+                  <StyledTableCell
+                    sx={{
+                      width: "15%",
+                    }}
+                  >
+                    등록일
+                  </StyledTableCell>
+                </StyledTableRow>
+              </TableHead>
+              <TableBody>
+                {boardList.map((row) => (
+                  <Row key={row._id} row={row} />
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
       </Paper>
     </div>
   );
@@ -128,13 +122,24 @@ export default Board;
 
 const Row = ({ row }) => {
   const navigate = useNavigate();
+
+  const navigateItem = (_id) => {
+    if (row.isForClient === "client") {
+      alert("접근 권한을 확인해주세요");
+    }
+
+    if (row.isForClient === "notice") {
+      navigate(_id);
+    }
+  };
+
   return (
     <React.Fragment>
       <StyledTableRow
         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
       >
         <StyledTableCell component="th" scope="row" align="center">
-          {row.id}
+          {row._id}
         </StyledTableCell>
         <StyledTableCell
           align="center"
@@ -161,21 +166,24 @@ const Row = ({ row }) => {
 
         <StyledTableCell
           sx={{ fontWeight: 600, cursor: "pointer" }}
-          onClick={() => navigate(`${row.id}`)}
+          onClick={() => navigateItem(`${row._id}`)}
         >
           {row.title}
+          <span className="secret">
+            {row.isForClient === "client" && "비밀글"}
+          </span>
         </StyledTableCell>
         <StyledTableCell
           sx={{ fontWeight: 600, cursor: "pointer" }}
-          onClick={() => navigate(`${row.id}`)}
+          onClick={() => navigateItem(`${row._id}`)}
         >
           {row.writer}
         </StyledTableCell>
         <StyledTableCell
           sx={{ fontWeight: 600, cursor: "pointer" }}
-          onClick={() => navigate(`${row.id}`)}
+          onClick={() => navigateItem(`${row._id}`)}
         >
-          {row.date}
+          {row.dateWrite.slice(2, 10)}
         </StyledTableCell>
       </StyledTableRow>
     </React.Fragment>
