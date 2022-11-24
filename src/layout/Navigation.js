@@ -294,7 +294,7 @@ const Navigation = (props) => {
           </MainNavigationLink>
         </NavbarWrapper>
 
-        {isLogin && (
+        {!isLogin && (
           <NavbarWrapper>
             <RegisterNavigationLink>
               <RegisterItem isHome={isHome}> 매물등록</RegisterItem>

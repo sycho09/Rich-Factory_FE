@@ -77,7 +77,6 @@ const CardDetailContent = ({ printRef }) => {
           obj[key] = allInfo[key];
           return obj;
         }, {});
-      console.log(newArr);
       setSections((old) => [...old, { ...newArr }]);
     }
     setLoading(false);
@@ -252,7 +251,11 @@ const CardDetailContent = ({ printRef }) => {
                             id={label[1]}
                             disabled
                             name={label[0]}
-                            value={sections[3][label[0]]}
+                            value={
+                              sections[3][label[0]] === "undefined"
+                                ? ""
+                                : sections[3][label[0]]
+                            }
                           />
                         )}
 
@@ -372,7 +375,11 @@ const CardDetailContent = ({ printRef }) => {
                     id={label[1]}
                     disabled
                     name={label[0]}
-                    value={sections[6][label[0]]}
+                    value={
+                      sections[6][label[0]] === "undefined"
+                        ? ""
+                        : sections[6][label[0]]
+                    }
                   />
                 </Grid>
               </React.Fragment>
@@ -390,7 +397,11 @@ const CardDetailContent = ({ printRef }) => {
                 multiline
                 disabled
                 name="feature"
-                value={sections[7]["feature"]}
+                value={
+                  sections[7]["feature"] === "undefined"
+                    ? ""
+                    : sections[7]["feature"]
+                }
               />
             </Grid>
           </Grid>

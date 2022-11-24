@@ -51,8 +51,6 @@ const Login = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
       const { result, token } = response.data;
-      console.log(response);
-      console.log(token);
 
       if (result === "success" && token) {
         onSuccess(token);

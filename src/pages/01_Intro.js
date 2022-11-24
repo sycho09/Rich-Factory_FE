@@ -1,6 +1,6 @@
-import { Typography, Box } from "@mui/material";
 import React from "react";
-
+import { Typography, Box } from "@mui/material";
+import { NewContext } from "../App";
 const Intro = () => {
   return (
     <Box mt={2} mb={10} p={5}>

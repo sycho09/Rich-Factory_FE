@@ -25,7 +25,6 @@ const CardDetail = () => {
         url: `https://www.richfactory.click/property/${id}`,
       });
       setAllInfo(response.data);
-
       setLoading(false);
     } catch (err) {
       alert(err);
@@ -43,7 +42,6 @@ const CardDetail = () => {
       await factory_API
         .delete(`/property/${id}`)
         .then((res) => {
-          console.log(res);
           alert("complete");
         })
         .catch((err) => {

@@ -8,7 +8,7 @@ import {
   Button,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { factory_API } from "../../util/axios";
 import { getCookie } from "../../util/cookie";
 
@@ -50,6 +50,7 @@ const BoardContent = ({
   title,
   writer,
 }) => {
+  const navigate = useNavigate();
   const deleteBoardItem = async (id) => {
     const isConfirm = window.confirm("정말 게시물을 삭제하시겠습니까?");
 
@@ -58,7 +59,8 @@ const BoardContent = ({
       factory_API.defaults.headers.common.Authorization = `Bearer ${loginToken}`;
       try {
         const response = await factory_API.delete(`/board/${id}`);
-        console.log(response);
+        alert(response.data.msg);
+        navigate("/main/board");
       } catch (error) {
         if (error.response.status === 401) {
           alert("권한이 없습니다.");

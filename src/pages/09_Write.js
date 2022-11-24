@@ -55,7 +55,6 @@ const Write = () => {
   const fileInput = React.createRef();
 
   const onSubmit = async (data, e) => {
-    console.log(data);
     const formdata = new FormData();
     for (let key in img) {
       formdata.append("images", img[key]);
@@ -215,7 +214,7 @@ const Write = () => {
                           <StyledInput
                             size="small"
                             variant="filled"
-                            {...field}
+                            {...(field || " ")}
                           />
                         )}
                       />
@@ -276,14 +275,20 @@ const Write = () => {
                       }}
                       defaultValue="공장"
                     >
-                      <MenuItem value="공장">공장</MenuItem>
-                      <MenuItem value="창고">창고</MenuItem>
-                      <MenuItem value="토지">토지</MenuItem>
-                      <MenuItem value="공장부지">공장부지</MenuItem>
-                      <MenuItem value="주택부지">주택부지</MenuItem>
-                      <MenuItem value="주택">주택</MenuItem>
-                      <MenuItem value="상가">상가</MenuItem>
-                      <MenuItem value="원룸">원룸</MenuItem>
+                      {[
+                        "공장",
+                        "창고",
+                        "토지",
+                        "공장부지",
+                        "주택부지",
+                        "주택",
+                        "상가",
+                        "원룸",
+                      ].map((type) => (
+                        <MenuItem value={type} key={type}>
+                          {type}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </>
                 )}
@@ -312,10 +317,11 @@ const Write = () => {
                       }}
                       defaultValue="매매"
                     >
-                      <MenuItem value="매매">매매</MenuItem>
-                      <MenuItem value="임대">임대</MenuItem>
-                      <MenuItem value="분양">분양</MenuItem>
-                      <MenuItem value="기타">기타</MenuItem>
+                      {["매매", "임대", "분양", "기타"].map((type) => (
+                        <MenuItem value={type} key={type}>
+                          {type}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </>
                 )}
@@ -378,7 +384,6 @@ const Write = () => {
             {[
               { helperText: "지목", name: "category" },
               { helperText: "용도지역", name: "useArea" },
-              // { helperText: "대지면적", name: "landArea" },
             ].map((item) => (
               <React.Fragment key={item.name}>
                 <Grid item xs={2} sm={2}>

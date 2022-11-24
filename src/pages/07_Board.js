@@ -46,6 +46,7 @@ const Board = () => {
       <Stack direction="row" justifyContent="space-between">
         <Typography variant="h5" sx={{ fontWeight: 600 }}>
           게시판
+          <Typography variant="caption"> (현재 보수 중입니다)</Typography>
         </Typography>
         {isLogin && (
           <Button
@@ -67,12 +68,6 @@ const Board = () => {
                 }}
               >
                 <StyledTableRow>
-                  <StyledTableCell
-                    sx={{
-                      width: "5%",
-                    }}
-                  ></StyledTableCell>
-
                   <StyledTableCell
                     align="center"
                     sx={{
