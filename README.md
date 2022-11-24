@@ -1,16 +1,20 @@
 ## 🏭 부동산 사이트 프로젝트 프론트엔드
 
 <br>
-
-🙋‍♀️ We are developing estate web page
 <br>
-🌈 with 1 Frontend developer & 1 Backend developer
 
-### Tech
+### 소개
 
 ---
 
+공장/토지를 전문적으로 중개하는 부동산 사이트 (현재 수정 진행중입니다)
 <br>
+<br>
+
+### 기술스택
+
+---
+
 <p>
   <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black">
   <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
@@ -22,11 +26,12 @@
   <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=Firebase&logoColor=black">
 </p>
 
+<br>
+<br>
+
 ### 디렉토리 구조
 
 ---
-
-<br>
 
 ```
 📦 src
@@ -38,3 +43,15 @@
 ┣ 📜 App.js
 ┗ 📜 index.js
 ```
+
+<br>
+<br>
+
+### 주요기능
+
+---
+
+1. 지역별, 면적별, 종류별(공장/창고/토지), 임대/매매별 매물 리스트 확인
+2. 매물 상세 정보 및 사진 확인
+3. 매물 등록 및 삭제 가능
+4. 게시판 글, 첨부파일 등록 및 확인 가능
