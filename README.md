@@ -1,7 +1,5 @@
 ## **소개**
 
----
-
 공장/토지부지 중개를 전문으로 하는 부동산 플랫폼입니다. (현재 수정 진행중입니다)
 
 1. 중개 업체는 많은 양의 매물을 등록 및 관리할 수 있습니다.
@@ -12,15 +10,11 @@
 
 ## **배포링크**
 
----
-
 [**링크**](https://demo.richfactory.click/home)를 클릭하면 이동합니다.
 
 <br>
 
 ## **프론트엔드 기술스택**
-
----
 
 <p>
   <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black">
@@ -36,8 +30,6 @@
 
 ## **디렉토리 구조**
 
----
-
 ```
 📦 src
 ┣ 📂 components / 재사용 컴포넌트 분리
@@ -52,8 +44,6 @@
 <br>
 
 ## 주요기능
-
----
 
 ### 🔥 메인 화면
 
