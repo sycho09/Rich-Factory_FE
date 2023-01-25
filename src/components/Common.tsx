@@ -13,7 +13,6 @@ import {
   Box,
   TextField,
 } from "@mui/material";
-import React from "react";
 
 export const SelectBox = (props) => {
   const { children, label, search, type, setSearch } = props;
