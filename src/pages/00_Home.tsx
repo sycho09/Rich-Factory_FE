@@ -33,6 +33,7 @@ import {
   TYPE_LIST,
 } from "../util/constants";
 import { allPropertyListProps } from "../util/types";
+import { SearchProps } from "../components/types";
 
 const Home = () => {
   // 로그인 정보 및 리스트 표시
@@ -46,7 +47,7 @@ const Home = () => {
   >(PropertyList);
 
   // 검색 선택
-  const [search, setSearch] = useState({
+  const [search, setSearch] = useState<SearchProps>({
     type: "",
     dealType: "",
     building: "",

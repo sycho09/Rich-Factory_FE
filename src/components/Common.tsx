@@ -4,21 +4,17 @@ import {
   Select,
   MenuItem,
   styled,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Box,
   TextField,
+  SelectChangeEvent,
 } from "@mui/material";
+import { SelectBoxProps } from "./types";
 
-export const SelectBox = (props) => {
+export const SelectBox = (props: SelectBoxProps) => {
   const { children, label, search, type, setSearch } = props;
 
-  const handleSelect = (e) => {
-    setSearch({ ...search, [type]: e.target.value });
+  const handleSelect = (e: SelectChangeEvent<string | number>) => {
+    setSearch({ ...search, [type]: (e.target as HTMLInputElement).value });
   };
   return (
     <>
@@ -26,7 +22,7 @@ export const SelectBox = (props) => {
         <Select
           input={<StyledInput />}
           value={search[type]}
-          onChange={(e) => handleSelect(e)}
+          onChange={(e: SelectChangeEvent<string | number>) => handleSelect(e)}
           displayEmpty
           inputProps={{ "aria-label": "Without label" }}
         >
@@ -35,40 +31,6 @@ export const SelectBox = (props) => {
         </Select>
       </FormControl>
     </>
-  );
-};
-
-export const PropertyTable = ({ list }) => {
-  return (
-    <TableContainer>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>번호</TableCell>
-            <TableCell>소재지</TableCell>
-            <TableCell>매물구분</TableCell>
-            <TableCell>면적</TableCell>
-            <TableCell>용도지역</TableCell>
-            <TableCell>가격</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {list.map((item) => (
-            <TableRow key={item._id}>
-              <TableCell>{item._id}</TableCell>
-              <TableCell>{item.address}</TableCell>
-              <TableCell>{item.dealType}</TableCell>
-              <TableCell>
-                <p>{item.landArea * 0.3025} 평 </p>
-                {item.landArea} ㎡
-              </TableCell>
-              <TableCell>{item.useArea}</TableCell>
-              <TableCell>{item.price}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
   );
 };
 
