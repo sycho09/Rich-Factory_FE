@@ -1,4 +1,5 @@
 import { atom } from "recoil";
+import { allPropertyListProps } from "./types";
 
 // 관리자 모드(로그인)
 export const LoginInfo = atom({
@@ -12,7 +13,7 @@ export const Token = atom({
 });
 
 // 등록된 매물 리스트 불러오기
-export const PropertyList = atom({
+export const PropertyList = atom<allPropertyListProps[]>({
   key: "PropertyList",
   default: [],
 });

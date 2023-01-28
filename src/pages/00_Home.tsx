@@ -1,3 +1,6 @@
+import React, { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import axios from "axios";
 import {
   Grid,
   Stack,
@@ -10,10 +13,7 @@ import {
   FormControlLabel,
   Switch,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { SortBtn } from "./02_Factory";
-import { useRecoilState, useRecoilValue } from "recoil";
 import {
   IsSearch,
   LoginInfo,
@@ -23,42 +23,27 @@ import {
 } from "../util/atom";
 import { SelectBox } from "../components/Common";
 import PaginationComponent from "../components/Pagination";
-import ListCard from "../components/Home/ListCard";
+import ListCard from "../components/Home/ListCard.js";
 import QuickSearch from "../components/Home/QuickSearch";
 import ListTable from "../components/Home/ListTable";
+import {
+  BUILDING_FILTER_LIST,
+  DEAL_TYPE_LIS,
+  LAND_FILTER_LIST,
+  TYPE_LIST,
+} from "../util/constants";
+import { allPropertyListProps } from "../util/types";
 
 const Home = () => {
-  const typeList = [
-    { value: "공장", menu: "공장" },
-    { value: "창고", menu: "창고" },
-    { value: "토지", menu: "토지" },
-    { value: "공장부지", menu: "공장부지" },
-    { value: "주택부지", menu: "주택부지" },
-    { value: "주택상가원룸", menu: "주택/상가/원룸" },
-  ];
-  const dealTypeList = [
-    { value: "임대", menu: "임대" },
-    { value: "매매", menu: "매매" },
-    { value: "분양", menu: "분양" },
-  ];
-  const buildingFilter = [
-    { value: 1, menu: "100평 이하" }, // 330.579제곱미터, 0.3025
-    { value: 2, menu: "100~200평 이하" },
-    { value: 3, menu: "200평 이상" },
-  ];
-  const landFilter = [
-    { value: 1, menu: "500평 이하" },
-    { value: 2, menu: "500~1000평 이하" },
-    { value: 3, menu: "1000~2000평 이하" },
-    { value: 4, menu: "2000평 이상" },
-  ];
   // 로그인 정보 및 리스트 표시
   const isLogin = useRecoilValue(LoginInfo);
   const [showList, setShowList] = useState(false);
 
   // 리스트 저장
   const [isloading, setIsLoading] = useState(true);
-  const [propertyList, setPropertyList] = useRecoilState(PropertyList);
+  const [propertyList, setPropertyList] = useRecoilState<
+    allPropertyListProps[]
+  >(PropertyList);
 
   // 검색 선택
   const [search, setSearch] = useState({
@@ -68,8 +53,7 @@ const Home = () => {
     land: "",
   });
 
-  // 전체매물
-  // 페이지네이션 api & 총 페이지
+  // 전체매물 - 페이지네이션 api & 총 페이지
   const [requestUrl, setRequestUrl] = useRecoilState(RequestUrl);
   const [totalPage, setTotalPage] = useRecoilState(TotalPage);
 
@@ -85,7 +69,10 @@ const Home = () => {
         method: "get",
         url: `https://www.richfactory.click/property/search?type=${search.type}&dealType=${search.dealType}&buildingArea=${search.building}&landArea=${search.land}`,
       });
-      setRequestUrl(response.config.url);
+      // 옵셔널 체이닝 추가 수정 필요
+      if (response.config.url) {
+        setRequestUrl(response.config.url);
+      }
       setPropertyList(response.data.propertyList);
       setTotalPage(response.data.lastPage);
       if (isSearch) setIsSearch("");
@@ -101,10 +88,13 @@ const Home = () => {
         method: "get",
         url: `https://www.richfactory.click/propertyall`,
       });
-      setRequestUrl(response.config.url);
+      // 옵셔널 체이닝 추가 수정 필요
+      if (response.config.url) {
+        setRequestUrl(response.config.url);
+      }
       setTotalPage(response.data.lastPage);
-      const allPropertyList = response.data.propertyList.sort((a, b) =>
-        a._id > b._id ? -1 : 1
+      const allPropertyList: allPropertyListProps[] = response.data.propertyList.sort(
+        (a: any, b: any) => (a._id > b._id ? -1 : 1)
       );
       setPropertyList(allPropertyList);
       setIsLoading(false);
@@ -117,7 +107,7 @@ const Home = () => {
   // sorting
   const [isSort, setIsSort] = useState("");
 
-  const sortItems = (e, item) => {
+  const sortItems = (e: React.MouseEvent, item: string) => {
     e.preventDefault();
     setIsSort(() => `?sort=${item}`);
   };
@@ -213,7 +203,7 @@ const Home = () => {
                   setSearch={setSearch}
                   label="매물구분"
                 >
-                  {typeList.map((item, i) => (
+                  {TYPE_LIST.map((item, i) => (
                     <StyledMenuItem key={`li_${i}`} value={item.value}>
                       {item.menu}
                     </StyledMenuItem>
@@ -225,7 +215,7 @@ const Home = () => {
                   setSearch={setSearch}
                   label="가격구분"
                 >
-                  {dealTypeList.map((item, i) => (
+                  {DEAL_TYPE_LIS.map((item, i) => (
                     <StyledMenuItem key={`li_${i}`} value={item.value}>
                       {item.menu}
                     </StyledMenuItem>
@@ -237,7 +227,7 @@ const Home = () => {
                   setSearch={setSearch}
                   label="건물면적"
                 >
-                  {buildingFilter.map((item, i) => (
+                  {BUILDING_FILTER_LIST.map((item, i) => (
                     <StyledMenuItem key={`li_${i}`} value={item.value}>
                       {item.menu}
                     </StyledMenuItem>
@@ -249,7 +239,7 @@ const Home = () => {
                   setSearch={setSearch}
                   label="토지면적"
                 >
-                  {landFilter.map((item, i) => (
+                  {LAND_FILTER_LIST.map((item, i) => (
                     <StyledMenuItem key={`li_${i}`} value={item.value}>
                       {item.menu}
                     </StyledMenuItem>
