@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Stack,
@@ -7,10 +8,11 @@ import {
   styled,
   Button,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { AxiosError } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { factory_API } from "../../util/axios";
 import { getCookie } from "../../util/cookie";
+import { BoardContentProps } from "../../layout/types";
 
 const BoardDetail = () => {
   const { id } = useParams();
@@ -24,7 +26,8 @@ const BoardDetail = () => {
       const response = await factory_API.get(`/board/${id}`);
       setBoardItem(response.data);
       setIsLoading(false);
-    } catch (error) {
+    } catch (err) {
+      const error = err as AxiosError;
       console.log(error);
     }
   };
@@ -37,21 +40,22 @@ const BoardDetail = () => {
 
 export default BoardDetail;
 
-const BoardContent = ({
-  _id,
-  category,
-  clientName,
-  content,
-  dateEdit,
-  dateWrite,
-  fileNameList,
-  fileUrlList,
-  isForClient,
-  title,
-  writer,
-}) => {
+const BoardContent = (boardProps: BoardContentProps) => {
+  const {
+    _id,
+    category,
+    clientName,
+    content,
+    dateEdit,
+    dateWrite,
+    fileNameList,
+    fileUrlList,
+    isForClient,
+    title,
+    writer,
+  } = boardProps;
   const navigate = useNavigate();
-  const deleteBoardItem = async (id) => {
+  const deleteBoardItem = async (id: number) => {
     const isConfirm = window.confirm("정말 게시물을 삭제하시겠습니까?");
 
     if (isConfirm) {
@@ -62,12 +66,14 @@ const BoardContent = ({
         alert(response.data.msg);
         navigate("/main/board");
       } catch (error) {
-        if (error.response.status === 401) {
-          alert("권한이 없습니다.");
-        }
-        if (error.response.status === 400) {
-          alert(error.response.data.msg);
-        }
+        const err = error as AxiosError;
+        // 옵셔널 체이닝 웹팩 에러 추후 해결
+        // if (err.response?.status === 401) {
+        //   alert("권한이 없습니다.");
+        // }
+        // if (err.response?.status === 400) {
+        //   alert(err.response?.data.msg);
+        // }
       }
     }
   };
@@ -103,7 +109,7 @@ const BoardContent = ({
       <Divider sx={{ margin: "1rem 0" }} />
       <StyledBoardTitle pb={3}>
         <span>첨부파일</span>
-        {fileUrlList.map((el, i) => (
+        {fileUrlList.map((el: string, i: number) => (
           <a href={el} key={i}>
             {fileNameList[i]}
           </a>
@@ -129,6 +135,6 @@ const StyledBoardTitle = styled(Box)(({ theme }) => ({
   },
   "& span": {
     fontSize: "1rem",
-    color: theme.palette.grey.second,
+    color: theme.palette.secondary.dark,
   },
 }));

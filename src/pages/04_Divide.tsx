@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Divider, Stack, Typography, Grid } from "@mui/material";
-import { ListItem } from "../components/Home/ListCard";
+import { ListItem } from "../components/Home/ListCard.js";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 
@@ -9,13 +9,13 @@ const Divide = () => {
 
   const [isLoading, setLoading] = useState(true);
   const [divideList, setDiovideList] = useState([]);
-  const getList = async (pathname) => {
+  const getList = async (pathname: string) => {
     try {
       const response = await axios.get(
         `https://www.richfactory.click/${pathname}`
       );
-      const allPropertyList = response.data.propertyList.sort((a, b) =>
-        a._id > b._id ? -1 : 1
+      const allPropertyList = response.data.propertyList.sort(
+        (a: any, b: any) => (a._id > b._id ? -1 : 1)
       );
       setDiovideList(allPropertyList);
     } catch (err) {

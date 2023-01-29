@@ -84,7 +84,7 @@ export const DefaultInput = styled(InputBase)({
 
 export const DefaultLabel = styled(Box)(({ theme }) => ({
   fontWeight: 700,
-  color: theme.palette.grey.second,
+  color: theme.palette.secondary.dark,
   wordBreak: "keep-all",
   padding: "5px 0",
   [theme.breakpoints.down("sm")]: {

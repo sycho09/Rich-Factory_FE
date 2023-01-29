@@ -39,7 +39,7 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     // backgroundColor: theme.palette.action.hover,
-    backgroundColor: theme.palette.grey.main,
+    backgroundColor: theme.palette.secondary.dark,
   },
   // hide last border
   "&:last-child td, &:last-child th": {
@@ -47,8 +47,14 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+interface CreateDataProps {
+  id: number;
+  name: string;
+  content: string;
+}
+
 const FAQ = () => {
-  function createData(id, name, content) {
+  function createData(id: number, name: string, content: string) {
     return { id, name, content };
   }
 
@@ -112,7 +118,7 @@ const FAQ = () => {
 
 export default FAQ;
 
-const Row = ({ row }) => {
+const Row = ({ row }: { row: CreateDataProps }) => {
   const [open, setOpen] = useState(false);
   return (
     <React.Fragment>

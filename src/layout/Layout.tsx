@@ -1,8 +1,9 @@
 import React from "react";
-import { Container, Divider, Grid, Box, styled } from "@mui/material";
+import { Container, Divider, styled } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
+import { LayoutContainerProps } from "./types";
 
 const Layout = () => {
   return (
@@ -27,13 +28,13 @@ const Layout = () => {
 
 export default Layout;
 
-const LayoutContainer = styled(Container)(({ theme }) => ({
-  paddingTop: 5,
-  //   [theme.breakpoints.down("md")]: {
-  paddingRight: 0,
-  paddingLeft: 0,
-  "& .MuiContainer-root": {
-    padding: 0,
-  },
-  //   },
-}));
+const LayoutContainer = styled(Container)<LayoutContainerProps>(
+  ({ theme }) => ({
+    paddingTop: 5,
+    paddingRight: 0,
+    paddingLeft: 0,
+    "& .MuiContainer-root": {
+      padding: 0,
+    },
+  })
+);

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Box, Divider, Grid, Stack, Typography } from "@mui/material";
 import axios from "axios";
-import { ListItem } from "../components/Home/ListCard";
+import { ListItem } from "../components/Home/ListCard.js";
 import { useLocation } from "react-router-dom";
 import { TotalPage, RequestUrl } from "../util/atom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import PaginationComponent from "../components/Pagination";
+import { allPropertyListProps } from "../util/types.js";
 
 export const SortBtn = styled.a.attrs({
   href: "#",
@@ -42,26 +43,25 @@ const Factory = () => {
   const [isLoading, setLoading] = useState(true);
 
   const [rentOrSale, setRentOrSale] = useState("");
-  const [factorageList, setFactorageList] = useState();
+  const [factorageList, setFactorageList] = useState<allPropertyListProps[]>();
 
   // 페이지네이션 api & 총 페이지
   const [isSort, setIsSort] = useState("");
-  const [requestUrl, setRequestUrl] = useRecoilState(RequestUrl);
+  const [requestUrl, setRequestUrl] = useRecoilState<string>(RequestUrl);
   const [totalPage, setTotalPage] = useRecoilState(TotalPage);
 
   // 현재 페이지 저장
   const [currentPage, setCurrentPage] = useState(1);
 
-  const getList = async (pathname) => {
+  const getList = async (pathname: string) => {
     try {
       const response = await axios.get(
         `https://www.richfactory.click${pathname}`
       );
-      const allPropertyList = response.data.propertyList.sort((a, b) =>
-        a._id > b._id ? -1 : 1
+      const allPropertyList: allPropertyListProps[] = response.data.propertyList.sort(
+        (a: any, b: any) => (a._id > b._id ? -1 : 1)
       );
-      // console.log(response.config.url);
-      setRequestUrl(response.config.url);
+      setRequestUrl(response.config.url!);
       setTotalPage(response.data.lastPage);
       setFactorageList(allPropertyList);
       setIsSort("");
@@ -98,7 +98,7 @@ const Factory = () => {
   }, [currentPage]);
 
   // sorting
-  const sortItems = (item) => {
+  const sortItems = (item: string) => {
     setIsSort(() => `?sort=${item}`);
   };
 
@@ -146,7 +146,7 @@ const Factory = () => {
             공장/창고 매물 페이지입니다.
           </Typography>
           <Grid container spacing={2} sx={{ marginBottom: 15 }}>
-            {factorageList.map((el, i) => (
+            {factorageList?.map((el, i) => (
               <Grid key={i} item xs={12} sm={6} md={3} mb={2}>
                 <ListItem content={el} />
               </Grid>

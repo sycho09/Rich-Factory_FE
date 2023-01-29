@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { AiFillHome } from "react-icons/ai";
 import { useRecoilValue } from "recoil";
 import { LoginInfo } from "../util/atom";
+import { IsHomeProps, MenuItemWrapperProps } from "./types";
 
-const NavContainer = styled.div`
+const NavContainer = styled.div<IsHomeProps>`
   display: flex;
   padding: 0 20px;
   justify-content: ${(props) => (props.isHome ? "space-between" : "flex-end")};
 `;
 
-const Navbar = styled.nav`
+const Navbar = styled.nav<IsHomeProps>`
   display: flex;
   align-items: center;
   justify-content: end;
@@ -21,7 +22,7 @@ const Navbar = styled.nav`
   padding-left: ${(props) => (props.isHome ? 0 : "30px")};
 `;
 
-const MenuItemsWrapper = styled.div`
+const MenuItemsWrapper = styled.div<MenuItemWrapperProps>`
   padding: 10px 0;
   width: ${(props) => (props.size === "small" ? "90px" : "150px")};
   border-radius: 0 0 5px 5px;
@@ -30,8 +31,8 @@ const MenuItemsWrapper = styled.div`
 
 const MainNavigationLink = styled.a.attrs({
   href: "#",
-  onClick: (evt) => {
-    evt.preventDefault();
+  onClick: (e: React.MouseEvent) => {
+    e.preventDefault();
   },
 })`
   align-items: center;
@@ -113,7 +114,7 @@ const NavbarWrapper = styled.div`
     display: block;
   }
 `;
-const MenuTitle = styled.span`
+const MenuTitle = styled.span<IsHomeProps>`
   color: ${(props) => props.theme.palette.primary.dark};
   font-weight: ${(props) => (props.isHome ? 600 : 400)};
   font-size: ${(props) => (props.isHome ? "22px" : "20px")};
@@ -124,13 +125,12 @@ const MenuTitle = styled.span`
   }
 `;
 
-const RegisterItem = styled.span`
+const RegisterItem = styled.span<IsHomeProps>`
   font-size: 16px;
   font-weight: 500;
   padding: 0.4rem;
   border: 1px solid;
   border-color: ${(props) => props.theme.palette.primary.dark};
-  /* color: ${(props) => props.theme.palette.red.main}; */
   border-radius: 50px;
   line-height: 1;
   cursor: pointer;
@@ -141,9 +141,7 @@ const RegisterItem = styled.span`
   }
 `;
 
-const Navigation = (props) => {
-  const { isHome } = props;
-
+const Navigation = ({ isHome }: IsHomeProps) => {
   const navigate = useNavigate();
   const isLogin = useRecoilValue(LoginInfo);
   return (

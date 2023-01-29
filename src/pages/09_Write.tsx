@@ -660,13 +660,16 @@ export const StyledPaper = styled(Paper)(({ theme }) => ({
   borderRadius: "5px",
   // backgroundColor: "rgba(0,0,0,.03)",
   border: "1px solid",
-  borderColor: theme.palette.grey.main,
+  borderColor: theme.palette.secondary.main,
   padding: 0,
 }));
 
 export const StyledTextField = styled(DefaultTextField)({});
 
-export const StyledInput = styled(DefaultInput)({
+interface StyledInputProps {
+  variant: string;
+}
+export const StyledInput = styled(DefaultInput)<StyledInputProps>({
   borderRight: "1px solid #cfcfcf",
 });
 

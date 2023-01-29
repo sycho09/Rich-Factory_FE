@@ -1,7 +1,12 @@
 import React from "react";
 import styled from "styled-components";
+import { PaginationComponentProps } from "./types";
 
-const PaginationComponent = ({ totalPage, currentPage, setCurrentPage }) => {
+const PaginationComponent = ({
+  totalPage,
+  currentPage,
+  setCurrentPage,
+}: PaginationComponentProps) => {
   return (
     <Container>
       {totalPage > 1 && (
@@ -13,11 +18,11 @@ const PaginationComponent = ({ totalPage, currentPage, setCurrentPage }) => {
             &lt;
           </PaginationButton>
           {Array(totalPage)
-            .fill()
+            .fill(undefined)
             .map((_, i) => (
               <PaginationButton
                 key={i + 1}
-                aria-current={currentPage === i + 1 ? "page" : null}
+                aria-current={currentPage === i + 1 ? "page" : undefined}
                 onClick={() => setCurrentPage(i + 1)}
               >
                 {i + 1}
