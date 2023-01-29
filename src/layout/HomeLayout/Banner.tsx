@@ -78,7 +78,7 @@ const Banner = () => {
   //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
   // }
 
-  function handleStepChange(step) {
+  function handleStepChange(step: number) {
     setActiveStep(step);
   }
   return (
@@ -134,7 +134,7 @@ const Banner = () => {
                 variant="h6"
                 sx={{
                   fontWeight: 700,
-                  color: (theme) => theme.palette.red.main,
+                  color: (theme) => theme.palette.red.default,
                   textAlign: "center",
                 }}
               >
@@ -170,7 +170,6 @@ const Banner = () => {
                       borderRadius: 5,
                     }}
                     variant="filled"
-                    size="small"
                     severity={i === 1 ? "error" : i === 2 ? "info" : "success"}
                     color={i === 1 ? "warning" : i === 2 ? "info" : "success"}
                   >

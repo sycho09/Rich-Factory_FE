@@ -59,7 +59,7 @@ const Home = () => {
   const [totalPage, setTotalPage] = useRecoilState(TotalPage);
 
   // 현재 페이지 저장
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const [isSearch, setIsSearch] = useRecoilState(IsSearch);
 

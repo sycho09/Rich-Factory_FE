@@ -10,7 +10,7 @@ export interface SelectBoxProps {
   setSearch: React.Dispatch<React.SetStateAction<SearchProps>>;
 }
 
-export interface PaginationProps {
+export interface PaginationComponentProps {
   totalPage: number;
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;

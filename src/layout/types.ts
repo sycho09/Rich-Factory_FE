@@ -1,3 +1,7 @@
+export interface BoardContentProps {
+  [key: string]: any;
+}
+
 export interface LayoutContainerProps {
   pb: number;
 }

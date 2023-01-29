@@ -19,9 +19,17 @@ declare module "@mui/material/styles" {
     };
   }
 
+  interface Palette {
+    red: Partial<Palette["warning"]>;
+  }
+  interface PaletteOptions {
+    red: Partial<Palette["warning"]>;
+  }
+
   interface PaletteColor {
     // 사용하는 곳에서 에러
     lightdark?: string;
+    default?: string;
   }
 
   interface PaletteColorOptions {
@@ -30,11 +38,9 @@ declare module "@mui/material/styles" {
     dark?: string;
     light?: string;
     lightdark?: string;
+    default?: string;
   }
 
-  interface PaletteOptions {
-    red?: DefaultColorOption;
-  }
   interface Shape {
     boxShadow?: string;
   }
