@@ -1,4 +1,53 @@
-import { createTheme } from "@mui/material";
+import { grey } from "@mui/material/colors";
+import { createTheme } from "@mui/material/styles";
+
+interface DefaultColorOption {
+  default: string;
+}
+
+declare module "@mui/material/styles" {
+  interface Theme {
+    shape: {
+      borderRadius?: number;
+      boxShadow?: string;
+    };
+  }
+  interface ThemeOptions {
+    shape: {
+      borderRadius?: number;
+      boxShadow?: string;
+    };
+  }
+
+  interface PaletteColor {
+    // 사용하는 곳에서 에러
+    lightdark?: string;
+  }
+
+  interface PaletteColorOptions {
+    // 현재 파일에서 에러
+    main?: string;
+    dark?: string;
+    light?: string;
+    lightdark?: string;
+  }
+
+  interface PaletteOptions {
+    red?: DefaultColorOption;
+  }
+  interface Shape {
+    boxShadow?: string;
+  }
+
+  interface BreakpointOverrides {
+    xs: true;
+    sm: true;
+    md: true;
+    lg: true;
+    xl: true;
+    laptop: true;
+  }
+}
 
 const theme = createTheme({
   components: {
@@ -19,16 +68,15 @@ const theme = createTheme({
       light: "#89BADC",
       lightdark: "#75ACC6",
     },
-    red: {
-      main: "#d74040",
+    secondary: {
+      main: grey[100],
+      dark: "#585858",
     },
-    grey: {
-      main: "rgb(240, 241, 243)",
-      second: "#585858",
+    red: {
+      default: "#d74040",
     },
 
     background: {
-      // default: "#f9f9f9",
       default: "#fff",
     },
   },
