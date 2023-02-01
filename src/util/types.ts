@@ -7,3 +7,9 @@ export interface RouteProps {
   element: JSX.Element;
   children?: any[];
 }
+
+export interface BoardListProps {
+  [key: string]: string | number | any[];
+  _id: number;
+  dateWrite: string;
+}

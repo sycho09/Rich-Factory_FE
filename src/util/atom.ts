@@ -7,7 +7,7 @@ export const LoginInfo = atom({
   default: false,
 });
 
-export const Token = atom({
+export const Token = atom<string>({
   key: "Token",
   default: "",
 });
