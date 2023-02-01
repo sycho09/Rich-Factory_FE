@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Divider, Grid, Stack, Typography } from "@mui/material";
 import axios from "axios";
-import { ListItem } from "../components/Home/ListCard.js";
+import { ListItem } from "../components/Home/ListCard";
 import { useLocation } from "react-router-dom";
 import { TotalPage, RequestUrl } from "../util/atom";
 import { useRecoilState } from "recoil";

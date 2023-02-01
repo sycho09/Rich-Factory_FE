@@ -13,11 +13,16 @@ import {
 } from "@mui/material";
 import { StyledTableRow } from "../../pages/08_FAQ";
 import { useNavigate } from "react-router-dom";
+import { allPropertyListProps } from "@/util/types";
 
-const ListTable = ({ propertyList }) => {
+const ListTable = ({
+  propertyList,
+}: {
+  propertyList: allPropertyListProps[];
+}) => {
   return (
     <>
-      {!propertyList.length < 1 ? (
+      {!(propertyList.length < 1) ? (
         <TableContainer>
           <Table
             size="small"
@@ -63,7 +68,7 @@ const ListTable = ({ propertyList }) => {
 
 export default ListTable;
 
-const ListRow = ({ content }) => {
+const ListRow = ({ content }: { content: allPropertyListProps }) => {
   const navigate = useNavigate();
   return (
     <>
@@ -72,7 +77,7 @@ const ListRow = ({ content }) => {
         sx={{
           cursor: "pointer",
           borderTop: "1px solid ",
-          borderColor: (theme) => theme.palette.grey.second,
+          borderColor: (theme) => theme.palette.secondary.dark,
         }}
       >
         <TableCell rowSpan={2} align="center">

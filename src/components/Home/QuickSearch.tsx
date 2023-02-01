@@ -9,13 +9,13 @@ const QuickSearch = () => {
   const setRequestUrl = useSetRecoilState(RequestUrl);
   const setTotalPage = useSetRecoilState(TotalPage);
   const [isSearch, setIsSearch] = useRecoilState(IsSearch);
-  const handleBuildingArea = async (py) => {
+  const handleBuildingArea = async (py: any) => {
     try {
       const response = await axios({
         method: "get",
         url: `https://www.richfactory.click/side/building/${py}`,
       });
-      setRequestUrl(response.config.url);
+      setRequestUrl(response.config.url!);
       setPropertyList(response.data.propertyList);
       setTotalPage(response.data.lastPage);
       if (!isSearch || isSearch !== "area") setIsSearch("area");
@@ -23,13 +23,13 @@ const QuickSearch = () => {
       console.log(err);
     }
   };
-  const handleLandArea = async (py) => {
+  const handleLandArea = async (py: any) => {
     try {
       const response = await axios({
         method: "get",
         url: `https://www.richfactory.click/side/land/${py}`,
       });
-      setRequestUrl(response.config.url);
+      setRequestUrl(response.config.url!);
       setPropertyList(response.data.propertyList);
       setTotalPage(response.data.lastPage);
       if (!isSearch || isSearch !== "area") setIsSearch("area");
@@ -138,18 +138,18 @@ const QuickSearch = () => {
 
 export default QuickSearch;
 
-const Buttons = ({ city }) => {
+const Buttons = ({ city }: { city: string }) => {
   const setPropertyList = useSetRecoilState(PropertyList);
   const setTotalPage = useSetRecoilState(TotalPage);
   const setRequestUrl = useSetRecoilState(RequestUrl);
   const [isSearch, setIsSearch] = useRecoilState(IsSearch);
-  const handleFactorage = async (city, dealType) => {
+  const handleFactorage = async (city: string, dealType: string) => {
     try {
       const response = await axios({
         method: "get",
         url: `https://www.richfactory.click/side/factorage/${city}/${dealType}`,
       });
-      setRequestUrl(response.config.url);
+      setRequestUrl(response.config.url!);
       setTotalPage(response.data.lastPage);
       setPropertyList(response.data.propertyList);
       if (!isSearch || isSearch !== "city") setIsSearch("city");
@@ -192,7 +192,10 @@ const QuickItem = styled(Typography)(({ theme }) => ({
   fontWeight: 600,
 }));
 
-const QuickBlueBtn = styled(Typography)(({ theme }) => ({
+interface QuickBlueBtnProps {
+  component?: string;
+}
+const QuickBlueBtn = styled(Typography)<QuickBlueBtnProps>(({ theme }) => ({
   backgroundColor: theme.palette.primary.lightdark,
   color: "#fff",
   borderRadius: "10px",
@@ -201,7 +204,11 @@ const QuickBlueBtn = styled(Typography)(({ theme }) => ({
   fontSize: "0.8rem",
   cursor: "pointer",
 }));
-const QuickRedBtn = styled(Typography)(({ theme }) => ({
+
+interface QuickRedBtnProps {
+  component?: string;
+}
+const QuickRedBtn = styled(Typography)<QuickRedBtnProps>(({ theme }) => ({
   backgroundColor: theme.palette.red.main,
   color: "#fff",
   borderRadius: "10px",
@@ -210,13 +217,19 @@ const QuickRedBtn = styled(Typography)(({ theme }) => ({
   fontSize: "0.8rem",
   cursor: "pointer",
 }));
-const QuickDarkBlueBtn = styled(Typography)(({ theme }) => ({
-  display: "inline-block",
-  backgroundColor: theme.palette.primary.lightdark,
-  color: "#fff",
-  borderRadius: "10px",
-  padding: "2px 6px",
-  marginLeft: "4px",
-  fontSize: "0.8rem",
-  cursor: "pointer",
-}));
+
+interface QuickDarkBlueBtnProps {
+  component?: string;
+}
+const QuickDarkBlueBtn = styled(Typography)<QuickDarkBlueBtnProps>(
+  ({ theme }) => ({
+    display: "inline-block",
+    backgroundColor: theme.palette.primary.lightdark,
+    color: "#fff",
+    borderRadius: "10px",
+    padding: "2px 6px",
+    marginLeft: "4px",
+    fontSize: "0.8rem",
+    cursor: "pointer",
+  })
+);

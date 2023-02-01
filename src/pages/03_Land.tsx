@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Divider, Stack, Grid, Typography } from "@mui/material";
-import { ListItem } from "../components/Home/ListCard.js";
+import { ListItem } from "../components/Home/ListCard";
 import axios from "axios";
 
 const Land = () => {

@@ -12,7 +12,7 @@ import {
   Stack,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {
   DefaultInput,
@@ -22,6 +22,13 @@ import {
 import { factory_API } from "../util/axios";
 import { getCookie } from "../util/cookie";
 
+interface FormValues {
+  landArea?: string;
+  buildingArea?: string;
+  groundArea?: string;
+  [key: string]: any;
+}
+
 const Write = () => {
   const navigate = useNavigate();
   const { control, register, handleSubmit, setValue, watch } = useForm({
@@ -29,32 +36,34 @@ const Write = () => {
       type: "공장",
       dealType: "매매",
       status: "possible",
-    },
+    } as Partial<FormValues>,
     mode: "onSubmit",
   });
 
   // 미리보기 이미지(화면에 표시)
-  const [previewImgs, setPreviewImgs] = useState([]);
+  const [previewImgs, setPreviewImgs] = useState<
+    (string | File | ArrayBuffer)[]
+  >([]);
   // 이미지 파일(백엔드 전송)
-  const [img, setImg] = useState([]);
+  const [img, setImg] = useState<File[]>([]);
 
   // 업로드한 이미지 미리보기(form data 형태로 전송)
-  const onImageChange = (e) => {
-    Object.values(e.target.files).map((item) => {
+  const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    Object.values(e.target.files!).map((item: File) => {
       setImg((img) => [...img, item]);
 
       let fileReader = new FileReader();
       fileReader.readAsDataURL(item);
-      fileReader.onload = function(f) {
-        setPreviewImgs((o) => [...o, f.target.result]);
+      fileReader.onload = function(f: ProgressEvent<FileReader>) {
+        setPreviewImgs((o) => [...o, f.target?.result!]);
       };
     });
   };
 
   // react-hook-form 사용 이미지 업로드
-  const fileInput = React.createRef();
+  const fileInput = React.createRef<HTMLInputElement>();
 
-  const onSubmit = async (data, e) => {
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const formdata = new FormData();
     for (let key in img) {
       formdata.append("images", img[key]);
@@ -68,7 +77,7 @@ const Write = () => {
     addSubmit(formdata);
   };
 
-  const addSubmit = async (value) => {
+  const addSubmit = async (value: any) => {
     await factory_API
       .post("/property/add", value)
       .then((res) => {
@@ -93,14 +102,17 @@ const Write = () => {
 
   // 평수 계산
   const [py, setPy] = useState("");
-  const handleChangeFab = (e, targetName) => {
-    setValue(targetName, e.target.value);
+  const handleChangeFab = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    targetName: string
+  ) => {
+    setValue(targetName, (e.target as HTMLInputElement).value);
     setPy(e.target.value);
   };
 
   // 대지면적
   const [landPy, setLandPy] = useState("");
-  const handleLandArea = (e) => {
+  const handleLandArea = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     let pyvalue = Number(py) * 0.3025;
     setLandPy(pyvalue.toFixed(1));
@@ -109,7 +121,7 @@ const Write = () => {
 
   // 건물면적
   const [fabPy, setFabPy] = useState("");
-  const handleFabArea = (e) => {
+  const handleFabArea = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     let pyvalue = Number(py) * 0.3025;
     setFabPy(pyvalue.toFixed(1));
@@ -118,7 +130,7 @@ const Write = () => {
 
   // 바닥면적
   const [groundPy, setGroundPy] = useState("");
-  const handleGroundArea = (e) => {
+  const handleGroundArea = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     let pyvalue = Number(py) * 0.3025;
     setGroundPy(pyvalue.toFixed(1));
@@ -179,7 +191,7 @@ const Write = () => {
                   {previewImgs.length > 0 && (
                     <img
                       alt="대표이미지"
-                      src={previewImgs[0]}
+                      src={previewImgs[0] as string}
                       style={{
                         maxHeight: 80,
                         width: "100%",
@@ -234,8 +246,8 @@ const Write = () => {
                   {previewImgs.map((item, i) => (
                     <Box key={`${item}_i`}>
                       <img
-                        src={item}
-                        alt={item}
+                        src={item as string}
+                        alt={item as string}
                         style={{
                           border: "2px solid #eaeaea",
                           maxHeight: 80,
@@ -428,7 +440,7 @@ const Write = () => {
                 name="landArea"
                 type="number"
                 placeholder="㎡"
-                onChange={(e) => handleChangeFab(e, e.target.name)}
+                onChange={(e) => handleChangeFab(e, e.target.name!)}
               />
               <button
                 onClick={handleLandArea}

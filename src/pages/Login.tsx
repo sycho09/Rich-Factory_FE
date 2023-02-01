@@ -21,9 +21,9 @@ const Login = () => {
     id: "",
     pw: "",
   });
-  const [token, setToken] = useRecoilState(Token);
+  const [token, setToken] = useRecoilState<string>(Token);
 
-  const onSuccess = (token) => {
+  const onSuccess = (token: string) => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     setToken(token);
     setCookie("loginToken", token, {
@@ -36,7 +36,7 @@ const Login = () => {
     navigate("/home");
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData();

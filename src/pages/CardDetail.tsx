@@ -1,12 +1,12 @@
-import { Button, Chip, Stack, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
 import ReactToPrint from "react-to-print";
-import CardDetailContent from "./CardDetailContent";
-import { useSetRecoilState } from "recoil";
-import { AllInfo } from "../util/atom";
 import axios from "axios";
-import { factory_API } from "../util/axios";
+import { Button, Chip, Stack, Typography } from "@mui/material";
+import { useParams } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { AllInfo } from "@/util/atom";
+import { factory_API } from "@/util/axios";
+import CardDetailContent from "./CardDetailContent";
 
 const CardDetail = () => {
   // 프린트
@@ -77,7 +77,7 @@ const CardDetail = () => {
                   </Button>
                 )}
                 // pageStyle="@page { size: auto; margin: 5mm; }"
-                content={() => componentRef.current}
+                content={() => componentRef.current!}
               />
             </Stack>
           </Stack>
@@ -90,14 +90,15 @@ const CardDetail = () => {
 
 export default CardDetail;
 
-const CardDetailButton = ({ type, children, ...props }) => {
+interface CardDetailButtonProps {
+  type?: "text" | "outlined" | "contained" | undefined;
+  event: () => void;
+  children?: string;
+}
+
+const CardDetailButton = ({ type, event, children }: CardDetailButtonProps) => {
   return (
-    <Button
-      size="small"
-      variant={type}
-      sx={props.sx || null}
-      onClick={props.event || null}
-    >
+    <Button size="small" variant={type} onClick={event || null}>
       {children}
     </Button>
   );

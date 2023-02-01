@@ -15,6 +15,7 @@ import { StyledTableCell, StyledTableRow } from "./08_FAQ";
 import { LoginInfo } from "../util/atom";
 import { useRecoilValue } from "recoil";
 import { factory_API } from "../util/axios";
+import { BoardListProps } from "../util/types";
 
 const Board = () => {
   const navigate = useNavigate();
@@ -22,13 +23,13 @@ const Board = () => {
   const isLogin = useRecoilValue(LoginInfo);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [boardList, setBoardList] = useState([]);
+  const [boardList, setBoardList] = useState<BoardListProps[]>([]);
 
   const getBoardList = async () => {
     setIsLoading(true);
     try {
       const response = await factory_API.get("/board");
-      const allBoardList = response.data.postList.sort((a, b) =>
+      const allBoardList = response.data.postList.sort((a: any, b: any) =>
         a._id > b._id ? -1 : 1
       );
       setBoardList(allBoardList);
@@ -114,10 +115,10 @@ const Board = () => {
 
 export default Board;
 
-const Row = ({ row }) => {
+const Row = ({ row }: { row: BoardListProps }) => {
   const navigate = useNavigate();
 
-  const navigateItem = (_id) => {
+  const navigateItem = (_id: number) => {
     if (row.isForClient === "client") {
       alert("접근 권한을 확인해주세요");
     }
@@ -160,7 +161,7 @@ const Row = ({ row }) => {
 
         <StyledTableCell
           sx={{ fontWeight: 600, cursor: "pointer" }}
-          onClick={() => navigateItem(`${row._id}`)}
+          onClick={() => navigateItem(row._id)}
         >
           {row.title}
           <span className="secret">
@@ -169,14 +170,14 @@ const Row = ({ row }) => {
         </StyledTableCell>
         <StyledTableCell
           sx={{ fontWeight: 600, cursor: "pointer" }}
-          onClick={() => navigateItem(`${row._id}`)}
+          onClick={() => navigateItem(row._id)}
         >
           {row.writer}
         </StyledTableCell>
         <StyledTableCell
           className="date"
           sx={{ fontWeight: 600, cursor: "pointer" }}
-          onClick={() => navigateItem(`${row._id}`)}
+          onClick={() => navigateItem(row._id)}
         >
           {row.dateWrite.slice(2, 10)}
         </StyledTableCell>

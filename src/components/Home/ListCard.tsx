@@ -13,11 +13,16 @@ import {
 import { useNavigate } from "react-router-dom";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
+import { allPropertyListProps } from "@/util/types";
 
-const ListCard = ({ propertyList }) => {
+const ListCard = ({
+  propertyList,
+}: {
+  propertyList: allPropertyListProps[];
+}) => {
   return (
     <Grid container spacing={2} sx={{ marginBottom: 5 }}>
-      {!propertyList.length < 1 ? (
+      {!(propertyList.length < 1) ? (
         <>
           {propertyList.map((el, i) => (
             <Grid key={i} item xs={12} sm={6} md={3} mb={2}>
@@ -34,7 +39,7 @@ const ListCard = ({ propertyList }) => {
   );
 };
 
-export const ListItem = ({ content }) => {
+export const ListItem = ({ content }: { content: allPropertyListProps }) => {
   const navigate = useNavigate();
 
   return (

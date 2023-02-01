@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Box, Divider, Stack, Typography, Grid } from "@mui/material";
-import { ListItem } from "../components/Home/ListCard.js";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { ListItem } from "../components/Home/ListCard";
 
 const Divide = () => {
   const location = useLocation();
