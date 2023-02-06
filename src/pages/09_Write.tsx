@@ -77,7 +77,7 @@ const Write = () => {
     addSubmit(formdata);
   };
 
-  const addSubmit = async (value: any) => {
+  const addSubmit = async (value: FormData) => {
     await factory_API
       .post("/property/add", value)
       .then((res) => {

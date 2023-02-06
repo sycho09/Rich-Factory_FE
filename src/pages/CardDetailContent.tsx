@@ -7,52 +7,21 @@ import {
   Divider,
   Stack,
   Box,
-  TextField,
 } from "@mui/material";
 import { useRecoilState } from "recoil";
 import { AllInfo } from "../util/atom";
-import testImg from "./testImg.png";
 import {
   DefaultInput,
   DefaultLabel,
   DefaultTextField,
 } from "../components/Common";
+import { INFO_LABEL } from "../util/constants";
+import { AllInfoProps } from "@/util/types";
 
-const labeling = [
-  {
-    store: " 상호",
-    manager: "담당자",
-    tel: "전화",
-    storeAddress: "주소",
-    registerId: "등록번호",
-  },
-  {
-    _id: "매물번호",
-    type: "매물종류",
-    dealType: "매물구분",
-    address: "소재지",
-    status: "계약상태",
-  },
-  { category: "지목", useArea: "용도지역", landArea: "대지면적" },
-  {
-    buildingArea: "건물면적(연면적)",
-    groundArea: "바닥면적",
-    floorArea: "층별면적",
-    hoist: "호이스트",
-    electric: "전력",
-    height: "층고",
-  },
-  { deposit: " 보증금", monthlyRent: "월세" },
-  { unitPrice: "평당가격", price: "매매가" },
-  { highway: "고속도로", roadNearby: "인접도로" },
-  { feature: " 간략특징" },
-  { images: [] },
-];
-
-const CardDetailContent = ({ printRef }) => {
+const CardDetailContent = ({ printRef }: any) => {
   const [isLoading, setLoading] = useState(true);
   const [allInfo, setAllInfo] = useRecoilState(AllInfo);
-  const [sections, setSections] = useState([]);
+  const [sections, setSections] = useState<AllInfoProps[]>([]);
 
   // 임대 or 매매
   const [isSale, setIsSale] = useState(true);
@@ -68,19 +37,18 @@ const CardDetailContent = ({ printRef }) => {
     const noBuilding = noBuildingList.some((el) => allInfo.type.includes(el));
     setHasBuilding(!noBuilding);
     setSections([]);
-
-    // 불러온 매물 정보 카테고리별로 입력
-    for (var key in labeling) {
+    for (var key in INFO_LABEL) {
       const newArr = Object.keys(allInfo)
-        .filter((data) => Object.keys(labeling[key]).includes(data))
+        .filter((data) => Object.keys(INFO_LABEL[key]).includes(data))
         .reduce((obj, key) => {
-          obj[key] = allInfo[key];
+          obj[key] = allInfo[key as keyof AllInfoProps];
           return obj;
-        }, {});
+        }, {} as AllInfoProps);
       setSections((old) => [...old, { ...newArr }]);
     }
     setLoading(false);
   }, []);
+  console.log(sections);
 
   return (
     <>
@@ -97,9 +65,10 @@ const CardDetailContent = ({ printRef }) => {
                       width: "100%",
                     }}
                   >
-                    {sections[8].images.length > 0 ? (
+                    {(sections[8].images as string[]).length > 0 ? (
                       <img
-                        src={sections[8].images[0]}
+                        alt="매물 사진"
+                        src={(sections[8].images as string[])[0]}
                         style={{
                           width: "100%",
                           maxHeight: "100%",
@@ -127,7 +96,7 @@ const CardDetailContent = ({ printRef }) => {
                 <div style={{ paddingLeft: "4px" }}>
                   <StyledTitle>☑ 담당자 안내</StyledTitle>
                   <Divider />
-                  {Object.entries(labeling[0]).map((label, i) => (
+                  {Object.entries(INFO_LABEL[0]).map((label, i) => (
                     <React.Fragment key={label[1]}>
                       <Grid container sx={{ width: "100%" }}>
                         <Grid item xs={4} sm={4}>
@@ -147,7 +116,7 @@ const CardDetailContent = ({ printRef }) => {
                 </div>
               )}
             </Grid>
-            {sections[8].images.length > 1 && (
+            {(sections[8].images as string[]).length > 1 && (
               <Grid item sm={12}>
                 <Stack
                   direction="row"
@@ -155,9 +124,10 @@ const CardDetailContent = ({ printRef }) => {
                   mt={1}
                   sx={{ overflowX: "scroll" }}
                 >
-                  {sections[8].images.map((item) => (
+                  {(sections[8].images as string[]).map((item, i) => (
                     <Box key={item}>
                       <img
+                        alt={`이미지_${i}`}
                         src={item}
                         style={{
                           border: "2px solid #eaeaea",
@@ -175,7 +145,7 @@ const CardDetailContent = ({ printRef }) => {
 
           <StyledTitle>☑ 매물 정보</StyledTitle>
           <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
-            {Object.entries(labeling[1]).map((label, i) => (
+            {Object.entries(INFO_LABEL[1]).map((label, i) => (
               <React.Fragment key={label[1]}>
                 <Grid item xs={2} sm={2}>
                   {/* <StyledLabel>{label[1]}</StyledLabel> */}
@@ -195,7 +165,7 @@ const CardDetailContent = ({ printRef }) => {
 
           <StyledTitle>☑ 토지 정보</StyledTitle>
           <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
-            {Object.entries(labeling[2]).map((label, i) => (
+            {Object.entries(INFO_LABEL[2]).map((label, i) => (
               <React.Fragment key={label[1]}>
                 <Grid item xs={2} sm={2}>
                   <StyledLabel>{label[1]}</StyledLabel>
@@ -223,7 +193,7 @@ const CardDetailContent = ({ printRef }) => {
                       />
                       <StyledPyInput
                         value={`${(
-                          sections[2][label[0]] * 0.3025
+                          (sections[2][label[0]] as number) * 0.3025
                         ).toLocaleString(undefined, {
                           maximumFractionDigits: 1,
                         })}평`}
@@ -239,7 +209,7 @@ const CardDetailContent = ({ printRef }) => {
             <>
               <StyledTitle>☑ 건축물 정보</StyledTitle>
               <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
-                {Object.entries(labeling[3]).map((label, i) => (
+                {Object.entries(INFO_LABEL[3]).map((label, i) => (
                   <React.Fragment key={label[1]}>
                     <Grid item xs={2} sm={2}>
                       <StyledLabel>{label[1]}</StyledLabel>
@@ -314,7 +284,7 @@ const CardDetailContent = ({ printRef }) => {
             <>
               <StyledTitle>☑ 매매가격</StyledTitle>
               <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
-                {Object.entries(labeling[5]).map((label, i) => (
+                {Object.entries(INFO_LABEL[5]).map((label, i) => (
                   <React.Fragment key={label[1]}>
                     <Grid item xs={2} sm={2}>
                       <StyledLabel>{label[1]}</StyledLabel>
@@ -324,12 +294,11 @@ const CardDetailContent = ({ printRef }) => {
                         id={label[1]}
                         disabled
                         name={label[0]}
-                        value={`${sections[5][label[0]].toLocaleString(
-                          undefined,
-                          {
-                            maximumFractionDigits: 1,
-                          }
-                        )}만원`}
+                        value={`${(sections[5][
+                          label[0]
+                        ] as number).toLocaleString(undefined, {
+                          maximumFractionDigits: 1,
+                        })}만원`}
                       />
                     </Grid>
                   </React.Fragment>
@@ -340,7 +309,7 @@ const CardDetailContent = ({ printRef }) => {
             <>
               <StyledTitle>☑ 임대가격</StyledTitle>
               <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
-                {Object.entries(labeling[4]).map((label, i) => (
+                {Object.entries(INFO_LABEL[4]).map((label, i) => (
                   <React.Fragment key={label[1]}>
                     <Grid item xs={2} sm={2}>
                       <StyledLabel>{label[1]}</StyledLabel>
@@ -350,12 +319,11 @@ const CardDetailContent = ({ printRef }) => {
                         id={label[1]}
                         disabled
                         name={label[0]}
-                        value={`${sections[4][label[0]].toLocaleString(
-                          undefined,
-                          {
-                            maximumFractionDigits: 1,
-                          }
-                        )}만원`}
+                        value={`${(sections[4][
+                          label[0]
+                        ] as number).toLocaleString(undefined, {
+                          maximumFractionDigits: 1,
+                        })}만원`}
                       />
                     </Grid>
                   </React.Fragment>
@@ -365,7 +333,7 @@ const CardDetailContent = ({ printRef }) => {
           )}
           <StyledTitle>☑ 매물 입지 정보</StyledTitle>
           <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
-            {Object.entries(labeling[6]).map((label, i) => (
+            {Object.entries(INFO_LABEL[6]).map((label, i) => (
               <React.Fragment key={label[1]}>
                 <Grid item xs={2} sm={2}>
                   <StyledLabel>{label[1]}</StyledLabel>
@@ -389,7 +357,7 @@ const CardDetailContent = ({ printRef }) => {
           <StyledTitle>☑ 매물특징</StyledTitle>
           <Grid container>
             <Grid item xs={2} sm={2}>
-              <StyledLabel>{labeling[7]["feature"]}</StyledLabel>
+              <StyledLabel>{INFO_LABEL[7]["feature"]}</StyledLabel>
             </Grid>
             <Grid item xs={12} sm={12}>
               <StyledTextField

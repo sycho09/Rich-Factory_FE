@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Divider,
@@ -8,27 +9,30 @@ import {
   styled,
   Container,
 } from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { DefaultInput, DefaultLabel, DefaultTextField } from "../Common";
 import { getCookie } from "../../util/cookie";
 import { factory_API } from "../../util/axios";
-import { useNavigate } from "react-router-dom";
+
+interface BoardFormValues {
+  [key: string]: any;
+}
 
 const BoardWrite = () => {
   const navigate = useNavigate();
-  const { control, register, handleSubmit, setValue, watch } = useForm({
+  const { control, handleSubmit, watch } = useForm({
     mode: "onSubmit",
   });
 
-  const [uploadFiles, setUploadFiles] = useState([]);
+  const [uploadFiles, setUploadFiles] = useState<File[]>([]);
 
-  const uploadFile = (e) => {
-    Object.values(e.target.files).map((item) => {
+  const uploadFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    Object.values(e.target.files!).map((item: File) => {
       setUploadFiles((file) => [...file, item]);
     });
   };
 
-  const onSubmit = (data) => {
+  const onSubmit: SubmitHandler<BoardFormValues> = (data) => {
     const formdata = new FormData();
     for (let key in uploadFiles) {
       formdata.append("attachedFiles", uploadFiles[key]);
@@ -41,7 +45,7 @@ const BoardWrite = () => {
     factory_API.defaults.headers.common.Authorization = `Bearer ${loginToken}`;
     addSubmit(formdata);
   };
-  const addSubmit = async (value) => {
+  const addSubmit = async (value: FormData) => {
     await factory_API
       .post("/board", value)
       .then((res) => {
@@ -159,7 +163,7 @@ const BoardWrite = () => {
                 type="file"
                 multiple
                 accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .hwp"
-                label="Upload"
+                name="Upload"
                 onChange={uploadFile}
               />
               {uploadFiles.length > 0 &&
@@ -199,8 +203,10 @@ const StyledLabel = styled(DefaultLabel)(({ theme }) => ({
   paddingLeft: 15,
   fontSize: 16,
 }));
-
-const StyledInput = styled(DefaultInput)(({ theme }) => ({
+interface StyledInputProps {
+  variant: string;
+}
+const StyledInput = styled(DefaultInput)<StyledInputProps>(({ theme }) => ({
   border: "1px solid #cfcfcf",
   borderRadius: "5px",
 }));

@@ -1,12 +1,12 @@
 export interface allPropertyListProps {
   // [key: string]: string | number | string[];
-  _id: number;
+  _id?: number;
   address: string;
   buildingArea: number;
-  buildingAreaPy: number;
+  buildingAreaPy?: number;
   category: string;
-  dateEdit: string;
-  dateWrite: string;
+  dateEdit?: string;
+  dateWrite?: string;
   dealType: string;
   deposit: number;
   electric: string;
@@ -42,4 +42,10 @@ export interface BoardListProps {
   [key: string]: string | number | any[];
   _id: number;
   dateWrite: string;
+}
+
+export interface AllInfoProps extends allPropertyListProps {
+  [key: string]: string | number | string[] | undefined;
+  propertyId?: number;
+  detailInfo?: string;
 }

@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { allPropertyListProps } from "./types";
+import { AllInfoProps, allPropertyListProps } from "./types";
 
 // 관리자 모드(로그인)
 export const LoginInfo = atom({
@@ -42,7 +42,7 @@ export const TitleInfo = atom({
   default: "",
 });
 
-export const AllInfo = atom({
+export const AllInfo = atom<AllInfoProps>({
   key: "AllInfo",
   default: {
     images: [],
