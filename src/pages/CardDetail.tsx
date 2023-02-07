@@ -41,7 +41,7 @@ const CardDetail = () => {
     if (isDelete) {
       await factory_API
         .delete(`/property/${id}`)
-        .then((res) => {
+        .then(() => {
           alert("complete");
         })
         .catch((err) => {

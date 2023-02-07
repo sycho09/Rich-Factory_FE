@@ -34,10 +34,10 @@ const BoardWrite = () => {
 
   const onSubmit: SubmitHandler<BoardFormValues> = (data) => {
     const formdata = new FormData();
-    for (let key in uploadFiles) {
+    for (const key in uploadFiles) {
       formdata.append("attachedFiles", uploadFiles[key]);
     }
-    for (let key in data) {
+    for (const key in data) {
       formdata.append(key, data[key]);
     }
     formdata.append("isForClient", "notice");

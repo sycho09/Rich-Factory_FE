@@ -1,6 +1,6 @@
 import React from "react";
-import { Container, Divider, Grid, Box, styled } from "@mui/material";
 import { Outlet } from "react-router-dom";
+import { Container, Divider, styled } from "@mui/material";
 import Header from "../Header";
 import Banner from "./Banner";
 import Footer from "../Footer";
@@ -30,13 +30,11 @@ const HomeLayout = () => {
 
 export default HomeLayout;
 
-const LayoutContainer = styled(Container)<LayoutContainerProps>(
-  ({ theme }) => ({
-    paddingTop: 5,
-    paddingRight: 0,
-    paddingLeft: 0,
-    "& .MuiContainer-root": {
-      padding: 0,
-    },
-  })
-);
+const LayoutContainer = styled(Container)<LayoutContainerProps>({
+  paddingTop: 5,
+  paddingRight: 0,
+  paddingLeft: 0,
+  "& .MuiContainer-root": {
+    padding: 0,
+  },
+});

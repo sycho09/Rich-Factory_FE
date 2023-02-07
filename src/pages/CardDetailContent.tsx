@@ -21,7 +21,7 @@ import { getPropertyDetail } from "@/util/getPropertyDetail";
 const CardDetailContent = ({ printRef }: any) => {
   const [isLoading, setLoading] = useState(true);
   const allInfo = useRecoilValue(AllInfo);
-  const [sections, setSections] = useState<{}[]>([]);
+  const [sections, setSections] = useState<object[]>([]);
 
   // 임대 or 매매
   const [isSale, setIsSale] = useState(true);
@@ -361,7 +361,7 @@ const CardDetailContent = ({ printRef }: any) => {
 
 export default CardDetailContent;
 
-export const StyledTitle = styled(Typography)(({ theme }) => ({
+export const StyledTitle = styled(Typography)({
   fontSize: 16,
   fontWeight: 700,
   padding: "1.5rem 0 0.2rem",
@@ -369,14 +369,14 @@ export const StyledTitle = styled(Typography)(({ theme }) => ({
     fontSize: "12px",
     padding: "4px 0 1px",
   },
-}));
+});
 
-const StyledLabel = styled(DefaultLabel)(({ theme }) => ({
+const StyledLabel = styled(DefaultLabel)({
   textAlign: "center",
   fontSize: 14,
   background: "#eaeaea",
   borderBottom: "1px solid #cfcfcf",
-}));
+});
 
 export const StyledTextField = styled(DefaultTextField)({
   ["@media print"]: {
@@ -418,9 +418,9 @@ export const StyledPyInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export const PrintBox = styled(Box)(({ theme }) => ({
+export const PrintBox = styled(Box)({
   height: 380,
   ["@media print"]: {
     height: 280,
   },
-}));
+});

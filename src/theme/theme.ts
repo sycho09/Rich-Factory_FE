@@ -1,10 +1,6 @@
 import { grey } from "@mui/material/colors";
 import { createTheme } from "@mui/material/styles";
 
-interface DefaultColorOption {
-  default: string;
-}
-
 declare module "@mui/material/styles" {
   interface Theme {
     shape: {

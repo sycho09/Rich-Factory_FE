@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Divider, Stack, Grid, Typography } from "@mui/material";
 import { ListItem } from "../components/Home/ListCard";
 import axios from "axios";
+import compare from "@/util/compare";
 
 const Land = () => {
   const [isLoading, setLoading] = useState(true);
@@ -11,9 +12,7 @@ const Land = () => {
       const response = await axios.get(
         `https://www.richfactory.click/property/land`
       );
-      const allPropertyList = response.data.propertyList.sort(
-        (a: any, b: any) => (a._id > b._id ? -1 : 1)
-      );
+      const allPropertyList = response.data.propertyList.sort(compare);
       setFactorageList(allPropertyList);
     } catch (err) {
       console.log(err);

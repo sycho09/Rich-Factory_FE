@@ -3,6 +3,7 @@ import { Box, Divider, Stack, Typography, Grid } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { ListItem } from "../components/Home/ListCard";
+import compare from "@/util/compare";
 
 const Divide = () => {
   const location = useLocation();
@@ -14,9 +15,7 @@ const Divide = () => {
       const response = await axios.get(
         `https://www.richfactory.click/${pathname}`
       );
-      const allPropertyList = response.data.propertyList.sort(
-        (a: any, b: any) => (a._id > b._id ? -1 : 1)
-      );
+      const allPropertyList = response.data.propertyList.sort(compare);
       setDiovideList(allPropertyList);
     } catch (err) {
       console.log(err);
