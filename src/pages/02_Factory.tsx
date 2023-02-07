@@ -8,6 +8,7 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import PaginationComponent from "../components/Pagination";
 import { allPropertyListProps } from "../util/types.js";
+import { factory_API } from "@/util/axios";
 
 export const SortBtn = styled.a.attrs({
   href: "#",
@@ -55,9 +56,7 @@ const Factory = () => {
 
   const getList = async (pathname: string) => {
     try {
-      const response = await axios.get(
-        `https://www.richfactory.click${pathname}`
-      );
+      const response = await factory_API.get(`${pathname}`);
       const allPropertyList: allPropertyListProps[] = response.data.propertyList.sort(
         (a: any, b: any) => (a._id > b._id ? -1 : 1)
       );

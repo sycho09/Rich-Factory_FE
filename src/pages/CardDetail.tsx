@@ -20,11 +20,10 @@ const CardDetail = () => {
 
   const getPropertyInfo = async () => {
     try {
-      const response = await axios({
-        method: "get",
-        url: `https://www.richfactory.click/property/${id}`,
-      });
-      setAllInfo(response.data);
+      const response = await factory_API.get(`/properties/2`);
+      console.log(response);
+      setAllInfo(response.data.data.attributes);
+      // setAllInfo(response.data);
       setLoading(false);
     } catch (err) {
       alert(err);

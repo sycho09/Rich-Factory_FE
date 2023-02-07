@@ -3,6 +3,7 @@ import { Box, Stack, styled, Typography } from "@mui/material";
 import axios from "axios";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { IsSearch, PropertyList, RequestUrl, TotalPage } from "../../util/atom";
+import { factory_API } from "@/util/axios";
 
 const QuickSearch = () => {
   const setPropertyList = useSetRecoilState(PropertyList);
@@ -11,10 +12,7 @@ const QuickSearch = () => {
   const [isSearch, setIsSearch] = useRecoilState(IsSearch);
   const handleBuildingArea = async (py: any) => {
     try {
-      const response = await axios({
-        method: "get",
-        url: `https://www.richfactory.click/side/building/${py}`,
-      });
+      const response = await factory_API.get(`/side/building/${py}`);
       setRequestUrl(response.config.url!);
       setPropertyList(response.data.propertyList);
       setTotalPage(response.data.lastPage);
@@ -25,10 +23,7 @@ const QuickSearch = () => {
   };
   const handleLandArea = async (py: any) => {
     try {
-      const response = await axios({
-        method: "get",
-        url: `https://www.richfactory.click/side/land/${py}`,
-      });
+      const response = await factory_API.get(`/side/land/${py}`);
       setRequestUrl(response.config.url!);
       setPropertyList(response.data.propertyList);
       setTotalPage(response.data.lastPage);

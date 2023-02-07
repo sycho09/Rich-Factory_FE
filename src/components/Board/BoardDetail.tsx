@@ -46,13 +46,10 @@ const BoardContent = (boardProps: BoardContentProps) => {
     category,
     clientName,
     content,
-    dateEdit,
     dateWrite,
     fileNameList,
     fileUrlList,
-    isForClient,
     title,
-    writer,
   } = boardProps;
   const navigate = useNavigate();
   const deleteBoardItem = async (id: number) => {
@@ -67,13 +64,12 @@ const BoardContent = (boardProps: BoardContentProps) => {
         navigate("/main/board");
       } catch (error) {
         const err = error as AxiosError;
-        // 옵셔널 체이닝 웹팩 에러 추후 해결
-        // if (err.response?.status === 401) {
-        //   alert("권한이 없습니다.");
-        // }
-        // if (err.response?.status === 400) {
-        //   alert(err.response?.data.msg);
-        // }
+        if (err.response?.status === 401) {
+          alert("권한이 없습니다.");
+        }
+        if (err.response?.status === 400) {
+          alert(err.response?.data.msg);
+        }
       }
     }
   };

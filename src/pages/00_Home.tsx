@@ -34,6 +34,7 @@ import { allPropertyListProps } from "../util/types";
 import { SearchProps } from "../components/types";
 import QuickSearch from "../components/Home/QuickSearch";
 import ListCard from "../components/Home/ListCard";
+import { factory_API } from "@/util/axios";
 
 const Home = () => {
   // 로그인 정보 및 리스트 표시
@@ -66,10 +67,9 @@ const Home = () => {
   // 검색하기
   const handleSearch = async () => {
     try {
-      const response = await axios({
-        method: "get",
-        url: `https://www.richfactory.click/property/search?type=${search.type}&dealType=${search.dealType}&buildingArea=${search.building}&landArea=${search.land}`,
-      });
+      const response = await factory_API.get(
+        `/property/search?type=${search.type}&dealType=${search.dealType}&buildingArea=${search.building}&landArea=${search.land}`
+      );
       // 옵셔널 체이닝 추가 수정 필요
       if (response.config.url) {
         setRequestUrl(response.config.url);
@@ -85,20 +85,28 @@ const Home = () => {
   const setList = async () => {
     console.log("loading List......");
     try {
-      const response = await axios({
-        method: "get",
-        url: `https://www.richfactory.click/propertyall`,
-      });
-      // 옵셔널 체이닝 추가 수정 필요
+      const response = await factory_API.get("/properties");
+      console.log(response.data.data);
       if (response.config.url) {
         setRequestUrl(response.config.url);
       }
       setTotalPage(response.data.lastPage);
-      const allPropertyList: allPropertyListProps[] = response.data.propertyList.sort(
-        (a: any, b: any) => (a._id > b._id ? -1 : 1)
+      const allPropertyList: allPropertyListProps[] = response.data.data.map(
+        (el: any) => el.attributes
       );
+      console.log(allPropertyList);
       setPropertyList(allPropertyList);
       setIsLoading(false);
+      // 원본
+      // if (response.config.url) {
+      //   setRequestUrl(response.config.url);
+      // }
+      // setTotalPage(response.data.lastPage);
+      // const allPropertyList: allPropertyListProps[] = response.data.propertyList.sort(
+      //   (a: any, b: any) => (a._id > b._id ? -1 : 1)
+      // );
+      // setPropertyList(allPropertyList);
+      // setIsLoading(false);
       if (isSearch) setIsSearch("");
     } catch (err) {
       console.log(err);

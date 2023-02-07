@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Box, Divider, Stack, Typography, Grid } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
 import { ListItem } from "../components/Home/ListCard";
+import { factory_API } from "@/util/axios";
 
 const Divide = () => {
   const location = useLocation();
@@ -11,9 +11,7 @@ const Divide = () => {
   const [divideList, setDiovideList] = useState([]);
   const getList = async (pathname: string) => {
     try {
-      const response = await axios.get(
-        `https://www.richfactory.click/${pathname}`
-      );
+      const response = await factory_API.get(`/${pathname}`);
       const allPropertyList = response.data.propertyList.sort(
         (a: any, b: any) => (a._id > b._id ? -1 : 1)
       );
