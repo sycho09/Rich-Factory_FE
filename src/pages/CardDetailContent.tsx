@@ -8,7 +8,7 @@ import {
   Stack,
   Box,
 } from "@mui/material";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { AllInfo } from "../util/atom";
 import {
   DefaultInput,
@@ -16,12 +16,12 @@ import {
   DefaultTextField,
 } from "../components/Common";
 import { INFO_LABEL } from "../util/constants";
-import { AllInfoProps } from "@/util/types";
+import { getPropertyDetail } from "@/util/getPropertyDetail";
 
 const CardDetailContent = ({ printRef }: any) => {
   const [isLoading, setLoading] = useState(true);
-  const [allInfo, setAllInfo] = useRecoilState(AllInfo);
-  const [sections, setSections] = useState<AllInfoProps[]>([]);
+  const allInfo = useRecoilValue(AllInfo);
+  const [sections, setSections] = useState<{}[]>([]);
 
   // 임대 or 매매
   const [isSale, setIsSale] = useState(true);
@@ -37,18 +37,14 @@ const CardDetailContent = ({ printRef }: any) => {
     const noBuilding = noBuildingList.some((el) => allInfo.type.includes(el));
     setHasBuilding(!noBuilding);
     setSections([]);
-    for (var key in INFO_LABEL) {
-      const newArr = Object.keys(allInfo)
-        .filter((data) => Object.keys(INFO_LABEL[key]).includes(data))
-        .reduce((obj, key) => {
-          obj[key] = allInfo[key as keyof AllInfoProps];
-          return obj;
-        }, {} as AllInfoProps);
-      setSections((old) => [...old, { ...newArr }]);
-    }
+
+    const normalizedData = INFO_LABEL.map((item) =>
+      getPropertyDetail(item, allInfo)
+    );
+    setSections(normalizedData);
     setLoading(false);
   }, []);
-  console.log(sections);
+  console.log("sections", sections);
 
   return (
     <>
@@ -65,7 +61,7 @@ const CardDetailContent = ({ printRef }: any) => {
                       width: "100%",
                     }}
                   >
-                    {(sections[8].images as string[]).length > 0 ? (
+                    {/* {(sections[8].images as string[]).length > 0 ? (
                       <img
                         alt="매물 사진"
                         src={(sections[8].images as string[])[0]}
@@ -86,17 +82,34 @@ const CardDetailContent = ({ printRef }: any) => {
                       >
                         <p>이미지가 없습니다</p>
                       </Box>
-                    )}
+                    )} */}
                   </PrintBox>
                 </>
               )}
             </Grid>
             <Grid item xs={6}>
               {sections.length > 0 && (
-                <div style={{ paddingLeft: "4px" }}>
+                <>
                   <StyledTitle>☑ 담당자 안내</StyledTitle>
                   <Divider />
-                  {Object.entries(INFO_LABEL[0]).map((label, i) => (
+                  {Object.entries(sections[0]).map(([key, val]) => (
+                    <React.Fragment key={key}>
+                      <Grid container sx={{ width: "100%" }}>
+                        <Grid item xs={4} sm={4}>
+                          <StyledLabel>{key}</StyledLabel>
+                        </Grid>
+                        <Grid item xs={8} sm={8}>
+                          <StyledInput
+                            id={key}
+                            disabled
+                            name={key}
+                            value={val}
+                          />
+                        </Grid>
+                      </Grid>
+                    </React.Fragment>
+                  ))}
+                  {/* {Object.entries(INFO_LABEL[0]).map((label, i) => (
                     <React.Fragment key={label[1]}>
                       <Grid container sx={{ width: "100%" }}>
                         <Grid item xs={4} sm={4}>
@@ -112,11 +125,11 @@ const CardDetailContent = ({ printRef }: any) => {
                         </Grid>
                       </Grid>
                     </React.Fragment>
-                  ))}
-                </div>
+                  ))} */}
+                </>
               )}
             </Grid>
-            {(sections[8].images as string[]).length > 1 && (
+            {/* {(sections[8].images as string[]).length > 1 && (
               <Grid item sm={12}>
                 <Stack
                   direction="row"
@@ -140,24 +153,19 @@ const CardDetailContent = ({ printRef }: any) => {
                   ))}
                 </Stack>
               </Grid>
-            )}
+            )} */}
           </Grid>
 
           <StyledTitle>☑ 매물 정보</StyledTitle>
           <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
-            {Object.entries(INFO_LABEL[1]).map((label, i) => (
-              <React.Fragment key={label[1]}>
+            {Object.entries(sections[1]).map(([key, val]) => (
+              <React.Fragment key={key}>
                 <Grid item xs={2} sm={2}>
                   {/* <StyledLabel>{label[1]}</StyledLabel> */}
-                  <StyledLabel>{label[1]}</StyledLabel>
+                  <StyledLabel>{key}</StyledLabel>
                 </Grid>
                 <Grid item xs={4} sm={4}>
-                  <StyledInput
-                    id={label[1]}
-                    disabled
-                    name={label[0]}
-                    value={sections[1][label[0]]}
-                  />
+                  <StyledInput id={key} disabled name={key} value={val} />
                 </Grid>
               </React.Fragment>
             ))}
@@ -165,38 +173,31 @@ const CardDetailContent = ({ printRef }: any) => {
 
           <StyledTitle>☑ 토지 정보</StyledTitle>
           <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
-            {Object.entries(INFO_LABEL[2]).map((label, i) => (
-              <React.Fragment key={label[1]}>
+            {Object.entries(sections[2]).map(([key, val]) => (
+              <React.Fragment key={key}>
                 <Grid item xs={2} sm={2}>
-                  <StyledLabel>{label[1]}</StyledLabel>
+                  <StyledLabel>{key}</StyledLabel>
                 </Grid>
                 <Grid item xs={4} sm={4}>
-                  {label[0] !== "landArea" ? (
-                    <StyledInput
-                      id={label[1]}
-                      disabled
-                      name={label[0]}
-                      value={sections[2][label[0]]}
-                    />
+                  {key !== "landArea" ? (
+                    <StyledInput id={key} disabled name={key} value={val} />
                   ) : (
                     <Stack direction="row">
                       <StyledInput
-                        id={label[1]}
+                        id={key}
                         disabled
-                        name={label[0]}
-                        value={`${sections[2][label[0]].toLocaleString(
+                        name={key}
+                        value={`${(val as number).toLocaleString(undefined, {
+                          maximumFractionDigits: 1,
+                        })}㎡`}
+                      />
+                      <StyledPyInput
+                        value={`${((val as number) * 0.3025).toLocaleString(
                           undefined,
                           {
                             maximumFractionDigits: 1,
                           }
-                        )}㎡`}
-                      />
-                      <StyledPyInput
-                        value={`${(
-                          (sections[2][label[0]] as number) * 0.3025
-                        ).toLocaleString(undefined, {
-                          maximumFractionDigits: 1,
-                        })}평`}
+                        )}평`}
                       />
                     </Stack>
                   )}
@@ -209,33 +210,23 @@ const CardDetailContent = ({ printRef }: any) => {
             <>
               <StyledTitle>☑ 건축물 정보</StyledTitle>
               <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
-                {Object.entries(INFO_LABEL[3]).map((label, i) => (
-                  <React.Fragment key={label[1]}>
+                {Object.entries(sections[3]).map(([key, val]) => (
+                  <React.Fragment key={key}>
                     <Grid item xs={2} sm={2}>
-                      <StyledLabel>{label[1]}</StyledLabel>
+                      <StyledLabel>{key}</StyledLabel>
                     </Grid>
                     <Grid item xs={4} sm={4}>
-                      {label[0] !== "buildingArea" &&
-                        label[0] !== "groundArea" && (
-                          <StyledInput
-                            id={label[1]}
-                            disabled
-                            name={label[0]}
-                            value={
-                              sections[3][label[0]] === "undefined"
-                                ? ""
-                                : sections[3][label[0]]
-                            }
-                          />
-                        )}
+                      {key !== "buildingArea" && key !== "groundArea" && (
+                        <StyledInput id={key} disabled name={key} value={val} />
+                      )}
 
-                      {label[0] === "buildingArea" && (
+                      {key === "buildingArea" && (
                         <Stack direction="row">
                           <StyledInput
-                            id={label[1]}
+                            id={key}
                             disabled
-                            name={label[0]}
-                            value={`${sections[3][label[0]].toLocaleString(
+                            name={key}
+                            value={`${(val as number).toLocaleString(
                               undefined,
                               {
                                 maximumFractionDigits: 1,
@@ -243,22 +234,23 @@ const CardDetailContent = ({ printRef }: any) => {
                             )}㎡`}
                           />
                           <StyledPyInput
-                            value={`${(
-                              sections[3][label[0]] * 0.3025
-                            ).toLocaleString(undefined, {
-                              maximumFractionDigits: 1,
-                            })}평`}
+                            value={`${((val as number) * 0.3025).toLocaleString(
+                              undefined,
+                              {
+                                maximumFractionDigits: 1,
+                              }
+                            )}평`}
                           />
                         </Stack>
                       )}
 
-                      {label[0] === "groundArea" && (
+                      {key === "groundArea" && (
                         <Stack direction="row">
                           <StyledInput
-                            id={label[1]}
+                            id={key}
                             disabled
-                            name={label[0]}
-                            value={`${sections[3][label[0]].toLocaleString(
+                            name={key}
+                            value={`${(val as number).toLocaleString(
                               undefined,
                               {
                                 maximumFractionDigits: 1,
@@ -266,11 +258,12 @@ const CardDetailContent = ({ printRef }: any) => {
                             )}㎡`}
                           />
                           <StyledPyInput
-                            value={`${(
-                              sections[3][label[0]] * 0.3025
-                            ).toLocaleString(undefined, {
-                              maximumFractionDigits: 1,
-                            })}평`}
+                            value={`${((val as number) * 0.3025).toLocaleString(
+                              undefined,
+                              {
+                                maximumFractionDigits: 1,
+                              }
+                            )}평`}
                           />
                         </Stack>
                       )}
@@ -284,19 +277,17 @@ const CardDetailContent = ({ printRef }: any) => {
             <>
               <StyledTitle>☑ 매매가격</StyledTitle>
               <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
-                {Object.entries(INFO_LABEL[5]).map((label, i) => (
-                  <React.Fragment key={label[1]}>
+                {Object.entries(sections[5]).map(([key, val]) => (
+                  <React.Fragment key={key}>
                     <Grid item xs={2} sm={2}>
-                      <StyledLabel>{label[1]}</StyledLabel>
+                      <StyledLabel>{key}</StyledLabel>
                     </Grid>
                     <Grid item xs={4} sm={4}>
                       <StyledInput
-                        id={label[1]}
+                        id={key}
                         disabled
-                        name={label[0]}
-                        value={`${(sections[5][
-                          label[0]
-                        ] as number).toLocaleString(undefined, {
+                        name={key}
+                        value={`${(val as number).toLocaleString(undefined, {
                           maximumFractionDigits: 1,
                         })}만원`}
                       />
@@ -309,19 +300,17 @@ const CardDetailContent = ({ printRef }: any) => {
             <>
               <StyledTitle>☑ 임대가격</StyledTitle>
               <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
-                {Object.entries(INFO_LABEL[4]).map((label, i) => (
-                  <React.Fragment key={label[1]}>
+                {Object.entries(sections[4]).map(([key, val]) => (
+                  <React.Fragment key={key}>
                     <Grid item xs={2} sm={2}>
-                      <StyledLabel>{label[1]}</StyledLabel>
+                      <StyledLabel>{key}</StyledLabel>
                     </Grid>
                     <Grid item xs={4} sm={4}>
                       <StyledInput
-                        id={label[1]}
+                        id={key}
                         disabled
-                        name={label[0]}
-                        value={`${(sections[4][
-                          label[0]
-                        ] as number).toLocaleString(undefined, {
+                        name={key}
+                        value={`${(val as number).toLocaleString(undefined, {
                           maximumFractionDigits: 1,
                         })}만원`}
                       />
@@ -333,22 +322,13 @@ const CardDetailContent = ({ printRef }: any) => {
           )}
           <StyledTitle>☑ 매물 입지 정보</StyledTitle>
           <Grid container sx={{ borderTop: "1px solid #cfcfcf" }}>
-            {Object.entries(INFO_LABEL[6]).map((label, i) => (
-              <React.Fragment key={label[1]}>
+            {Object.entries(sections[6]).map(([key, val]) => (
+              <React.Fragment key={key}>
                 <Grid item xs={2} sm={2}>
-                  <StyledLabel>{label[1]}</StyledLabel>
+                  <StyledLabel>{key}</StyledLabel>
                 </Grid>
                 <Grid item xs={4} sm={4}>
-                  <StyledInput
-                    id={label[1]}
-                    disabled
-                    name={label[0]}
-                    value={
-                      sections[6][label[0]] === "undefined"
-                        ? ""
-                        : sections[6][label[0]]
-                    }
-                  />
+                  <StyledInput id={key} disabled name={key} value={val} />
                 </Grid>
               </React.Fragment>
             ))}
@@ -357,7 +337,9 @@ const CardDetailContent = ({ printRef }: any) => {
           <StyledTitle>☑ 매물특징</StyledTitle>
           <Grid container>
             <Grid item xs={2} sm={2}>
-              <StyledLabel>{INFO_LABEL[7]["feature"]}</StyledLabel>
+              <StyledLabel>
+                {Object.keys(sections[6]).map((item) => item)}
+              </StyledLabel>
             </Grid>
             <Grid item xs={12} sm={12}>
               <StyledTextField
@@ -365,11 +347,7 @@ const CardDetailContent = ({ printRef }: any) => {
                 multiline
                 disabled
                 name="feature"
-                value={
-                  sections[7]["feature"] === "undefined"
-                    ? ""
-                    : sections[7]["feature"]
-                }
+                value={Object.values(sections[6]).map((key) => key)}
               />
             </Grid>
           </Grid>
@@ -401,10 +379,6 @@ const StyledLabel = styled(DefaultLabel)(({ theme }) => ({
 }));
 
 export const StyledTextField = styled(DefaultTextField)({
-  // "& .css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
-  //   WebkitTextFillColor: "#000",
-  // },
-
   ["@media print"]: {
     fontSize: "12px",
   },

@@ -32,7 +32,7 @@ export const LAND_FILTER_LIST: TypesListProps[] = [
 
 export const INFO_LABEL = [
   {
-    store: " 상호",
+    store: "상호",
     manager: "담당자",
     tel: "전화",
     storeAddress: "주소",
@@ -54,9 +54,9 @@ export const INFO_LABEL = [
     electric: "전력",
     height: "층고",
   },
-  { deposit: " 보증금", monthlyRent: "월세" },
+  { deposit: "보증금", monthlyRent: "월세" },
   { unitPrice: "평당가격", price: "매매가" },
   { highway: "고속도로", roadNearby: "인접도로" },
-  { feature: " 간략특징" },
-  { images: [] },
+  { feature: "간략특징" },
+  { images: "이미지" },
 ];
