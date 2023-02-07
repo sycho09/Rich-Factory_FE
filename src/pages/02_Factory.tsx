@@ -9,6 +9,7 @@ import styled from "styled-components";
 import PaginationComponent from "../components/Pagination";
 import { allPropertyListProps } from "../util/types.js";
 import { factory_API } from "@/util/axios";
+import compare from "@/util/compare";
 
 export const SortBtn = styled.a.attrs({
   href: "#",
@@ -58,7 +59,7 @@ const Factory = () => {
     try {
       const response = await factory_API.get(`${pathname}`);
       const allPropertyList: allPropertyListProps[] = response.data.propertyList.sort(
-        (a: any, b: any) => (a._id > b._id ? -1 : 1)
+        compare
       );
       setRequestUrl(response.config.url!);
       setTotalPage(response.data.lastPage);
@@ -132,12 +133,12 @@ const Factory = () => {
               {rentOrSale === "/property/factorage-rent" ? "임대" : "매매"}
             </Typography>
             <Stack direction="row">
-              <SortBtn onClick={(e) => sortItems("price")}>가격순</SortBtn>
-              <SortBtn onClick={(e) => sortItems("local")}>
+              <SortBtn onClick={() => sortItems("price")}>가격순</SortBtn>
+              <SortBtn onClick={() => sortItems("local")}>
                 지역(오름차순)
               </SortBtn>
 
-              <SortBtn onClick={(e) => sortItems("size")}>면적순</SortBtn>
+              <SortBtn onClick={() => sortItems("size")}>면적순</SortBtn>
             </Stack>
           </Stack>
           <Divider sx={{ margin: "1rem 0" }} />

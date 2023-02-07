@@ -16,6 +16,7 @@ import { LoginInfo } from "../util/atom";
 import { useRecoilValue } from "recoil";
 import { factory_API } from "../util/axios";
 import { BoardListProps } from "../util/types";
+import compare from "@/util/compare";
 
 const Board = () => {
   const navigate = useNavigate();
@@ -29,9 +30,7 @@ const Board = () => {
     setIsLoading(true);
     try {
       const response = await factory_API.get("/board");
-      const allBoardList = response.data.postList.sort((a: any, b: any) =>
-        a._id > b._id ? -1 : 1
-      );
+      const allBoardList = response.data.postList.sort(compare);
       setBoardList(allBoardList);
       setIsLoading(false);
     } catch (error) {

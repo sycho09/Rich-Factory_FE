@@ -3,6 +3,7 @@ import { Box, Divider, Stack, Typography, Grid } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { ListItem } from "../components/Home/ListCard";
 import { factory_API } from "@/util/axios";
+import compare from "@/util/compare";
 
 const Divide = () => {
   const location = useLocation();
@@ -12,9 +13,7 @@ const Divide = () => {
   const getList = async (pathname: string) => {
     try {
       const response = await factory_API.get(`/${pathname}`);
-      const allPropertyList = response.data.propertyList.sort(
-        (a: any, b: any) => (a._id > b._id ? -1 : 1)
-      );
+      const allPropertyList = response.data.propertyList.sort(compare);
       setDiovideList(allPropertyList);
     } catch (err) {
       console.log(err);

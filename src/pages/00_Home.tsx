@@ -35,10 +35,9 @@ import { SearchProps } from "../components/types";
 import QuickSearch from "../components/Home/QuickSearch";
 import ListCard from "../components/Home/ListCard";
 import { factory_API } from "@/util/axios";
-
 const Home = () => {
   // 로그인 정보 및 리스트 표시
-  const isLogin = useRecoilValue(LoginInfo);
+  // const isLogin = useRecoilValue(LoginInfo);
   const [showList, setShowList] = useState(false);
 
   // 리스트 저장
@@ -97,16 +96,7 @@ const Home = () => {
       console.log(allPropertyList);
       setPropertyList(allPropertyList);
       setIsLoading(false);
-      // 원본
-      // if (response.config.url) {
-      //   setRequestUrl(response.config.url);
-      // }
-      // setTotalPage(response.data.lastPage);
-      // const allPropertyList: allPropertyListProps[] = response.data.propertyList.sort(
-      //   (a: any, b: any) => (a._id > b._id ? -1 : 1)
-      // );
-      // setPropertyList(allPropertyList);
-      // setIsLoading(false);
+
       if (isSearch) setIsSearch("");
     } catch (err) {
       console.log(err);
@@ -356,10 +346,10 @@ const Home = () => {
 
 export default Home;
 
-const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
+const StyledMenuItem = styled(MenuItem)({
   padding: "3px 15px",
   fontSize: "0.9rem",
-}));
+});
 
 const SearchBtn = styled(Button)(({ theme }) => ({
   // width: "180px",
